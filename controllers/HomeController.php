@@ -1,9 +1,11 @@
 <?php
-class HomeController {
-    public function index() {
+class HomeController
+{
+    public function index()
+    {
         // Đặt biến cần truyền ra view
         $title = "Trang chủ";
-        
+
         // Nạp view vào trong layout
         ob_start();
         require_once 'views/public/home.php';

@@ -4,12 +4,12 @@ class User {
     private $table_name = "users";
 
     public $id;
-    public $username;
     public $password;
     public $email;
     public $fullname;
     public $avatar;
     public $role;
+    public $status;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -21,13 +21,15 @@ class User {
         }
 
         $query = "INSERT INTO " . $this->table_name . " 
-                  SET password=:password, email=:email, role='member'";
+                  SET fullname=:fullname, password=:password, email=:email, role='member'";
         $stmt = $this->conn->prepare($query);
 
+        $this->fullname = htmlspecialchars(strip_tags($this->fullname));
         $this->email = htmlspecialchars(strip_tags($this->email));
         
         $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
 
+        $stmt->bindParam(":fullname", $this->fullname);
         $stmt->bindParam(":password", $password_hash);
         $stmt->bindParam(":email", $this->email);
 
@@ -38,7 +40,7 @@ class User {
     }
 
     public function login($email, $password) {
-        $query = "SELECT id, username, password, role, fullname FROM " . $this->table_name . " WHERE email = :email LIMIT 0,1";
+        $query = "SELECT id, password, role, fullname, avatar, status FROM " . $this->table_name . " WHERE email = :email LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         
         $email = htmlspecialchars(strip_tags($email));
@@ -47,11 +49,15 @@ class User {
         
         if ($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($row['status'] === 'locked') {
+                return 'locked';
+            }
             if (password_verify($password, $row['password'])) {
                 $this->id = $row['id'];
-                $this->username = $row['username'];
                 $this->role = $row['role'];
                 $this->fullname = $row['fullname'];
+                $this->avatar = $row['avatar'];
+                $this->status = $row['status'];
                 return true;
             }
         }
@@ -114,10 +120,19 @@ class User {
     }
 
     public function getAllUsers() {
-        $query = "SELECT id, username, email, fullname, role, created_at FROM " . $this->table_name . " ORDER BY id DESC";
+        $query = "SELECT id, email, fullname, role, status, created_at FROM " . $this->table_name . " WHERE role = 'member' ORDER BY id DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function toggleStatus($id) {
+        $query = "UPDATE " . $this->table_name . " 
+                  SET status = IF(status='active', 'locked', 'active') 
+                  WHERE id = :id AND role='member'";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
     }
 
     public function resetPassword($id) {

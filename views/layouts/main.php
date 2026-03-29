@@ -21,52 +21,61 @@
 <body>
 
     <!-- Main Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top tech-navbar shadow-sm">
-        <div class="container">
+    <nav class="navbar navbar-expand bg-white sticky-top tech-navbar shadow-sm py-3">
+        <div class="container d-flex justify-content-between align-items-center">
             <!-- Brand Logo -->
-            <a class="navbar-brand fw-bold text-primary fs-3" href="/btl/">
-                <i class="fa fa-laptop-code me-2"></i>TechStore
+            <a class="navbar-brand fw-bold text-primary fs-4 m-0 p-0" href="/btl/">
+                <i class="fa fa-laptop-code me-1"></i><span class="d-none d-sm-inline">TechStore</span>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navTech">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navTech">
-
-                <!-- Menus -->
-                <ul class="navbar-nav ms-auto align-items-start align-items-lg-center mt-3 mt-lg-0">
-
-                    <!-- Cart Icon -->
-                    <li class="nav-item me-lg-4 mb-3 mb-lg-0 position-relative d-inline-block ms-2 ms-lg-0">
-                        <a class="nav-link text-dark p-0 p-lg-2" href="/btl/cart">
-                            <i class="fa fa-shopping-cart fs-5"></i>
-                            <span
-                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                style="font-size: 0.65rem;">
-                                0
-                            </span>
-                        </a>
-                    </li>
+            <!-- Right side items -->
+            <div class="d-flex align-items-center" id="navTech">
+                <ul class="navbar-nav align-items-center flex-row m-0 p-0">
 
                     <!-- User Account -->
                     <?php if (isset($_SESSION['user_id'])): ?>
-                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                            <li class="nav-item mb-2 mb-lg-0"><a
-                                    class="nav-link btn btn-outline-danger btn-sm text-danger me-lg-2 fw-semibold px-3 rounded-pill text-start w-100 d-lg-inline-block" style="width: fit-content;"
-                                    href="/btl/adminUser/index">Quản trị</a></li>
+                        <?php if ($_SESSION['user_role'] !== 'admin'): ?>
+                            <!-- Cart Icon -->
+                            <li class="nav-item me-3 position-relative">
+                                <a class="nav-link text-dark p-2" href="/btl/cart">
+                                    <i class="fa fa-shopping-cart fs-5"></i>
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                        style="font-size: 0.65rem;">
+                                        0
+                                    </span>
+                                </a>
+                            </li>
                         <?php endif; ?>
-                        <li class="nav-item dropdown w-100">
-                            <a class="nav-link dropdown-toggle text-dark fw-medium p-2" href="#" id="userDropdown" role="button"
-                                data-bs-toggle="dropdown">
-                                <i class="fa fa-user-circle fs-5 me-1 text-primary"></i>
-                                <?= htmlspecialchars($_SESSION['username']) ?>
+                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                            <li class="nav-item me-3 d-none d-md-block">
+                                <a class="btn btn-outline-danger btn-sm fw-semibold px-3 rounded-pill"
+                                    href="/btl/adminUser/index">Quản trị</a>
+                            </li>
+                        <?php endif; ?>
+                        <li class="nav-item dropdown">
+                            <!-- Show Avatar -->
+                            <a class="nav-link dropdown-toggle text-dark fw-medium p-0 d-flex align-items-center" href="#"
+                                id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <?php if (!empty($_SESSION['avatar'])): ?>
+                                    <img src="/btl/<?= htmlspecialchars($_SESSION['avatar']) ?>" alt="Avatar"
+                                        class="rounded-circle me-1 border"
+                                        style="width: 32px; height: 32px; object-fit: cover;">
+                                <?php else: ?>
+                                    <i class="fa fa-user-circle fs-4 me-1 text-primary"></i>
+                                <?php endif; ?>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2">
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-3 position-absolute">
                                 <li><a class="dropdown-item py-2" href="/btl/profile/index"><i
-                                            class="fa fa-id-card me-2 text-muted"></i> Trang cá nhân</a></li>
-                                <li><a class="dropdown-item py-2" href="/btl/orders/history"><i
-                                            class="fa fa-box-open me-2 text-muted"></i> Đơn hàng của tôi</a></li>
+                                            class="fa fa-id-card me-2 text-muted"></i> Hồ sơ</a></li>
+                                <?php if ($_SESSION['user_role'] !== 'admin'): ?>
+                                    <li><a class="dropdown-item py-2" href="/btl/orders/history"><i
+                                                class="fa fa-box-open me-2 text-muted"></i> Đơn hàng của tôi</a></li>
+                                <?php endif; ?>
+                                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                                    <li class="d-md-none"><a class="dropdown-item py-2 text-danger fw-bold"
+                                            href="/btl/adminUser/index"><i class="fa fa-cogs me-2"></i> Quản trị</a></li>
+                                <?php endif; ?>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -75,13 +84,9 @@
                             </ul>
                         </li>
                     <?php else: ?>
-                        <li class="nav-item mb-2 mb-lg-0 w-100 text-start">
-                            <a class="btn btn-outline-primary btn-sm rounded-pill px-3 me-lg-2"
-                                href="/btl/auth/login">Đăng nhập</a>
-                        </li>
-                        <li class="nav-item w-100 text-start">
-                            <a class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm"
-                                href="/btl/auth/register">Đăng ký</a>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-primary btn-sm rounded-pill px-3 fs-6" href="/btl/auth/login">Đăng
+                                nhập</a>
                         </li>
                     <?php endif; ?>
                 </ul>
@@ -94,11 +99,25 @@
         <?php
         // Hiển thị flash message (thông báo)
         if (isset($_SESSION['flash_msg'])): ?>
-            <div
-                class="alert alert-<?= $_SESSION['flash_type'] ?? 'info' ?> alert-dismissible fade show shadow-sm border-0">
-                <?= $_SESSION['flash_msg'] ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    let type = "<?= $_SESSION['flash_type'] ?? 'info' ?>";
+                    if (type === 'danger') type = 'error'; // Chuyển kiểu của Bootstrap sang SweetAlert
+
+                    Swal.fire({
+                        toast: true,
+                        position: 'bottom-end',
+                        icon: type,
+                        title: "<?= $_SESSION['flash_msg'] ?>",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'colored-toast'
+                        }
+                    });
+                });
+            </script>
             <?php
             unset($_SESSION['flash_msg']);
             unset($_SESSION['flash_type']);
@@ -154,6 +173,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/btl/public/js/main.js"></script>
 </body>
 

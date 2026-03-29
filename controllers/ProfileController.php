@@ -21,7 +21,6 @@ class ProfileController
         $user->id = $_SESSION['user_id'];
         $user_data = $user->getUserById();
 
-        $error = '';
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Update Profile
             if (isset($_POST['update_profile'])) {
@@ -31,7 +30,8 @@ class ProfileController
                 // Process Avatar Upload
                 if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] == 0) {
                     $target_dir = "public/uploads/avatars/";
-                    if (!is_dir($target_dir)) mkdir($target_dir, 0777, true);
+                    if (!is_dir($target_dir))
+                        mkdir($target_dir, 0777, true);
 
                     $filename = time() . '_' . basename($_FILES["avatar"]["name"]);
                     $target_file = $target_dir . $filename;
@@ -45,11 +45,24 @@ class ProfileController
                 }
 
                 if ($user->updateProfile()) {
+                    // Xóa avatar cũ nếu có upload avatar mới thành công
+                    if (!empty($user->avatar) && !empty($user_data['avatar']) && file_exists($user_data['avatar']) && $user->avatar !== $user_data['avatar']) {
+                        unlink($user_data['avatar']);
+                    }
+
                     $_SESSION['flash_msg'] = "Cập nhật thông tin thành công!";
                     $_SESSION['flash_type'] = "success";
                     $user_data = $user->getUserById(); // Refresh data
+                    $_SESSION['avatar'] = $user_data['avatar'];
+
+                    // Thực hiện redirect để tránh resubmit form khi F5
+                    header("Location: /btl/profile/index");
+                    exit();
                 } else {
-                    $error = "Cập nhật thất bại (email có thể đã tồn tại).";
+                    // Xóa file avatar mới tải lên nếu updateProfile thất bại để tránh rác
+                    if (!empty($user->avatar) && file_exists($user->avatar)) {
+                        unlink($user->avatar);
+                    }
                 }
             }
 
@@ -63,6 +76,10 @@ class ProfileController
                         if ($user->changePassword($new_password)) {
                             $_SESSION['flash_msg'] = "Mật khẩu đã được thay đổi!";
                             $_SESSION['flash_type'] = "success";
+
+                            // Thực hiện redirect để tránh resubmit form khi F5
+                            header("Location: /btl/profile/index");
+                            exit();
                         } else {
                             $error = "Không thể đổi mật khẩu.";
                         }

@@ -13,9 +13,13 @@ class AuthController
 
     public function login()
     {
-        // Nếu đã đăng nhập thì về trang chủ
+        // Nếu đã đăng nhập thì về trang phù hợp
         if (isset($_SESSION['user_id'])) {
-            header("Location: /btl/");
+            if ($_SESSION['user_role'] === 'admin') {
+                header("Location: /btl/adminUser/index");
+            } else {
+                header("Location: /btl/");
+            }
             exit();
         }
 
@@ -25,17 +29,25 @@ class AuthController
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
 
-            if ($user->login($email, $password)) {
+            $loginStatus = $user->login($email, $password);
+            if ($loginStatus === true) {
                 // Tạo session
                 $_SESSION['user_id'] = $user->id;
-                $_SESSION['username'] = $user->username;
+                $_SESSION['fullname'] = $user->fullname;
                 $_SESSION['user_role'] = $user->role;
+                $_SESSION['avatar'] = $user->avatar;
 
                 $_SESSION['flash_msg'] = "Đăng nhập thành công!";
                 $_SESSION['flash_type'] = "success";
 
-                header("Location: /btl/");
+                if ($_SESSION['user_role'] === 'admin') {
+                    header("Location: /btl/adminUser/index");
+                } else {
+                    header("Location: /btl/");
+                }
                 exit();
+            } elseif ($loginStatus === 'locked') {
+                $error = "Tài khoản của bạn đã bị khoá. Vui lòng liên hệ quản trị viên.";
             } else {
                 $error = "Tên đăng nhập hoặc mật khẩu không chính xác.";
             }
@@ -58,11 +70,12 @@ class AuthController
         $error = '';
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = new User($this->db);
+            $user->fullname = $_POST['fullname'] ?? '';
             $user->email = $_POST['email'] ?? '';
             $user->password = $_POST['password'] ?? '';
             $confirm_password = $_POST['confirm_password'] ?? '';
 
-            if (empty($user->password) || empty($user->email) || empty($confirm_password)) {
+            if (empty($user->fullname) || empty($user->password) || empty($user->email) || empty($confirm_password)) {
                 $error = "Vui lòng nhập đầy đủ thông tin bắt buộc.";
             } elseif ($user->password !== $confirm_password) {
                 $error = "Mật khẩu xác nhận không khớp.";

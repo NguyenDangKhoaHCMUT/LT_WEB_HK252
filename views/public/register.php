@@ -11,6 +11,14 @@
 <form action="/btl/auth/register" method="POST" id="registerForm" onsubmit="return validateRegister()">
     
     <div class="mb-3">
+        <label for="fullname" class="form-label fw-semibold text-dark">Họ và Tên <span class="text-danger">*</span></label>
+        <div class="input-group shadow-sm">
+            <span class="input-group-text bg-light border-end-0 text-muted px-3"><i class="fa fa-user"></i></span>
+            <input type="text" class="form-control bg-light border-start-0 ps-0" id="fullname" name="fullname" placeholder="Nhập họ và tên" required>
+        </div>
+    </div>
+
+    <div class="mb-3">
         <label for="email" class="form-label fw-semibold text-dark">Địa chỉ Email <span class="text-danger">*</span></label>
         <div class="input-group shadow-sm">
             <span class="input-group-text bg-light border-end-0 text-muted px-3"><i class="fa fa-envelope"></i></span>
