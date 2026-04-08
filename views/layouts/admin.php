@@ -122,11 +122,12 @@
                 margin-left: 0;
             }
         }
-        
+
         @media (min-width: 992px) {
             body.sidebar-collapsed .admin-sidebar {
                 transform: translateX(-100%);
             }
+
             body.sidebar-collapsed .admin-main {
                 margin-left: 0;
             }
@@ -200,8 +201,8 @@
             <li><a href="/btl/admin/index"
                     class="<?= strpos($current_uri, '/admin/index') !== false ? 'active' : '' ?>"><i
                         class="fa fa-chart-pie"></i> Tổng quan</a></li>
-            <li><a href="/btl/admin-user/index"
-                    class="<?= strpos($current_uri, '/admin-user/') !== false ? 'active' : '' ?>"><i
+            <li><a href="/btl/adminUser/index"
+                    class="<?= strpos($current_uri, '/adminUser/') !== false ? 'active' : '' ?>"><i
                         class="fa fa-users"></i> Quản lý Thành viên</a></li>
             <li><a href="/btl/adminProduct/index"
                     class="<?= strpos($current_uri, '/adminProduct/') !== false ? 'active' : '' ?>"><i
@@ -215,6 +216,9 @@
 
             <li class="nav-small-cap text-muted text-uppercase fw-bold mb-2 mt-4 px-3" style="font-size: 0.75rem;">Hệ
                 thống</li>
+            <li><a href="/btl/adminSetting/about"
+                    class="<?= strpos($current_uri, '/adminSetting/') !== false ? 'active' : '' ?>"><i
+                        class="fa fa-cog"></i> Quản lý Nội dung</a></li>
             <li><a href="/btl/auth/logout" class="text-danger"><i class="fa fa-sign-out-alt"></i> Đăng xuất</a></li>
         </ul>
     </div>

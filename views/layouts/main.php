@@ -29,7 +29,7 @@
                     data-bs-target="#navbarCenter">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                
+
                 <!-- Brand Logo -->
                 <a class="navbar-brand fw-bold text-primary fs-4 m-0 p-0" href="/btl/">
                     <i class="fa fa-laptop-code me-1"></i><span class="d-none d-sm-inline">TechStore</span>
@@ -41,22 +41,20 @@
                 <?php $current_uri = $_SERVER['REQUEST_URI'] ?? ''; ?>
                 <ul class="navbar-nav fw-medium gap-lg-2 mt-3 mt-lg-0 text-center">
                     <li class="nav-item">
-                        <a class="nav-link <?= $current_uri == '/btl/' || strpos($current_uri, '/home/index') !== false ? 'text-primary fw-bold' : '' ?>" href="/btl/">Trang chủ</a>
+                        <a class="nav-link <?= $current_uri == '/btl/' || strpos($current_uri, '/home/index') !== false ? 'text-primary fw-bold' : '' ?>"
+                            href="/btl/">Trang chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= strpos($current_uri, '/product') !== false ? 'text-primary fw-bold' : '' ?>" href="/btl/product/index">Sản phẩm</a>
+                        <a class="nav-link <?= strpos($current_uri, '/product') !== false ? 'text-primary fw-bold' : '' ?>"
+                            href="/btl/product/index">Sản phẩm</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= strpos($current_uri, '/news') !== false ? 'text-primary fw-bold' : '' ?>" href="/btl/news/index">Tin tức</a>
+                        <a class="nav-link <?= strpos($current_uri, '/news') !== false ? 'text-primary fw-bold' : '' ?>"
+                            href="/btl/news/index">Tin tức</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= strpos($current_uri, '/home/about') !== false ? 'text-primary fw-bold' : '' ?>" href="/btl/home/about">Giới thiệu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= strpos($current_uri, '/home/faq') !== false ? 'text-primary fw-bold' : '' ?>" href="/btl/home/faq">Hỏi đáp</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= strpos($current_uri, '/home/contact') !== false ? 'text-primary fw-bold' : '' ?>" href="/btl/home/contact">Liên hệ</a>
+                        <a class="nav-link <?= strpos($current_uri, '/home/contact') !== false ? 'text-primary fw-bold' : '' ?>"
+                            href="/btl/home/contact">Liên hệ</a>
                     </li>
                 </ul>
             </div>
@@ -83,39 +81,41 @@
                         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                             <li class="nav-item me-3 d-none d-md-block">
                                 <a class="btn btn-outline-danger btn-sm fw-semibold px-3 rounded-pill"
-                                    href="/btl/admin-user/index">Quản trị</a>
+                                    href="/btl/adminUser/index">Quản trị</a>
                             </li>
                         <?php endif; ?>
-                        <li class="nav-item dropdown">
-                            <!-- Show Avatar -->
-                            <a class="nav-link dropdown-toggle text-dark fw-medium p-0 d-flex align-items-center" href="#"
-                                id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                <?php if (!empty($_SESSION['avatar'])): ?>
-                                    <img src="/btl/<?= htmlspecialchars($_SESSION['avatar']) ?>" alt="Avatar"
-                                        class="rounded-circle me-1 border"
-                                        style="width: 32px; height: 32px; object-fit: cover;">
-                                <?php else: ?>
-                                    <i class="fa fa-user-circle fs-4 me-1 text-primary"></i>
-                                <?php endif; ?>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-3 position-absolute">
-                                <li><a class="dropdown-item py-2" href="/btl/profile/index"><i
-                                            class="fa fa-id-card me-2 text-muted"></i> Hồ sơ</a></li>
-                                <?php if ($_SESSION['user_role'] !== 'admin'): ?>
-                                    <li><a class="dropdown-item py-2" href="/btl/orders/history"><i
-                                                class="fa fa-box-open me-2 text-muted"></i> Đơn hàng của tôi</a></li>
-                                <?php endif; ?>
-                                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                                    <li class="d-md-none"><a class="dropdown-item py-2 text-danger fw-bold"
-                                            href="/btl/admin-user/index"><i class="fa fa-cogs me-2"></i> Quản trị</a></li>
-                                <?php endif; ?>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item py-2 text-danger" href="/btl/auth/logout"><i
-                                            class="fa fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
-                            </ul>
-                        </li>
+                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] != 'admin'): ?>
+                            <li class="nav-item dropdown">
+                                <!-- Show Avatar -->
+                                <a class="nav-link dropdown-toggle text-dark fw-medium p-0 d-flex align-items-center" href="#"
+                                    id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                    <?php if (!empty($_SESSION['avatar'])): ?>
+                                        <img src="/btl/<?= htmlspecialchars($_SESSION['avatar']) ?>" alt="Avatar"
+                                            class="rounded-circle me-1 border"
+                                            style="width: 32px; height: 32px; object-fit: cover;">
+                                    <?php else: ?>
+                                        <i class="fa fa-user-circle fs-4 me-1 text-primary"></i>
+                                    <?php endif; ?>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-3 position-absolute">
+                                    <li><a class="dropdown-item py-2" href="/btl/profile/index"><i
+                                                class="fa fa-id-card me-2 text-muted"></i> Hồ sơ</a></li>
+                                    <?php if ($_SESSION['user_role'] !== 'admin'): ?>
+                                        <li><a class="dropdown-item py-2" href="/btl/orders/history"><i
+                                                    class="fa fa-box-open me-2 text-muted"></i> Đơn hàng của tôi</a></li>
+                                    <?php endif; ?>
+                                    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                                        <li class="d-md-none"><a class="dropdown-item py-2 text-danger fw-bold"
+                                                href="/btl/adminUser/index"><i class="fa fa-cogs me-2"></i> Quản trị</a></li>
+                                    <?php endif; ?>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item py-2 text-danger" href="/btl/auth/logout"><i
+                                                class="fa fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
                     <?php else: ?>
                         <li class="nav-item ms-md-2">
                             <a class="btn rounded-pill px-4 fw-medium shadow-sm d-flex align-items-center gap-2 tech-login-btn"

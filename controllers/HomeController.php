@@ -1,4 +1,6 @@
 <?php
+require_once 'models/Setting.php';
+
 class HomeController
 {
     public function index()
@@ -13,6 +15,10 @@ class HomeController
     public function about()
     {
         $title = "Giới thiệu";
+        
+        $settingModel = new Setting();
+        $settings = $settingModel->getAllSettings();
+        
         ob_start();
         require_once 'views/public/about.php';
         $content = ob_get_clean();
