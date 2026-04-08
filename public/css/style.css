@@ -91,3 +91,12 @@ body {
     box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
 }
 
+/* Feature Cards (About Page) */
+.tech-feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tech-feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+}

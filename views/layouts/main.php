@@ -21,12 +21,45 @@
 <body>
 
     <!-- Main Navigation -->
-    <nav class="navbar navbar-expand bg-white sticky-top tech-navbar shadow-sm py-3">
-        <div class="container d-flex justify-content-between align-items-center">
-            <!-- Brand Logo -->
-            <a class="navbar-brand fw-bold text-primary fs-4 m-0 p-0" href="/btl/">
-                <i class="fa fa-laptop-code me-1"></i><span class="d-none d-sm-inline">TechStore</span>
-            </a>
+    <nav class="navbar navbar-expand-lg bg-white sticky-top tech-navbar shadow-sm py-2">
+        <div class="container d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <!-- Toggle Button for Mobile -->
+                <button class="navbar-toggler border-0 shadow-none px-2 me-2" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCenter">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Brand Logo -->
+                <a class="navbar-brand fw-bold text-primary fs-4 m-0 p-0" href="/btl/">
+                    <i class="fa fa-laptop-code me-1"></i><span class="d-none d-sm-inline">TechStore</span>
+                </a>
+            </div>
+
+            <!-- Center Menu -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarCenter">
+                <?php $current_uri = $_SERVER['REQUEST_URI'] ?? ''; ?>
+                <ul class="navbar-nav fw-medium gap-lg-2 mt-3 mt-lg-0 text-center">
+                    <li class="nav-item">
+                        <a class="nav-link <?= $current_uri == '/btl/' || strpos($current_uri, '/home/index') !== false ? 'text-primary fw-bold' : '' ?>" href="/btl/">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= strpos($current_uri, '/product') !== false ? 'text-primary fw-bold' : '' ?>" href="/btl/product/index">Sản phẩm</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= strpos($current_uri, '/news') !== false ? 'text-primary fw-bold' : '' ?>" href="/btl/news/index">Tin tức</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= strpos($current_uri, '/home/about') !== false ? 'text-primary fw-bold' : '' ?>" href="/btl/home/about">Giới thiệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= strpos($current_uri, '/home/faq') !== false ? 'text-primary fw-bold' : '' ?>" href="/btl/home/faq">Hỏi đáp</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= strpos($current_uri, '/home/contact') !== false ? 'text-primary fw-bold' : '' ?>" href="/btl/home/contact">Liên hệ</a>
+                    </li>
+                </ul>
+            </div>
 
             <!-- Right side items -->
             <div class="d-flex align-items-center" id="navTech">
