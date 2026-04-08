@@ -7,9 +7,9 @@ $url_param = isset($_GET['url']) ? rtrim($_GET['url'], '/') : '';
 $url = explode('/', filter_var($url_param, FILTER_SANITIZE_URL));
 
 $controller_name = !empty($url[0]) ? ucfirst($url[0]) . 'Controller' : 'HomeController';
-$action = isset($url[1]) ? $url[1] : 'index';
+$action = $url[1] ?? 'index';
 
-$controller_file = 'controllers/' . $controller_name . '.php';
+$controller_file = "controllers/$controller_name.php";
 
 if (file_exists($controller_file)) {
     require_once $controller_file;

@@ -42,13 +42,13 @@
                             </td>
                             <td class="text-end pe-4">
                                 <div class="d-inline-flex gap-2">
-                                    <a href="/btl/adminUser/view/<?= $user['id'] ?>" class="btn btn-sm btn-light text-primary bg-opacity-50 border shadow-sm" title="Xem chi tiết">
+                                    <a href="/btl/admin-user/view/<?= $user['id'] ?>" class="btn btn-sm btn-light text-primary bg-opacity-50 border shadow-sm" title="Xem chi tiết">
                                         <i class="fa fa-eye"></i>
                                     </a>
-                                    <a href="/btl/adminUser/toggle_status/<?= $user['id'] ?>" class="btn btn-sm btn-light text-warning bg-opacity-50 border shadow-sm" title="<?= $user['status'] === 'active' ? 'Khóa tài khoản' : 'Mở khóa tài khoản' ?>" onclick="return confirm('Bạn có chắc chắn muốn đổi trạng thái tài khoản này?')">
+                                    <a href="/btl/admin-user/toggle_status/<?= $user['id'] ?>" class="btn btn-sm btn-light text-warning bg-opacity-50 border shadow-sm" title="<?= $user['status'] === 'active' ? 'Khóa tài khoản' : 'Mở khóa tài khoản' ?>" onclick="return confirm('Bạn có chắc chắn muốn đổi trạng thái tài khoản này?')">
                                         <i class="fa <?= $user['status'] === 'active' ? 'fa-lock' : 'fa-unlock' ?>"></i>
                                     </a>
-                                    <a href="/btl/adminUser/delete/<?= $user['id'] ?>" class="btn btn-sm btn-light text-danger bg-opacity-50 border shadow-sm" title="Xoá vĩnh viễn" onclick="return confirm('Cảnh báo: Xác nhận xoá tài khoản này? Hành động không thể hoàn tác.')">
+                                    <a href="/btl/admin-user/delete/<?= $user['id'] ?>" class="btn btn-sm btn-light text-danger bg-opacity-50 border shadow-sm" title="Xoá vĩnh viễn" onclick="return confirm('Cảnh báo: Xác nhận xoá tài khoản này? Hành động không thể hoàn tác.')">
                                         <i class="fa fa-trash-alt"></i>
                                     </a>
                                 </div>

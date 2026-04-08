@@ -50,7 +50,7 @@
                         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                             <li class="nav-item me-3 d-none d-md-block">
                                 <a class="btn btn-outline-danger btn-sm fw-semibold px-3 rounded-pill"
-                                    href="/btl/adminUser/index">Quản trị</a>
+                                    href="/btl/admin-user/index">Quản trị</a>
                             </li>
                         <?php endif; ?>
                         <li class="nav-item dropdown">
@@ -74,7 +74,7 @@
                                 <?php endif; ?>
                                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                                     <li class="d-md-none"><a class="dropdown-item py-2 text-danger fw-bold"
-                                            href="/btl/adminUser/index"><i class="fa fa-cogs me-2"></i> Quản trị</a></li>
+                                            href="/btl/admin-user/index"><i class="fa fa-cogs me-2"></i> Quản trị</a></li>
                                 <?php endif; ?>
                                 <li>
                                     <hr class="dropdown-divider">
@@ -84,9 +84,12 @@
                             </ul>
                         </li>
                     <?php else: ?>
-                        <li class="nav-item">
-                            <a class="btn btn-outline-primary btn-sm rounded-pill px-3 fs-6" href="/btl/auth/login">Đăng
-                                nhập</a>
+                        <li class="nav-item ms-md-2">
+                            <a class="btn rounded-pill px-4 fw-medium shadow-sm d-flex align-items-center gap-2 tech-login-btn"
+                                href="/btl/auth/login" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                Đăng nhập
+                                <i class="fa-regular fa-circle-user fs-5"></i>
+                            </a>
                         </li>
                     <?php endif; ?>
                 </ul>

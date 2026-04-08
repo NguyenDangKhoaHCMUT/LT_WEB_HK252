@@ -122,6 +122,15 @@
                 margin-left: 0;
             }
         }
+        
+        @media (min-width: 992px) {
+            body.sidebar-collapsed .admin-sidebar {
+                transform: translateX(-100%);
+            }
+            body.sidebar-collapsed .admin-main {
+                margin-left: 0;
+            }
+        }
 
         /* Header Styling */
         .admin-header {
@@ -191,8 +200,8 @@
             <li><a href="/btl/admin/index"
                     class="<?= strpos($current_uri, '/admin/index') !== false ? 'active' : '' ?>"><i
                         class="fa fa-chart-pie"></i> Tổng quan</a></li>
-            <li><a href="/btl/adminUser/index"
-                    class="<?= strpos($current_uri, '/adminUser/') !== false ? 'active' : '' ?>"><i
+            <li><a href="/btl/admin-user/index"
+                    class="<?= strpos($current_uri, '/admin-user/') !== false ? 'active' : '' ?>"><i
                         class="fa fa-users"></i> Quản lý Thành viên</a></li>
             <li><a href="/btl/adminProduct/index"
                     class="<?= strpos($current_uri, '/adminProduct/') !== false ? 'active' : '' ?>"><i
@@ -218,7 +227,7 @@
         <!-- Header -->
         <header class="admin-header d-flex justify-content-between">
             <div class="d-flex align-items-center">
-                <button class="btn btn-light btn-icon d-lg-none me-3" id="sidebarToggle">
+                <button class="btn btn-light btn-icon me-3" id="sidebarToggle" title="Toggle Sidebar">
                     <i class="fa fa-bars fs-5"></i>
                 </button>
                 <h1 class="header-title d-none d-sm-block"><?= isset($title) ? $title : 'Dashboard' ?></h1>
@@ -271,7 +280,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Sidebar Toggle Logic for Mobile
+        // Sidebar Toggle Logic for Mobile and PC
         document.addEventListener("DOMContentLoaded", function () {
             const toggleBtn = document.getElementById('sidebarToggle');
             const sidebar = document.getElementById('adminSidebar');
@@ -279,8 +288,14 @@
 
             if (toggleBtn && sidebar && backdrop) {
                 toggleBtn.addEventListener('click', function () {
-                    sidebar.classList.add('show');
-                    backdrop.classList.add('show');
+                    if (window.innerWidth < 992) {
+                        // Logic cho Mobile
+                        sidebar.classList.add('show');
+                        backdrop.classList.add('show');
+                    } else {
+                        // Logic cho PC
+                        document.body.classList.toggle('sidebar-collapsed');
+                    }
                 });
 
                 backdrop.addEventListener('click', function () {
