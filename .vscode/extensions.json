@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "bmewburn.vscode-intelephense-client",
+        "esbenp.prettier-vscode"
+    ],
+    "unwantedRecommendations": [
+        "devsense.phptools-vscode",
+        "devsense.intelli-php-vscode"
+    ]
+}

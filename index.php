@@ -18,6 +18,8 @@ if (file_exists($controller_file)) {
         unset($url[0], $url[1]);
         $params = $url ? array_values($url) : [];
         call_user_func_array([$controller, $action], $params);
+    } elseif ($controller_name === 'NewsController' && !empty($action) && method_exists($controller, 'show')) {
+        call_user_func_array([$controller, 'show'], [$action]);
     } else {
         http_response_code(404);
         echo "Lỗi 404: Không tìm thấy Action '{$action}'.";
