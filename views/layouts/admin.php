@@ -213,10 +213,6 @@
             <li><a href="/btl/adminOrder/index"
                     class="<?= strpos($current_uri, '/adminOrder/') !== false ? 'active' : '' ?>"><i
                         class="fa fa-shopping-cart"></i> Quản lý Đơn hàng</a></li>
-            <li><a href="/btl/admincontact/index"
-                class="<?= strpos($current_uri, '/admincontact/') !== false ? 'active' : '' ?>">
-                <i class="fa fa-envelope"></i> Quản lý Liên hệ
-            </a></li>
 
             <li class="nav-small-cap text-muted text-uppercase fw-bold mb-2 mt-4 px-3" style="font-size: 0.75rem;">Hệ
                 thống</li>
