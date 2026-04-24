@@ -263,9 +263,9 @@ $sectionTitle = $hasFilters ? 'Bài viết phù hợp với bộ lọc' : 'Bài 
                             <a href="/btl/news" class="btn btn-outline-primary news-action-btn px-4">Xem toàn bộ bài viết</a>
                         <?php else: ?>
                             <h3 class="fw-bold">Chưa có bài viết nào được xuất bản</h3>
-                            <p class="text-secondary mb-0">
-                                Bạn có thể import lại dữ liệu từ <code>init.sql</code> hoặc thêm dữ liệu vào bảng <code>posts</code>.
-                            </p>
+                            <!-- <p class="text-secondary mb-0">
+                                Admin có thể tạo bài viết mới từ trang quản trị để nội dung được hiển thị tại đây.
+                            </p> -->
                         <?php endif; ?>
                     </div>
                 </div>
