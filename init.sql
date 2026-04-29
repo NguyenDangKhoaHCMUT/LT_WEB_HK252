@@ -31,6 +31,55 @@ CREATE TABLE IF NOT EXISTS settings (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+-- Tạo bảng categories
+CREATE TABLE IF NOT EXISTS categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tạo bảng products
+CREATE TABLE IF NOT EXISTS products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_id INT,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    image VARCHAR(255),
+    price INT NOT NULL,
+    stock INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_products_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+);
+
+-- Tạo bảng orders
+CREATE TABLE IF NOT EXISTS orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    status ENUM('cart', 'pending', 'processing', 'completed', 'cancelled') DEFAULT 'cart',
+    total_amount INT DEFAULT 0,
+    customer_name VARCHAR(255),
+    phone VARCHAR(20),
+    address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Tạo bảng order_items
+CREATE TABLE IF NOT EXISTS order_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    unit_price INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    UNIQUE KEY uniq_order_product (order_id, product_id)
+);
+
 -- Dữ liệu khởi tạo mẫu cho trang About
 INSERT IGNORE INTO settings (setting_key, setting_value) VALUES 
 ('about_subtitle', 'Câu chuyện của chúng tôi'),
@@ -40,3 +89,34 @@ INSERT IGNORE INTO settings (setting_key, setting_value) VALUES
 ('about_carousel_1', 'https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=2070&auto=format&fit=crop'),
 ('about_carousel_2', 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop'),
 ('about_carousel_3', 'https://images.unsplash.com/photo-1531297172864-45d6124c9c8c?q=80&w=2070&auto=format&fit=crop');
+
+-- Dữ liệu mẫu người dùng để đảm bảo khóa ngoại cho orders
+INSERT IGNORE INTO users (id, password, email, fullname, avatar, role, status) VALUES
+(1, '123456', 'admin@techstore.local', 'Quản trị viên', NULL, 'admin', 'active'),
+(2, '123456', 'member@techstore.local', 'Nguyễn Văn A', NULL, 'member', 'active');
+
+-- Dữ liệu mẫu cho categories
+INSERT IGNORE INTO categories (id, name, created_at) VALUES
+(1, 'Smartphone', CURRENT_TIMESTAMP),
+(2, 'Laptop', CURRENT_TIMESTAMP);
+
+-- Dữ liệu mẫu cho products
+INSERT IGNORE INTO products (id, category_id, name, slug, description, image, price, stock, created_at, updated_at) VALUES
+(1, 1, 'iPhone 15 Pro Max', 'iphone-15-pro-max', 'iPhone 15 Pro Max với khung titan, chip A17 Pro và camera zoom quang học 5x, phù hợp cho nhu cầu cao cấp.', 'https://images.unsplash.com/photo-1695048133142-1a20484d2d91?q=80&w=1200&auto=format&fit=crop', 32990000, 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 1, 'Samsung Galaxy S24 Ultra', 'samsung-galaxy-s24-ultra', 'Galaxy S24 Ultra sở hữu màn hình lớn, camera 200MP và S Pen cho trải nghiệm làm việc linh hoạt.', 'https://images.unsplash.com/photo-1610945264803-c22b62d2a6b5?q=80&w=1200&auto=format&fit=crop', 31990000, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 2, 'MacBook Air M3', 'macbook-air-m3', 'MacBook Air M3 mỏng nhẹ, pin lâu và hiệu năng ổn định cho học tập lẫn công việc văn phòng.', 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop', 28990000, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 2, 'ASUS ROG Strix G16', 'asus-rog-strix-g16', 'Laptop gaming hiệu năng cao, phù hợp cho game thủ và người dùng cần cấu hình mạnh.', 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=1200&auto=format&fit=crop', 35990000, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Dữ liệu mẫu cho orders
+INSERT IGNORE INTO orders (id, user_id, status, total_amount, customer_name, phone, address, created_at, updated_at) VALUES
+(1, 2, 'cart', 64980000, 'Nguyễn Văn A', '0901234567', 'Quận 1, TP. Hồ Chí Minh', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 2, 'pending', 28990000, 'Nguyễn Văn A', '0901234567', 'Quận 1, TP. Hồ Chí Minh', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 2, 'completed', 35990000, 'Nguyễn Văn A', '0901234567', 'Quận 1, TP. Hồ Chí Minh', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Dữ liệu mẫu cho order_items
+INSERT IGNORE INTO order_items (id, order_id, product_id, quantity, unit_price, created_at) VALUES
+(1, 1, 1, 1, 32990000, CURRENT_TIMESTAMP),
+(2, 1, 3, 1, 31990000, CURRENT_TIMESTAMP),
+(3, 2, 3, 1, 28990000, CURRENT_TIMESTAMP),
+(4, 3, 4, 1, 35990000, CURRENT_TIMESTAMP);
+
