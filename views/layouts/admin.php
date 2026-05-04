@@ -210,6 +210,9 @@
             <li><a href="/btl/adminNews/index"
                     class="<?= strpos($current_uri, '/adminNews/') !== false ? 'active' : '' ?>"><i
                         class="fa fa-newspaper"></i> Quản lý Tin tức</a></li>
+            <li><a href="/btl/adminComment/index"
+                    class="<?= strpos($current_uri, '/adminComment/') !== false ? 'active' : '' ?>"><i
+                        class="fa fa-comments"></i> Quản lý Bình luận</a></li>
             <li><a href="/btl/adminOrder/index"
                     class="<?= strpos($current_uri, '/adminOrder/') !== false ? 'active' : '' ?>"><i
                         class="fa fa-shopping-cart"></i> Quản lý Đơn hàng</a></li>

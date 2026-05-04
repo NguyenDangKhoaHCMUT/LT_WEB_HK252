@@ -1,8 +1,19 @@
 <?php
+$keyword = $keyword ?? '';
+$category = $category ?? null;
+$sort = $sort ?? 'latest';
+$featuredPost = $featuredPost ?? null;
+
 $isSearching = !empty($keyword);
 $hasFilters = $isSearching || !empty($category) || (($sort ?? 'latest') !== 'latest');
-$listingPosts = $featuredPost ? array_slice($posts, 1) : $posts;
-$selectedCategoryName = $selectedCategory['name'] ?? 'Tất cả danh mục';
+$posts = $posts ?? [];
+$hasFeaturedPost = !empty($featuredPost);
+$listingPosts = $hasFeaturedPost ? array_slice($posts, 1) : $posts;
+
+$totalPosts = $totalPosts ?? count($posts);
+$totalPages = isset($totalPages) ? (int) $totalPages : ($totalPosts > 0 ? 1 : 0);
+$page = isset($page) ? (int) $page : 1;
+
 $sortLabelMap = [
     'latest' => 'Mới nhất',
     'most_viewed' => 'Xem nhiều',
@@ -20,16 +31,16 @@ if (!empty($category)) {
 }
 
 if (($sort ?? 'latest') !== 'latest') {
-    $listingQuery['sort'] = $sort;
+    $listingQuery['sort'] = $sort ?? 'latest';
 }
 
 $buildPageQuery = function ($targetPage) use ($listingQuery) {
     return http_build_query(array_merge($listingQuery, ['page' => $targetPage]));
 };
 
-$showPagination = $totalPages >= 1 && ($featuredPost || !empty($listingPosts));
+$showPagination = $totalPages >= 1 && ($hasFeaturedPost || !empty($listingPosts));
 $heroTitle = $isSearching ? 'Kết quả tìm kiếm bài viết' : 'Tin tức công nghệ và đánh giá sản phẩm';
-$sectionTitle = $hasFilters ? 'Bài viết phù hợp với bộ lọc' : 'Bài viết mới nhất';
+$sectionTitle = $hasFilters ? 'Kết quả' : 'Bài viết mới nhất';
 ?>
 
 <section class="py-2 py-lg-4 news-live-root" data-news-live-search-root data-news-url="/btl/news">
@@ -41,36 +52,18 @@ $sectionTitle = $hasFilters ? 'Bài viết phù hợp với bộ lọc' : 'Bài 
                 <?php if ($isSearching): ?>
                     Tìm thấy <strong><?= (int) $totalPosts ?></strong> bài viết cho từ khóa
                     <strong>"<?= htmlspecialchars($keyword) ?>"</strong>.
-                <?php elseif ($hasFilters): ?>
-                    Khám phá các bài viết theo danh mục <strong><?= htmlspecialchars($selectedCategoryName) ?></strong>
-                    và cách sắp xếp <strong><?= htmlspecialchars($sortLabel) ?></strong>.
                 <?php else: ?>
                     Cập nhật tin công nghệ, review thiết bị và kinh nghiệm mua sắm phù hợp cho khách hàng của TechStore.
                 <?php endif; ?>
             </p>
         </div>
-        <div class="col-lg-4">
-            <div class="news-hero-summary">
-                <div class="news-hero-stat">
-                    <span class="news-hero-stat-value"><?= (int) $totalPosts ?></span>
-                    <span class="news-hero-stat-label"><?= $isSearching ? 'Kết quả' : 'Bài viết' ?></span>
-                </div>
-                <div class="news-hero-stat">
-                    <span class="news-hero-stat-value"><?= count($categories) ?></span>
-                    <span class="news-hero-stat-label">Danh mục</span>
-                </div>
-                <div class="news-hero-stat">
-                    <span class="news-hero-stat-value"><?= htmlspecialchars($sortLabel) ?></span>
-                    <span class="news-hero-stat-label">Hiển thị</span>
-                </div>
-            </div>
-        </div>
+        
     </div>
 
     <div class="card border-0 shadow-sm mb-5 news-search-card">
         <div class="card-body">
-            <form method="GET" action="/btl/news" class="row g-3 align-items-end news-search-form" data-news-search-form>
-                <div class="col-lg-5">
+            <form method="GET" action="/btl/news" class="row g-3 align-items-center news-search-form" data-news-search-form>
+                <div class="col-lg-6">
                     <label for="keyword" class="form-label fw-semibold">Từ khóa</label>
                     <input
                         type="text"
@@ -83,17 +76,6 @@ $sectionTitle = $hasFilters ? 'Bài viết phù hợp với bộ lọc' : 'Bài 
                         placeholder="Nhập tiêu đề, mô tả, nội dung hoặc từ khóa công nghệ...">
                 </div>
                 <div class="col-lg-3">
-                    <label for="category" class="form-label fw-semibold">Danh mục</label>
-                    <select class="form-select" id="category" name="category" data-news-search-filter>
-                        <option value="">Tất cả danh mục</option>
-                        <?php foreach ($categories as $item): ?>
-                            <option value="<?= htmlspecialchars($item['slug']) ?>" <?= ($category ?? '') === $item['slug'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($item['name']) ?> (<?= (int) $item['post_count'] ?>)
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="col-lg-2">
                     <label for="sort" class="form-label fw-semibold">Sắp xếp</label>
                     <select class="form-select" id="sort" name="sort" data-news-search-filter>
                         <option value="latest" <?= ($sort ?? 'latest') === 'latest' ? 'selected' : '' ?>>Mới nhất</option>
@@ -101,26 +83,16 @@ $sectionTitle = $hasFilters ? 'Bài viết phù hợp với bộ lọc' : 'Bài 
                         <option value="most_commented" <?= ($sort ?? '') === 'most_commented' ? 'selected' : '' ?>>Bình luận nhiều</option>
                     </select>
                 </div>
-                <div class="col-lg-2">
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary news-action-btn">
-                            <i class="fa-solid fa-magnifying-glass me-2"></i>Tìm kiếm
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary news-action-btn" data-news-search-clear>
-                            <i class="fa-solid fa-rotate-left me-2"></i>Đặt lại
-                        </button>
+                <div class="col-lg-3">
+                    <div class="news-hero-summary">
+                        <div class="news-hero-stat">
+                            <span class="news-hero-stat-value"><?= (int) $totalPosts ?></span>
+                            <span class="news-hero-stat-label"><?= $isSearching ? 'Kết quả' : 'Bài viết' ?></span>
+                        </div>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-12 mt-2">
                     <div class="d-flex flex-wrap align-items-center gap-2 news-filter-pills">
-                        <span class="news-filter-pill">
-                            <i class="fa-regular fa-folder-open"></i>
-                            <?= htmlspecialchars($selectedCategoryName) ?>
-                        </span>
-                        <span class="news-filter-pill">
-                            <i class="fa-solid fa-arrow-down-wide-short"></i>
-                            <?= htmlspecialchars($sortLabel) ?>
-                        </span>
                         <?php if (!empty($keyword)): ?>
                             <span class="news-filter-pill">
                                 <i class="fa-solid fa-hashtag"></i>
@@ -128,22 +100,20 @@ $sectionTitle = $hasFilters ? 'Bài viết phù hợp với bộ lọc' : 'Bài 
                             </span>
                         <?php endif; ?>
                     </div>
-                    <div class="small text-secondary mt-2 news-search-status" data-news-search-status>
-                        Gõ từ khóa hoặc thay đổi bộ lọc để cập nhật danh sách bài viết.
-                    </div>
                 </div>
             </form>
         </div>
     </div>
 
-    <?php if ($featuredPost): ?>
+    <?php if (!empty($featuredPost)): ?>
         <div class="card border-0 shadow-sm overflow-hidden mb-5 news-featured-card">
             <div class="row g-0">
                 <div class="col-lg-6">
                     <img
                         src="<?= htmlspecialchars($featuredPost['thumbnail'] ?: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop') ?>"
                         class="w-100 h-100 news-cover-image"
-                        alt="<?= htmlspecialchars($featuredPost['title']) ?>">
+                        alt="<?= htmlspecialchars($featuredPost['title']) ?>"
+                        loading="eager">
                 </div>
                 <div class="col-lg-6">
                     <div class="card-body p-4 p-xl-5">
@@ -190,14 +160,7 @@ $sectionTitle = $hasFilters ? 'Bài viết phù hợp với bộ lọc' : 'Bài 
     <?php if (!empty($listingPosts)): ?>
         <div class="d-flex flex-column flex-lg-row align-items-lg-end justify-content-between gap-3 mb-4 news-section-heading">
             <div>
-                <p class="text-uppercase fw-semibold text-primary small mb-2">Chuyên mục bài viết</p>
                 <h2 class="h3 fw-bold mb-1"><?= htmlspecialchars($sectionTitle) ?></h2>
-                <p class="text-secondary mb-0">
-                    Tổng hợp review sản phẩm, tin công nghệ mới và kinh nghiệm chọn mua thiết bị dành cho khách hàng TechStore.
-                </p>
-            </div>
-            <div class="news-section-count">
-                <span><?= (int) $totalPosts ?></span> bài viết
             </div>
         </div>
     <?php endif; ?>
@@ -207,10 +170,14 @@ $sectionTitle = $hasFilters ? 'Bài viết phù hợp với bộ lọc' : 'Bài 
             <?php foreach ($listingPosts as $post): ?>
                 <div class="col-lg-6">
                     <article class="card h-100 border-0 shadow-sm news-post-card">
-                        <img
-                            src="<?= htmlspecialchars($post['thumbnail'] ?: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop') ?>"
-                            class="card-img-top news-card-image"
-                            alt="<?= htmlspecialchars($post['title']) ?>">
+                        <div class="news-card-image-wrap">
+                            <img
+                                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3C/svg%3E"
+                                data-src="<?= htmlspecialchars($post['thumbnail'] ?: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop') ?>"
+                                class="card-img-top news-card-image lazy-img"
+                                alt="<?= htmlspecialchars($post['title']) ?>"
+                                loading="lazy">
+                        </div>
                         <div class="card-body d-flex flex-column">
                             <div class="d-flex flex-wrap gap-2 mb-3">
                                 <?php foreach ($post['categories'] as $item): ?>
@@ -258,14 +225,11 @@ $sectionTitle = $hasFilters ? 'Bài viết phù hợp với bộ lọc' : 'Bài 
                         <?php if ($isSearching || $hasFilters): ?>
                             <h3 class="fw-bold">Không tìm thấy bài viết phù hợp</h3>
                             <p class="text-secondary mb-4">
-                                Hãy thử lại với từ khóa khác, đổi danh mục hoặc trở về danh sách tất cả bài viết.
+                                Hãy thử lại với từ khóa khác hoặc trở về danh sách tất cả bài viết.
                             </p>
                             <a href="/btl/news" class="btn btn-outline-primary news-action-btn px-4">Xem toàn bộ bài viết</a>
                         <?php else: ?>
                             <h3 class="fw-bold">Chưa có bài viết nào được xuất bản</h3>
-                            <!-- <p class="text-secondary mb-0">
-                                Admin có thể tạo bài viết mới từ trang quản trị để nội dung được hiển thị tại đây.
-                            </p> -->
                         <?php endif; ?>
                     </div>
                 </div>

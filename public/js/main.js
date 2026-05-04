@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     initializeNewsLiveSearch(document);
+    initializeLazyImages(document);
 });
 
 function initializeNewsLiveSearch(scope) {
@@ -84,6 +85,7 @@ function initializeNewsLiveSearch(scope) {
         document.title = nextDocument.title || document.title;
         window.history.replaceState({}, '', targetUrl);
         initializeNewsLiveSearch(document);
+        initializeLazyImages(document);
 
         if (shouldRestoreFocus) {
             var nextInput = document.querySelector('[data-news-search-input]');
@@ -204,5 +206,48 @@ function initializeNewsLiveSearch(scope) {
             clearTimeout(debounceTimer);
             performSearch({ keyword: '', category: '', sort: 'latest' }, { restoreFocus: true, force: true });
         });
+    }
+}
+
+/* ── Lazy Image Loading with Intersection Observer ── */
+function initializeLazyImages(scope) {
+    var lazyImgs = (scope || document).querySelectorAll('img.lazy-img[data-src]');
+    if (!lazyImgs.length) return;
+
+    function loadImage(img) {
+        var src = img.getAttribute('data-src');
+        if (!src) return;
+
+        var tmp = new Image();
+        tmp.onload = function () {
+            img.src = src;
+            img.removeAttribute('data-src');
+            img.classList.add('lazy-loaded');
+        };
+        tmp.onerror = function () {
+            img.src = src; // show broken image rather than blank
+            img.removeAttribute('data-src');
+            img.classList.add('lazy-loaded');
+        };
+        tmp.src = src;
+    }
+
+    if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries, obs) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    loadImage(entry.target);
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, {
+            rootMargin: '0px 0px 200px 0px', // start loading 200px before entering viewport
+            threshold: 0
+        });
+
+        lazyImgs.forEach(function (img) { observer.observe(img); });
+    } else {
+        // Fallback: load all immediately
+        lazyImgs.forEach(loadImage);
     }
 }

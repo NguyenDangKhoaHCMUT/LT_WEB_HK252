@@ -43,7 +43,7 @@ class AdminNewsController
 
     public function create()
     {
-        $post = $this->getEmptyPostData();
+        $post   = $this->getEmptyPostData();
         $errors = [];
         $isEdit = false;
 
@@ -83,7 +83,7 @@ class AdminNewsController
 
         if (!empty($errors)) {
             $isEdit = false;
-            $title = "Thêm bài viết";
+            $title  = "Thêm bài viết";
             ob_start();
             require_once 'views/admin/news/form.php';
             $content = ob_get_clean();
@@ -93,8 +93,9 @@ class AdminNewsController
 
         $post['author_id'] = $_SESSION['user_id'];
 
-        if ($this->postModel->create($post)) {
-            $_SESSION['flash_msg'] = "Thêm bài viết thành công.";
+        $newId = $this->postModel->create($post);
+        if ($newId) {
+            $_SESSION['flash_msg']  = "Thêm bài viết thành công.";
             $_SESSION['flash_type'] = "success";
             header("Location: /btl/adminNews/index");
             exit();
@@ -103,7 +104,7 @@ class AdminNewsController
         $this->deleteLocalThumbnail($post['thumbnail']);
         $errors['general'] = "Không thể lưu bài viết vào cơ sở dữ liệu.";
         $isEdit = false;
-        $title = "Thêm bài viết";
+        $title  = "Thêm bài viết";
         ob_start();
         require_once 'views/admin/news/form.php';
         $content = ob_get_clean();
@@ -114,7 +115,7 @@ class AdminNewsController
     {
         $post = $this->postModel->getPostById($id);
         if (!$post) {
-            $_SESSION['flash_msg'] = "Không tìm thấy bài viết.";
+            $_SESSION['flash_msg']  = "Không tìm thấy bài viết.";
             $_SESSION['flash_type'] = "warning";
             header("Location: /btl/adminNews/index");
             exit();
@@ -122,7 +123,7 @@ class AdminNewsController
 
         $errors = [];
         $isEdit = true;
-        $title = "Sửa bài viết";
+        $title  = "Sửa bài viết";
         ob_start();
         require_once 'views/admin/news/form.php';
         $content = ob_get_clean();
@@ -167,10 +168,10 @@ class AdminNewsController
         }
 
         if (!empty($errors)) {
-            $post['id'] = $id;
+            $post['id']         = $id;
             $post['created_at'] = $existingPost['created_at'];
             $isEdit = true;
-            $title = "Sửa bài viết";
+            $title  = "Sửa bài viết";
             ob_start();
             require_once 'views/admin/news/form.php';
             $content = ob_get_clean();
@@ -184,8 +185,7 @@ class AdminNewsController
             if ($post['thumbnail'] !== $existingPost['thumbnail']) {
                 $this->deleteLocalThumbnail($existingPost['thumbnail']);
             }
-
-            $_SESSION['flash_msg'] = "Cập nhật bài viết thành công.";
+            $_SESSION['flash_msg']  = "Cập nhật bài viết thành công.";
             $_SESSION['flash_type'] = "success";
             header("Location: /btl/adminNews/index");
             exit();
@@ -197,10 +197,10 @@ class AdminNewsController
         }
 
         $errors['general'] = "Không thể cập nhật bài viết.";
-        $post['id'] = $id;
+        $post['id']         = $id;
         $post['created_at'] = $existingPost['created_at'];
         $isEdit = true;
-        $title = "Sửa bài viết";
+        $title  = "Sửa bài viết";
         ob_start();
         require_once 'views/admin/news/form.php';
         $content = ob_get_clean();
@@ -389,6 +389,7 @@ class AdminNewsController
 
         return $text;
     }
+
 
     private function getEmptyPostData()
     {

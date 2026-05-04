@@ -155,6 +155,34 @@ body {
     background: linear-gradient(135deg, #ffffff 0%, #f6f9ff 100%);
 }
 
+/* Layout tweaks for the inline search summary inside the search card */
+.news-search-card .news-hero-summary {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.news-search-card .news-hero-stat {
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.85rem;
+    background: linear-gradient(180deg, #ffffff 0%, #eef6ff 100%);
+    border: 1px solid #e6eefc;
+    box-shadow: 0 8px 20px rgba(15, 50, 120, 0.03);
+    text-align: center;
+}
+
+.news-search-card .news-hero-stat-value {
+    color: #0d6efd;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.news-search-card .news-hero-stat-label {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
 .news-hero-block {
     margin-bottom: 1.5rem !important;
 }
@@ -195,17 +223,50 @@ body {
     opacity: 0.65;
 }
 
-.news-search-form .form-control {
-    min-height: 48px;
+.news-search-form .form-control,
+.news-search-form .form-select {
+    min-height: 52px;
+    border-radius: 0.75rem;
+    border: 1px solid #e6eefc;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+    padding: 0.65rem 1rem;
+    box-shadow: 0 6px 18px rgba(13, 110, 253, 0.06);
+    transition: box-shadow 0.18s ease, transform 0.12s ease, border-color 0.12s ease;
 }
 
-.news-search-form .form-select {
-    min-height: 48px;
-    border-radius: 0.75rem;
+.news-search-form .form-control:focus,
+.news-search-form .form-select:focus {
+    box-shadow: 0 12px 36px rgba(13, 110, 253, 0.08);
+    border-color: #cfe0ff;
 }
 
 .news-search-form .btn {
-    min-height: 48px;
+    min-height: 52px;
+    border-radius: 0.75rem;
+    padding: 0 0.9rem;
+}
+
+.news-search-form .btn-primary {
+    background: linear-gradient(90deg, #0d6efd 0%, #0069ff 100%);
+    border: none;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.12);
+}
+
+.news-search-form .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px rgba(13, 110, 253, 0.16);
+}
+
+.news-search-form .btn-outline-secondary {
+    background: #ffffff;
+    border: 1px solid #e6edf9;
+    color: #495057;
+}
+
+.news-search-form .btn-outline-secondary:hover {
+    background: #f8fbff;
+    border-color: #d9e7ff;
 }
 
 .news-search-meta {
@@ -217,24 +278,44 @@ body {
 }
 
 .news-filter-pills {
-    margin-top: 0.25rem;
+    margin-top: 0.45rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .news-filter-pill {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.55rem 0.9rem;
+    padding: 0.5rem 0.9rem;
     border-radius: 999px;
-    background-color: #ffffff;
-    border: 1px solid #d9e7ff;
-    color: #234;
-    font-size: 0.92rem;
-    font-weight: 500;
+    background: linear-gradient(180deg, #ffffff 0%, #f6fbff 100%);
+    border: none;
+    color: #0b2540;
+    font-size: 0.94rem;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(15, 50, 120, 0.04);
 }
 
 .news-filter-pill i {
     color: #0d6efd;
+}
+
+@media (max-width: 991.98px) {
+    .news-search-form .col-lg-5,
+    .news-search-form .col-lg-2 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .news-search-form .d-grid {
+        gap: 0.5rem;
+    }
+
+    .news-search-form .btn {
+        width: 100%;
+    }
 }
 
 .news-featured-card {
@@ -330,4 +411,38 @@ body {
     .news-hero-summary {
         grid-template-columns: 1fr;
     }
+}
+
+/* ── Lazy Image Loading ─────────────────────────────── */
+.news-card-image-wrap {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(90deg, #f0f2f5 25%, #e4e7ec 50%, #f0f2f5 75%);
+    background-size: 200% 100%;
+    animation: lazy-skeleton 1.4s ease infinite;
+}
+
+@keyframes lazy-skeleton {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.lazy-img {
+    opacity: 0;
+    transform: scale(1.03);
+    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
+    filter: blur(6px);
+    will-change: opacity, transform, filter;
+}
+
+.lazy-img.lazy-loaded {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+}
+
+/* Stop skeleton animation once image is loaded */
+.news-card-image-wrap:has(.lazy-loaded) {
+    background: none;
+    animation: none;
 }

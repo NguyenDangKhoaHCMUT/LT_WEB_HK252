@@ -345,7 +345,10 @@ class Post
                         author_id = :author_id";
 
         $stmt = $this->conn->prepare($query);
-        return $this->bindPostData($stmt, $data) && $stmt->execute();
+        if ($this->bindPostData($stmt, $data) && $stmt->execute()) {
+            return (int) $this->conn->lastInsertId();
+        }
+        return 0;
     }
 
     public function update($id, $data)
@@ -499,6 +502,45 @@ class Post
         }
 
         $stmt->bindValue(':category_slug', $categorySlug, PDO::PARAM_STR);
+    }
+
+    public function getCategoryIdsForPost($postId)
+    {
+        $stmt = $this->conn->prepare(
+            "SELECT category_id
+             FROM post_categories
+             WHERE post_id = :post_id
+               AND deleted_at IS NULL"
+        );
+        $stmt->bindValue(':post_id', (int) $postId, PDO::PARAM_INT);
+        $stmt->execute();
+        return array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'category_id');
+    }
+
+    public function syncCategories($postId, array $categoryIds)
+    {
+        $postId = (int) $postId;
+        $del = $this->conn->prepare(
+            "DELETE FROM post_categories WHERE post_id = :post_id"
+        );
+        $del->bindValue(':post_id', $postId, PDO::PARAM_INT);
+        $del->execute();
+
+        if (empty($categoryIds)) {
+            return true;
+        }
+
+        $ins = $this->conn->prepare(
+            "INSERT INTO post_categories (post_id, category_id) VALUES (:post_id, :category_id)"
+        );
+        foreach ($categoryIds as $catId) {
+            $catId = (int) $catId;
+            if ($catId <= 0) continue;
+            $ins->bindValue(':post_id', $postId, PDO::PARAM_INT);
+            $ins->bindValue(':category_id', $catId, PDO::PARAM_INT);
+            $ins->execute();
+        }
+        return true;
     }
 
     private function buildPublishedOrderClause($sort)

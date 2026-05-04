@@ -23,16 +23,24 @@ class AdminCommentController
 
     public function index()
     {
-        $page = max(1, (int) ($_GET['page'] ?? 1));
-        $totalComments = $this->commentModel->countAdminComments();
-        $totalPages = max(1, (int) ceil($totalComments / $this->perPage));
+        $keyword = trim($_GET['keyword'] ?? '');
+        $status  = trim($_GET['status'] ?? '');
+        $page    = max(1, (int) ($_GET['page'] ?? 1));
+
+        $allowedStatuses = ['approved', 'hidden', 'pending'];
+        if (!in_array($status, $allowedStatuses, true)) {
+            $status = '';
+        }
+
+        $totalComments = $this->commentModel->countAdminComments($keyword, $status);
+        $totalPages    = max(1, (int) ceil($totalComments / $this->perPage));
 
         if ($page > $totalPages) {
             $page = $totalPages;
         }
 
-        $comments = $this->commentModel->getAdminComments($page, $this->perPage);
-        $perPage = $this->perPage;
+        $comments = $this->commentModel->getAdminComments($page, $this->perPage, $keyword, $status);
+        $perPage  = $this->perPage;
 
         $title = "Quản lý bình luận";
         ob_start();
@@ -45,7 +53,7 @@ class AdminCommentController
     {
         $comment = $this->commentModel->getById($id);
         if (!$comment) {
-            $_SESSION['flash_msg'] = "Không tìm thấy bình luận.";
+            $_SESSION['flash_msg']  = "Không tìm thấy bình luận.";
             $_SESSION['flash_type'] = "warning";
             header("Location: /btl/adminComment/index");
             exit();
@@ -54,16 +62,14 @@ class AdminCommentController
         $newStatus = $comment['status'] === 'hidden' ? 'approved' : 'hidden';
 
         if ($this->commentModel->updateStatus($id, $newStatus)) {
-            $_SESSION['flash_msg'] = $newStatus === 'hidden'
-                ? "Đã ẩn bình luận."
-                : "Đã hiển thị lại bình luận.";
+            $_SESSION['flash_msg']  = $newStatus === 'hidden' ? "Đã ẩn bình luận." : "Đã hiển thị lại bình luận.";
             $_SESSION['flash_type'] = "success";
         } else {
-            $_SESSION['flash_msg'] = "Không thể cập nhật trạng thái bình luận.";
+            $_SESSION['flash_msg']  = "Không thể cập nhật trạng thái bình luận.";
             $_SESSION['flash_type'] = "danger";
         }
 
-        header("Location: /btl/adminComment/index");
+        header("Location: /btl/adminComment/index?" . $this->buildReturnQuery());
         exit();
     }
 
@@ -71,21 +77,31 @@ class AdminCommentController
     {
         $comment = $this->commentModel->getById($id);
         if (!$comment) {
-            $_SESSION['flash_msg'] = "Bình luận không tồn tại hoặc đã bị xóa.";
+            $_SESSION['flash_msg']  = "Bình luận không tồn tại hoặc đã bị xóa.";
             $_SESSION['flash_type'] = "warning";
             header("Location: /btl/adminComment/index");
             exit();
         }
 
         if ($this->commentModel->softDelete($id)) {
-            $_SESSION['flash_msg'] = "Đã xóa bình luận.";
+            $_SESSION['flash_msg']  = "Đã xóa bình luận.";
             $_SESSION['flash_type'] = "success";
         } else {
-            $_SESSION['flash_msg'] = "Không thể xóa bình luận.";
+            $_SESSION['flash_msg']  = "Không thể xóa bình luận.";
             $_SESSION['flash_type'] = "danger";
         }
 
-        header("Location: /btl/adminComment/index");
+        header("Location: /btl/adminComment/index?" . $this->buildReturnQuery());
         exit();
+    }
+
+    private function buildReturnQuery()
+    {
+        $params = array_filter([
+            'keyword' => trim($_GET['keyword'] ?? ''),
+            'status'  => trim($_GET['status'] ?? ''),
+            'page'    => (int) ($_GET['page'] ?? 1) > 1 ? (int) ($_GET['page'] ?? 1) : null,
+        ]);
+        return http_build_query($params);
     }
 }

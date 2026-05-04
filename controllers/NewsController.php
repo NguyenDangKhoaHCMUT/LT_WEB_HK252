@@ -40,14 +40,20 @@ class NewsController
         $featuredPost = (!$hasActiveFilter && $page === 1) ? ($posts[0] ?? null) : null;
 
         if ($isSearching) {
-            $title = 'Tìm kiếm bài viết: ' . $keyword . ' | TechStore';
+            $title           = 'Tìm kiếm bài viết: ' . $keyword . ' | TechStore';
             $metaDescription = 'Kết quả tìm kiếm bài viết và tin tức cho từ khoá "' . $keyword . '" tại TechStore.';
+            $metaKeywords    = htmlspecialchars($keyword) . ', tin tức công nghệ, techstore';
         } else {
-            $title = 'Tin tức công nghệ và đánh giá sản phẩm | TechStore';
+            $title           = 'Tin tức công nghệ và đánh giá sản phẩm | TechStore';
             $metaDescription = 'Cập nhật tin tức công nghệ, bài đánh giá sản phẩm và kinh nghiệm mua sắm mới nhất từ TechStore.';
+            $metaKeywords    = 'tin tức công nghệ, đánh giá sản phẩm, laptop, smartphone, techstore';
         }
 
-        $canonicalUrl = $this->buildNewsUrl('', $this->buildListingQueryParams($keyword, $category, $sort, $page));
+        $canonicalUrl  = $this->buildNewsUrl('', $this->buildListingQueryParams($keyword, $category, $sort, $page));
+        $ogTitle       = $title;
+        $ogDescription = $metaDescription;
+        $ogType        = 'website';
+        $ogImage       = null;
 
         ob_start();
         require_once 'views/public/news.php';
@@ -141,11 +147,16 @@ class NewsController
             $post['view_count']++;
         }
 
-        $comments = $commentModel->getApprovedByPost($post['id']);
-        $relatedPosts = $postModel->getRelatedPosts($post['id']);
-        $title = ($post['seo_title'] ?: $post['title']) . ' | TechStore';
+        $comments        = $commentModel->getApprovedByPost($post['id']);
+        $relatedPosts    = $postModel->getRelatedPosts($post['id']);
+        $title           = ($post['seo_title'] ?: $post['title']) . ' | TechStore';
         $metaDescription = $this->buildMetaDescription($post['seo_description'] ?: $post['summary'] ?: $post['title']);
-        $canonicalUrl = $this->buildNewsUrl($post['slug']);
+        $metaKeywords    = !empty($post['seo_keywords']) ? $post['seo_keywords'] : '';
+        $canonicalUrl    = $this->buildNewsUrl($post['slug']);
+        $ogTitle         = $post['seo_title'] ?: $post['title'];
+        $ogDescription   = $metaDescription;
+        $ogType          = 'article';
+        $ogImage         = !empty($post['thumbnail']) ? $post['thumbnail'] : null;
 
         ob_start();
         require_once 'views/public/news_detail.php';

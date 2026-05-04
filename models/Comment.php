@@ -62,25 +62,48 @@ class Comment
         return $stmt->execute();
     }
 
-    public function countAdminComments()
+    public function countAdminComments($keyword = '', $status = '')
     {
+        $keyword = trim($keyword);
+        $status  = trim($status);
+
         $query = "SELECT COUNT(*)
                   FROM " . $this->table_name . " c
                   INNER JOIN posts p ON p.id = c.post_id
+                  LEFT JOIN users u ON u.id = c.user_id
                   WHERE c.deleted_at IS NULL
                     AND p.deleted_at IS NULL";
 
+        if ($keyword !== '') {
+            $query .= " AND (
+                            c.content LIKE :keyword
+                            OR p.title LIKE :keyword
+                            OR COALESCE(u.fullname, 'Khach') LIKE :keyword
+                        )";
+        }
+        if ($status !== '') {
+            $query .= " AND c.status = :status";
+        }
+
         $stmt = $this->conn->prepare($query);
+        if ($keyword !== '') {
+            $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+        }
+        if ($status !== '') {
+            $stmt->bindValue(':status', $status, PDO::PARAM_STR);
+        }
         $stmt->execute();
 
         return (int) $stmt->fetchColumn();
     }
 
-    public function getAdminComments($page = 1, $perPage = 10)
+    public function getAdminComments($page = 1, $perPage = 10, $keyword = '', $status = '')
     {
-        $page = max(1, (int) $page);
+        $keyword = trim($keyword);
+        $status  = trim($status);
+        $page    = max(1, (int) $page);
         $perPage = max(1, (int) $perPage);
-        $offset = ($page - 1) * $perPage;
+        $offset  = ($page - 1) * $perPage;
 
         $query = "SELECT
                     c.*,
@@ -91,11 +114,29 @@ class Comment
                   INNER JOIN posts p ON p.id = c.post_id
                   LEFT JOIN users u ON u.id = c.user_id
                   WHERE c.deleted_at IS NULL
-                    AND p.deleted_at IS NULL
-                  ORDER BY c.created_at DESC
-                  LIMIT :limit OFFSET :offset";
+                    AND p.deleted_at IS NULL";
+
+        if ($keyword !== '') {
+            $query .= " AND (
+                            c.content LIKE :keyword
+                            OR p.title LIKE :keyword
+                            OR COALESCE(u.fullname, 'Khach') LIKE :keyword
+                        )";
+        }
+        if ($status !== '') {
+            $query .= " AND c.status = :status";
+        }
+
+        $query .= " ORDER BY c.created_at DESC
+                   LIMIT :limit OFFSET :offset";
 
         $stmt = $this->conn->prepare($query);
+        if ($keyword !== '') {
+            $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+        }
+        if ($status !== '') {
+            $stmt->bindValue(':status', $status, PDO::PARAM_STR);
+        }
         $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
