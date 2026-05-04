@@ -9,10 +9,9 @@ class Post
         $this->conn = $db;
     }
 
-    public function countPublishedPosts($keyword = '', $categorySlug = '')
+    public function countPublishedPosts($keyword = '')
     {
         $keyword = trim($keyword);
-        $categorySlug = trim($categorySlug);
         $query =
             "SELECT COUNT(*)
                   FROM " .
@@ -22,20 +21,17 @@ class Post
                     AND p.deleted_at IS NULL";
 
         $query .= $this->buildPublishedKeywordCondition($keyword);
-        $query .= $this->buildPublishedCategoryCondition($categorySlug);
 
         $stmt = $this->conn->prepare($query);
         $this->bindPublishedKeywordParams($stmt, $keyword);
-        $this->bindPublishedCategoryParams($stmt, $categorySlug);
         $stmt->execute();
 
         return (int) $stmt->fetchColumn();
     }
 
-    public function getPublishedPosts($keyword = '', $page = 1, $perPage = 5, $categorySlug = '', $sort = 'latest')
+    public function getPublishedPosts($keyword = '', $page = 1, $perPage = 5, $sort = 'latest')
     {
         $keyword = trim($keyword);
-        $categorySlug = trim($categorySlug);
         $page = max(1, (int) $page);
         $perPage = max(1, (int) $perPage);
         $offset = ($page - 1) * $perPage;
@@ -56,15 +52,7 @@ class Post
                         FROM post_views pv
                         WHERE pv.post_id = p.id
                           AND pv.deleted_at IS NULL
-                    ) AS view_count,
-                    (
-                        SELECT GROUP_CONCAT(cat.name ORDER BY cat.name SEPARATOR '||')
-                        FROM post_categories pc
-                        INNER JOIN categories cat ON cat.id = pc.category_id
-                        WHERE pc.post_id = p.id
-                        AND pc.deleted_at IS NULL
-                        AND cat.deleted_at IS NULL
-                    ) AS category_names
+                    ) AS view_count
                 FROM " .
             $this->table_name .
             " p
@@ -73,7 +61,6 @@ class Post
                     AND p.deleted_at IS NULL";
 
         $query .= $this->buildPublishedKeywordCondition($keyword);
-        $query .= $this->buildPublishedCategoryCondition($categorySlug);
 
         $query .= "
                 ORDER BY " . $this->buildPublishedOrderClause($sort) . "
@@ -81,7 +68,6 @@ class Post
 
         $stmt = $this->conn->prepare($query);
         $this->bindPublishedKeywordParams($stmt, $keyword);
-        $this->bindPublishedCategoryParams($stmt, $categorySlug);
         $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
@@ -92,28 +78,6 @@ class Post
         }
 
         return $posts;
-    }
-
-    public function getPublishedCategories()
-    {
-        $query = "SELECT
-                    cat.name,
-                    cat.slug,
-                    COUNT(DISTINCT p.id) AS post_count
-                FROM categories cat
-                INNER JOIN post_categories pc ON pc.category_id = cat.id
-                    AND pc.deleted_at IS NULL
-                INNER JOIN posts p ON p.id = pc.post_id
-                    AND p.status = 'published'
-                    AND p.deleted_at IS NULL
-                WHERE cat.deleted_at IS NULL
-                GROUP BY cat.id, cat.name, cat.slug
-                ORDER BY post_count DESC, cat.name ASC";
-
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getPublishedPostBySlug($slug)
@@ -134,15 +98,7 @@ class Post
                         FROM post_views pv
                         WHERE pv.post_id = p.id
                         AND pv.deleted_at IS NULL
-                    ) AS view_count,
-                    (
-                        SELECT GROUP_CONCAT(cat.name ORDER BY cat.name SEPARATOR '||')
-                        FROM post_categories pc
-                        INNER JOIN categories cat ON cat.id = pc.category_id
-                        WHERE pc.post_id = p.id
-                        AND pc.deleted_at IS NULL
-                        AND cat.deleted_at IS NULL
-                    ) AS category_names
+                    ) AS view_count
                 FROM " .
             $this->table_name .
             " p
@@ -430,12 +386,6 @@ class Post
 
     private function mapPost($row)
     {
-        $row['categories'] = [];
-        if (!empty($row['category_names'])) {
-            $row['categories'] = explode('||', $row['category_names']);
-        }
-
-        unset($row['category_names']);
         return $row;
     }
 
@@ -451,32 +401,6 @@ class Post
                     OR p.summary LIKE :keyword_summary
                     OR p.content LIKE :keyword_content
                     OR p.seo_keywords LIKE :keyword_seo
-                    OR EXISTS (
-                        SELECT 1
-                        FROM post_categories pc
-                        INNER JOIN categories cat ON cat.id = pc.category_id
-                        WHERE pc.post_id = p.id
-                            AND pc.deleted_at IS NULL
-                            AND cat.deleted_at IS NULL
-                            AND cat.name LIKE :keyword_category
-                    )
-                )";
-    }
-
-    private function buildPublishedCategoryCondition($categorySlug)
-    {
-        if ($categorySlug === '') {
-            return '';
-        }
-
-        return " AND EXISTS (
-                    SELECT 1
-                    FROM post_categories pc_filter
-                    INNER JOIN categories cat_filter ON cat_filter.id = pc_filter.category_id
-                    WHERE pc_filter.post_id = p.id
-                        AND pc_filter.deleted_at IS NULL
-                        AND cat_filter.deleted_at IS NULL
-                        AND cat_filter.slug = :category_slug
                 )";
     }
 
@@ -492,55 +416,6 @@ class Post
         $stmt->bindValue(':keyword_summary', $searchValue, PDO::PARAM_STR);
         $stmt->bindValue(':keyword_content', $searchValue, PDO::PARAM_STR);
         $stmt->bindValue(':keyword_seo', $searchValue, PDO::PARAM_STR);
-        $stmt->bindValue(':keyword_category', $searchValue, PDO::PARAM_STR);
-    }
-
-    private function bindPublishedCategoryParams($stmt, $categorySlug)
-    {
-        if ($categorySlug === '') {
-            return;
-        }
-
-        $stmt->bindValue(':category_slug', $categorySlug, PDO::PARAM_STR);
-    }
-
-    public function getCategoryIdsForPost($postId)
-    {
-        $stmt = $this->conn->prepare(
-            "SELECT category_id
-             FROM post_categories
-             WHERE post_id = :post_id
-               AND deleted_at IS NULL"
-        );
-        $stmt->bindValue(':post_id', (int) $postId, PDO::PARAM_INT);
-        $stmt->execute();
-        return array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'category_id');
-    }
-
-    public function syncCategories($postId, array $categoryIds)
-    {
-        $postId = (int) $postId;
-        $del = $this->conn->prepare(
-            "DELETE FROM post_categories WHERE post_id = :post_id"
-        );
-        $del->bindValue(':post_id', $postId, PDO::PARAM_INT);
-        $del->execute();
-
-        if (empty($categoryIds)) {
-            return true;
-        }
-
-        $ins = $this->conn->prepare(
-            "INSERT INTO post_categories (post_id, category_id) VALUES (:post_id, :category_id)"
-        );
-        foreach ($categoryIds as $catId) {
-            $catId = (int) $catId;
-            if ($catId <= 0) continue;
-            $ins->bindValue(':post_id', $postId, PDO::PARAM_INT);
-            $ins->bindValue(':category_id', $catId, PDO::PARAM_INT);
-            $ins->execute();
-        }
-        return true;
     }
 
     private function buildPublishedOrderClause($sort)

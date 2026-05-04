@@ -41,7 +41,6 @@ function initializeNewsLiveSearch(scope) {
 
         return {
             keyword: (formData.get('keyword') || '').toString().trim(),
-            category: (formData.get('category') || '').toString().trim(),
             sort: (formData.get('sort') || 'latest').toString().trim() || 'latest'
         };
     }
@@ -53,12 +52,6 @@ function initializeNewsLiveSearch(scope) {
             url.searchParams.set('keyword', state.keyword);
         } else {
             url.searchParams.delete('keyword');
-        }
-
-        if (state.category !== '') {
-            url.searchParams.set('category', state.category);
-        } else {
-            url.searchParams.delete('category');
         }
 
         if (state.sort !== '' && state.sort !== 'latest') {
@@ -99,7 +92,6 @@ function initializeNewsLiveSearch(scope) {
 
     function sameState(left, right) {
         return left.keyword === right.keyword
-            && left.category === right.category
             && left.sort === right.sort;
     }
 
@@ -108,13 +100,12 @@ function initializeNewsLiveSearch(scope) {
         var shouldRestoreFocus = settings.restoreFocus !== false;
         var normalizedState = {
             keyword: (nextState.keyword || '').trim(),
-            category: nextState.category || '',
             sort: nextState.sort || 'latest'
         };
 
         if (sameState(normalizedState, lastState) && !settings.force) {
             setStatus(
-                normalizedState.keyword === '' && normalizedState.category === '' && normalizedState.sort === 'latest'
+                normalizedState.keyword === '' && normalizedState.sort === 'latest'
                     ? 'Gõ từ khóa hoặc thay đổi bộ lọc để cập nhật danh sách bài viết.'
                     : 'Kết quả đã được cập nhật theo bộ lọc hiện tại.'
             );
@@ -133,7 +124,7 @@ function initializeNewsLiveSearch(scope) {
         activeController = new AbortController();
         setLoadingState(true);
         setStatus(
-            normalizedState.keyword === '' && normalizedState.category === '' && normalizedState.sort === 'latest'
+            normalizedState.keyword === '' && normalizedState.sort === 'latest'
                 ? 'Đang tải lại toàn bộ bài viết...'
                 : 'Đang áp dụng tìm kiếm và bộ lọc...'
         );
@@ -198,13 +189,13 @@ function initializeNewsLiveSearch(scope) {
             input.value = '';
 
             filters.forEach(function (filter) {
-                if (filter.name === 'category' || filter.name === 'sort') {
+                if ( filter.name === 'sort') {
                     filter.value = filter.name === 'sort' ? 'latest' : '';
                 }
             });
 
             clearTimeout(debounceTimer);
-            performSearch({ keyword: '', category: '', sort: 'latest' }, { restoreFocus: true, force: true });
+            performSearch({ keyword: '', sort: 'latest' }, { restoreFocus: true, force: true });
         });
     }
 }

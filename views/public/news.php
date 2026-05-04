@@ -1,11 +1,10 @@
 <?php
 $keyword = $keyword ?? '';
-$category = $category ?? null;
 $sort = $sort ?? 'latest';
 $featuredPost = $featuredPost ?? null;
 
 $isSearching = !empty($keyword);
-$hasFilters = $isSearching || !empty($category) || (($sort ?? 'latest') !== 'latest');
+$hasFilters = $isSearching || (($sort ?? 'latest') !== 'latest');
 $posts = $posts ?? [];
 $hasFeaturedPost = !empty($featuredPost);
 $listingPosts = $hasFeaturedPost ? array_slice($posts, 1) : $posts;
@@ -24,10 +23,6 @@ $listingQuery = [];
 
 if (!empty($keyword)) {
     $listingQuery['keyword'] = $keyword;
-}
-
-if (!empty($category)) {
-    $listingQuery['category'] = $category;
 }
 
 if (($sort ?? 'latest') !== 'latest') {
@@ -121,14 +116,6 @@ $sectionTitle = $hasFilters ? 'Kết quả' : 'Bài viết mới nhất';
                         <h2 class="fw-bold mb-3"><?= htmlspecialchars($featuredPost['title']) ?></h2>
                         <p class="text-secondary mb-4"><?= htmlspecialchars($featuredPost['summary']) ?></p>
 
-                        <?php if (!empty($featuredPost['categories'])): ?>
-                            <div class="d-flex flex-wrap gap-2 mb-4">
-                                <?php foreach ($featuredPost['categories'] as $item): ?>
-                                    <span class="badge text-bg-light border"><?= htmlspecialchars($item) ?></span>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?>
-
                         <div class="news-meta-list mb-4">
                             <span class="news-meta-item">
                                 <i class="fa-regular fa-user"></i>
@@ -179,15 +166,6 @@ $sectionTitle = $hasFilters ? 'Kết quả' : 'Bài viết mới nhất';
                                 loading="lazy">
                         </div>
                         <div class="card-body d-flex flex-column">
-                            <div class="d-flex flex-wrap gap-2 mb-3">
-                                <?php foreach ($post['categories'] as $item): ?>
-                                    <span class="badge bg-light text-secondary border"><?= htmlspecialchars($item) ?></span>
-                                <?php endforeach; ?>
-                                <span class="badge bg-success-subtle text-success border border-success-subtle">
-                                    <?= htmlspecialchars($post['status']) ?>
-                                </span>
-                            </div>
-
                             <h3 class="h4 fw-bold mb-3"><?= htmlspecialchars($post['title']) ?></h3>
                             <p class="text-secondary flex-grow-1"><?= htmlspecialchars($post['summary']) ?></p>
 

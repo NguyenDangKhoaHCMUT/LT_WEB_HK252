@@ -38,6 +38,20 @@ $formAction = $isEdit
     .form-section { background: #fff; border: 1px solid #e9ecef; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem; }
     .form-section-title { font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: #6c757d; letter-spacing: 0.05em; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #f0f0f0; }
     .char-counter { font-size: 0.75rem; color: #adb5bd; text-align: right; margin-top: 2px; }
+    /* Upload hint (dùng chung) */
+    .upload-hint { background: #f0f7ff; border: 1px solid #bdd9f8; border-radius: 0.5rem; padding: 0.65rem 0.85rem; font-size: 0.8rem; }
+    .upload-hint__header { font-weight: 600; color: #1a6bbf; margin-bottom: 0.4rem; }
+    .upload-hint__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.3rem; }
+    .upload-hint__list li { display: flex; align-items: flex-start; gap: 0.45rem; color: #444; line-height: 1.4; }
+    .upload-hint__list li i { margin-top: 0.1rem; flex-shrink: 0; }
+    /* Content image hint */
+    .content-img-hint { background: #fffbea; border: 1px solid #fde68a; border-radius: 0.5rem; padding: 0.65rem 0.85rem; font-size: 0.8rem; margin-top: 0.6rem; }
+    .content-img-hint__header { font-weight: 600; color: #92610a; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
+    .content-img-hint__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.3rem; }
+    .content-img-hint__list li { display: flex; align-items: flex-start; gap: 0.45rem; color: #555; line-height: 1.4; }
+    .content-img-hint__list li i { margin-top: 0.1rem; flex-shrink: 0; }
+    .content-img-hint .badge-fmt { display: inline-flex; gap: 0.25rem; flex-wrap: wrap; margin-top: 0.15rem; }
+    .content-img-hint .badge-fmt span { background: #fde68a; color: #78510a; font-size: 0.7rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 0.25rem; }
 </style>
 
 <!-- Page Header -->
@@ -116,6 +130,32 @@ $formAction = $isEdit
                 <div id="quill-editor" class="<?= isset($errors['content']) ? 'is-invalid' : '' ?>"><?= $post['content'] ?? '' ?></div>
                 <textarea name="content" id="content-hidden" class="d-none" required><?= $val('content') ?></textarea>
                 <?= $err('content') ?>
+
+                <!-- Content image hint -->
+                <div class="content-img-hint">
+                    <div class="content-img-hint__header">
+                        <i class="fa fa-image"></i> Hướng dẫn chèn ảnh vào nội dung
+                    </div>
+                    <ul class="content-img-hint__list">
+                        <li>
+                            <i class="fa fa-check-circle text-success"></i>
+                            <span>
+                                <strong>Định dạng hỗ trợ:</strong>
+                                <span class="badge-fmt">
+                                    <span>JPG</span><span>JPEG</span><span>PNG</span><span>GIF</span><span>WEBP</span>
+                                </span>
+                            </span>
+                        </li>
+                        <li>
+                            <i class="fa fa-triangle-exclamation text-warning"></i>
+                            <span>Ảnh được <strong>nhúng trực tiếp</strong> vào nội dung — nên dùng ảnh <strong>dưới 500 KB</strong> để trang tải nhanh.</span>
+                        </li>
+                        <li>
+                            <i class="fa fa-lightbulb text-warning"></i>
+                            <span>Nhấn biểu tượng <strong>Image</strong> trên thanh công cụ để chọn ảnh từ máy tính.</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
         </div>
@@ -270,12 +310,55 @@ $formAction = $isEdit
         }
     });
 
-    /* Sync Quill → hidden textarea before submit */
+    /* Show quick usage hints*/
+    applyToolbarHoverHints(quill);
+
+    function applyToolbarHoverHints(editor) {
+        var toolbarModule = editor.getModule('toolbar');
+        if (!toolbarModule || !toolbarModule.container) return;
+
+        var toolbar = toolbarModule.container;
+        var buttonHints = {
+            'ql-bold': 'Bôi đậm văn bản đang chọn',
+            'ql-italic': 'In nghiêng văn bản đang chọn',
+            'ql-underline': 'Gạch chân văn bản đang chọn',
+            'ql-strike': 'Gạch ngang văn bản đang chọn',
+            'ql-blockquote': 'Chèn khối trích dẫn',
+            'ql-code-block': 'Chèn khối mã nguồn',
+            'ql-link': 'Chèn hoặc sửa liên kết',
+            'ql-image': 'Chèn ảnh từ máy tính',
+            'ql-clean': 'Xóa toàn bộ định dạng đã áp dụng'
+        };
+
+        Object.keys(buttonHints).forEach(function (className) {
+            var btn = toolbar.querySelector('.' + className);
+            if (!btn) return;
+            btn.setAttribute('title', buttonHints[className]);
+            btn.setAttribute('aria-label', buttonHints[className]);
+        });
+
+        var pickerHints = [
+            { selector: '.ql-header .ql-picker-label', hint: 'Chọn cấp độ tiêu đề (H1, H2...)' },
+            { selector: '.ql-color .ql-picker-label', hint: 'Đổi màu chữ' },
+            { selector: '.ql-background .ql-picker-label', hint: 'Đổi màu nền chữ' },
+            { selector: '.ql-list[value="ordered"]', hint: 'Tạo danh sách đánh số' },
+            { selector: '.ql-list[value="bullet"]', hint: 'Tạo danh sách chấm tròn' },
+            { selector: '.ql-align .ql-picker-label', hint: 'Căn lề đoạn văn' }
+        ];
+
+        pickerHints.forEach(function (item) {
+            var el = toolbar.querySelector(item.selector);
+            if (!el) return;
+            el.setAttribute('title', item.hint);
+            el.setAttribute('aria-label', item.hint);
+        });
+    }
+
+    /* Sync Quill*/
     var form = document.getElementById('news-form');
     var hiddenContent = document.getElementById('content-hidden');
     form.addEventListener('submit', function () {
         hiddenContent.value = quill.root.innerHTML;
-        /* Mark Quill invalid if empty */
         var container = document.getElementById('quill-editor');
         if (quill.getText().trim() === '') {
             container.classList.add('is-invalid');
@@ -367,7 +450,7 @@ $formAction = $isEdit
         var reader = new FileReader();
         reader.onload = function (e) { showPreview(e.target.result); };
         reader.readAsDataURL(file);
-        urlInput.value = ''; // clear URL input
+        urlInput.value = '';
     }
 
     function showPreview(src) {

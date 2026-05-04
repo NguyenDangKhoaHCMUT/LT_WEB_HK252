@@ -1,6 +1,5 @@
 -- Khởi tạo Database cho BTL Lập trình Web
-CREATE DATABASE IF NOT EXISTS web_btl
-
+CREATE DATABASE IF NOT EXISTS web_btl;
 USE web_btl;
 
 -- Bảng người dùng (Chỉ chứa bảng liên quan đến phần công việc chung: Đăng nhập, phân quyền, quản lý user)

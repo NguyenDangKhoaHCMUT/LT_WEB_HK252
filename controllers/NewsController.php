@@ -17,26 +17,19 @@ class NewsController
     {
         $postModel = new Post($this->db);
         $keyword = $this->normalizeKeyword($_GET['keyword'] ?? '');
-        $category = $this->normalizeSlug($_GET['category'] ?? '');
         $sort = $this->normalizeSort($_GET['sort'] ?? 'latest');
         $page = max(1, (int) ($_GET['page'] ?? 1));
-        $categories = $postModel->getPublishedCategories();
 
-        if (!$this->categoryExists($categories, $category)) {
-            $category = '';
-        }
-
-        $selectedCategory = $this->findCategoryBySlug($categories, $category);
-        $totalPosts = $postModel->countPublishedPosts($keyword, $category);
+        $totalPosts = $postModel->countPublishedPosts($keyword);
         $totalPages = max(1, (int) ceil($totalPosts / $this->perPage));
 
         if ($page > $totalPages) {
             $page = $totalPages;
         }
 
-        $posts = $postModel->getPublishedPosts($keyword, $page, $this->perPage, $category, $sort);
+        $posts = $postModel->getPublishedPosts($keyword, $page, $this->perPage, $sort);
         $isSearching = $keyword !== '';
-        $hasActiveFilter = $isSearching || $category !== '' || $sort !== 'latest';
+        $hasActiveFilter = $isSearching || $sort !== 'latest';
         $featuredPost = (!$hasActiveFilter && $page === 1) ? ($posts[0] ?? null) : null;
 
         if ($isSearching) {
@@ -49,7 +42,7 @@ class NewsController
             $metaKeywords    = 'tin tức công nghệ, đánh giá sản phẩm, laptop, smartphone, techstore';
         }
 
-        $canonicalUrl  = $this->buildNewsUrl('', $this->buildListingQueryParams($keyword, $category, $sort, $page));
+        $canonicalUrl  = $this->buildNewsUrl('', $this->buildListingQueryParams($keyword, $sort, $page));
         $ogTitle       = $title;
         $ogDescription = $metaDescription;
         $ogType        = 'website';
@@ -223,16 +216,12 @@ class NewsController
         return $scheme . '://' . $host . $path;
     }
 
-    private function buildListingQueryParams($keyword, $category, $sort, $page)
+    private function buildListingQueryParams($keyword, $sort, $page)
     {
         $params = [];
 
         if ($keyword !== '') {
             $params['keyword'] = $keyword;
-        }
-
-        if ($category !== '') {
-            $params['category'] = $category;
         }
 
         if ($sort !== 'latest') {
@@ -262,35 +251,5 @@ class NewsController
         $allowedSorts = ['latest', 'most_viewed', 'most_commented'];
 
         return in_array($sort, $allowedSorts, true) ? $sort : 'latest';
-    }
-
-    private function categoryExists($categories, $slug)
-    {
-        if ($slug === '') {
-            return true;
-        }
-
-        foreach ($categories as $category) {
-            if (($category['slug'] ?? '') === $slug) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function findCategoryBySlug($categories, $slug)
-    {
-        if ($slug === '') {
-            return null;
-        }
-
-        foreach ($categories as $category) {
-            if (($category['slug'] ?? '') === $slug) {
-                return $category;
-            }
-        }
-
-        return null;
     }
 }

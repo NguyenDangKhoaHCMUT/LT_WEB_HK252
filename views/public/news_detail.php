@@ -1,3 +1,5 @@
+<?php $post = $post ?? []; ?>
+<?php $comments = $comments ?? []; ?>
 <section class="py-2 py-lg-4">
     <div class="mb-4">
         <a href="/btl/news" class="text-decoration-none small text-secondary">
@@ -9,16 +11,10 @@
         <div class="col-lg-8">
             <article class="card border-0 shadow-sm overflow-hidden mb-4">
                 <img
-                    src="<?= htmlspecialchars($post['thumbnail'] ?: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop') ?>"
+                    src="<?= htmlspecialchars($post['thumbnail'] ?? 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop') ?>"
                     class="w-100 news-detail-image"
                     alt="<?= htmlspecialchars($post['title']) ?>">
                 <div class="card-body p-4 p-lg-5">
-                    <div class="d-flex flex-wrap gap-2 mb-3">
-                        <?php foreach ($post['categories'] as $category): ?>
-                            <span class="badge bg-light text-secondary border"><?= htmlspecialchars($category) ?></span>
-                        <?php endforeach; ?>
-                    </div>
-
                     <h1 class="fw-bold mb-3"><?= htmlspecialchars($post['title']) ?></h1>
                     <p class="lead text-secondary"><?= htmlspecialchars($post['summary']) ?></p>
 
@@ -142,18 +138,6 @@
         </div>
 
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-body p-4">
-                    <h2 class="h5 fw-bold mb-3">SEO và dữ liệu bài viết</h2>
-                    <ul class="list-unstyled small text-secondary mb-0 d-flex flex-column gap-2">
-                        <li><strong>Slug:</strong> <?= htmlspecialchars($post['slug']) ?></li>
-                        <li><strong>SEO title:</strong> <?= htmlspecialchars($post['seo_title'] ?: $post['title']) ?></li>
-                        <li><strong>SEO keywords:</strong> <?= htmlspecialchars($post['seo_keywords'] ?: 'Chưa cập nhật') ?></li>
-                        <li><strong>Trạng thái:</strong> <?= htmlspecialchars($post['status']) ?></li>
-                    </ul>
-                </div>
-            </div>
-
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
                     <h2 class="h5 fw-bold mb-3">Bài viết liên quan</h2>
