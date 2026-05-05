@@ -14,7 +14,7 @@ class AdminMiddleware
         if (!isset($_SESSION['user_id'])) {
             $_SESSION['flash_msg'] = "Vui lòng đăng nhập!";
             $_SESSION['flash_type'] = "warning";
-            header("Location: /btl/?controller=Auth&action=login");
+            header("Location: /btl/Auth/login");
             exit();
         }
 

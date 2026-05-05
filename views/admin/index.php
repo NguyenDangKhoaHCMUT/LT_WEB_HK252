@@ -52,7 +52,7 @@
     <div class="col-12">
         <div class="row">
             <div class="col-md-6 col-lg-3 mb-20">
-                <a href="/btl/?controller=AdminDashboard&action=products" class="card text-decoration-none" style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; transition: all 0.3s;">
+                <a href="/btl/adminProduct/create" class="card text-decoration-none" style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; transition: all 0.3s;">
                     <div class="text-center">
                         <i class="fas fa-plus-circle" style="font-size: 32px; color: #6366f1; margin-bottom: 10px;"></i>
                         <h6 class="mt-3 mb-0">Thêm Sản Phẩm</h6>
@@ -62,7 +62,7 @@
             </div>
 
             <div class="col-md-6 col-lg-3 mb-20">
-                <a href="/btl/?controller=AdminDashboard&action=orders" class="card text-decoration-none" style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; transition: all 0.3s;">
+                <a href="/btl/AdminDashboard/orders" class="card text-decoration-none" style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; transition: all 0.3s;">
                     <div class="text-center">
                         <i class="fas fa-clipboard-list" style="font-size: 32px; color: #f59e0b; margin-bottom: 10px;"></i>
                         <h6 class="mt-3 mb-0">Quản Lý Đơn</h6>
@@ -72,7 +72,7 @@
             </div>
 
             <div class="col-md-6 col-lg-3 mb-20">
-                <a href="/btl/?controller=AdminDashboard&action=users" class="card text-decoration-none" style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; transition: all 0.3s;">
+                <a href="/btl/adminUser/index" class="card text-decoration-none" style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; transition: all 0.3s;">
                     <div class="text-center">
                         <i class="fas fa-user-cog" style="font-size: 32px; color: #10b981; margin-bottom: 10px;"></i>
                         <h6 class="mt-3 mb-0">Quản Lý Người</h6>
@@ -82,7 +82,7 @@
             </div>
 
             <div class="col-md-6 col-lg-3 mb-20">
-                <a href="/btl/?controller=AdminDashboard&action=contacts" class="card text-decoration-none" style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; transition: all 0.3s;">
+                <a href="/btl/admincontact/index" class="card text-decoration-none" style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; transition: all 0.3s;">
                     <div class="text-center">
                         <i class="fas fa-envelope-open" style="font-size: 32px; color: #ef4444; margin-bottom: 10px;"></i>
                         <h6 class="mt-3 mb-0">Liên Hệ</h6>

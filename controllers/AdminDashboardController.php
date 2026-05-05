@@ -59,13 +59,8 @@ class AdminDashboardController
      */
     public function products()
     {
-        $title = "Quản lý Sản phẩm";
-        $pageTitle = "Sản phẩm";
-        
-        ob_start();
-        require_once 'views/admin/products.php';
-        $content = ob_get_clean();
-        require_once 'views/layouts/admin.php';
+        header('Location: /btl/adminProduct/index');
+        exit();
     }
 
     /**
