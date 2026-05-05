@@ -150,15 +150,52 @@ class User {
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
-}
-?>
 
-    public function countUsers() {
+    public function countUsers($keyword = '') {
         $query = "SELECT COUNT(*) AS total FROM " . $this->table_name . " WHERE role = 'member'";
+
+        if ($keyword !== '') {
+            $query .= " AND (fullname LIKE :keyword OR email LIKE :keyword OR id LIKE :keyword)";
+        }
+
         $stmt = $this->conn->prepare($query);
+        if ($keyword !== '') {
+            $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+        }
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return (int)($row['total'] ?? 0);
     }
 
-    public function toggleStatus($id) {
+    public function getUsers($keyword = '', $limit = null, $offset = null) {
+        $query = "SELECT id, email, fullname, role, status, created_at FROM " . $this->table_name . " WHERE role = 'member'";
+
+        if ($keyword !== '') {
+            $query .= " AND (fullname LIKE :keyword OR email LIKE :keyword OR id LIKE :keyword)";
+        }
+
+        $query .= " ORDER BY id DESC";
+
+        if ($limit !== null) {
+            $query .= " LIMIT :limit";
+            if ($offset !== null) {
+                $query .= " OFFSET :offset";
+            }
+        }
+
+        $stmt = $this->conn->prepare($query);
+        if ($keyword !== '') {
+            $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+        }
+        if ($limit !== null) {
+            $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+            if ($offset !== null) {
+                $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+            }
+        }
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}
+?>
