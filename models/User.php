@@ -152,3 +152,13 @@ class User {
     }
 }
 ?>
+
+    public function countUsers() {
+        $query = "SELECT COUNT(*) AS total FROM " . $this->table_name . " WHERE role = 'member'";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)($row['total'] ?? 0);
+    }
+
+    public function toggleStatus($id) {
