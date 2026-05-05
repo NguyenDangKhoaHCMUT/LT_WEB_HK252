@@ -6,9 +6,14 @@ class HomeController
     public function index()
     {
         $title = "Trang chủ";
+
+        $settingModel = new Setting();
+        $settings = $settingModel->getAllSettings();
+
         ob_start();
         require_once 'views/public/home.php';
         $content = ob_get_clean();
+
         require_once 'views/layouts/main.php';
     }
 
