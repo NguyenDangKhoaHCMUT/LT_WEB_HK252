@@ -73,6 +73,10 @@
                             href="/btl/news">Tin tức</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link <?= strpos($current_uri, '/faq') !== false ? 'text-primary fw-bold' : '' ?>"
+                            href="/btl/faq/index">Hỏi/Đáp</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link <?= strpos($current_uri, '/home/contact') !== false ? 'text-primary fw-bold' : '' ?>"
                             href="/btl/home/contact">Liên hệ</a>
                     </li>
@@ -208,7 +212,7 @@
                         <li><a href="/btl/home/about">Giới thiệu</a></li>
                         <li><a href="/btl/home/contact">Liên hệ</a></li>
                         <li><a href="#">Bảo hành</a></li>
-                        <li><a href="#">Hỏi đáp (FAQ)</a></li>
+                        <li><a href="/btl/faq/index">Hỏi đáp (FAQ)</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4 mb-4">
