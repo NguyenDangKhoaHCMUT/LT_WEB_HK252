@@ -68,13 +68,8 @@ class AdminDashboardController
      */
     public function orders()
     {
-        $title = "Quản lý Đơn hàng";
-        $pageTitle = "Đơn hàng";
-        
-        ob_start();
-        require_once 'views/admin/orders.php';
-        $content = ob_get_clean();
-        require_once 'views/layouts/admin.php';
+        header('Location: /btl/adminOrder/index');
+        exit();
     }
 
     /**

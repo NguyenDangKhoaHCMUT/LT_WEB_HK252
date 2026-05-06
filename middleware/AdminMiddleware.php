@@ -14,12 +14,12 @@ class AdminMiddleware
         if (!isset($_SESSION['user_id'])) {
             $_SESSION['flash_msg'] = "Vui lòng đăng nhập!";
             $_SESSION['flash_type'] = "warning";
-            header("Location: /btl/Auth/login");
+            header("Location: /btl/auth/login");
             exit();
         }
 
         // Kiểm tra role admin
-        if ($_SESSION['user_role'] !== 'admin') {
+        if (($_SESSION['user_role'] ?? '') !== 'admin') {
             $_SESSION['flash_msg'] = "Bạn không có quyền truy cập trang này!";
             $_SESSION['flash_type'] = "danger";
             header("Location: /btl/");
