@@ -52,9 +52,9 @@
                     class="badge bg-primary bg-opacity-10 text-primary mb-2 px-3 py-2 rounded-pill fw-semibold"><?= htmlspecialchars($settings['about_subtitle'] ?? 'Câu chuyện của chúng tôi') ?></span>
                 <h2 class="fw-bold text-dark mb-4">
                     <?= $settings['about_title'] ?? '<span class="text-primary">Sứ mệnh</span> số hóa' ?></h2>
-                <p class="text-secondary fs-6 lh-lg mb-0">
+                <div class="text-secondary fs-6 lh-lg mb-0">
                     <?= $settings['about_desc_1'] ?? 'Tại <strong>TechStore</strong>, chúng tôi tin rằng công nghệ là chìa khóa để khai mở những giới hạn mới của con người. Được thành lập với khát khao thu hẹp khoảng cách công nghệ, chúng tôi không ngừng nỗ lực mang đến cho khách hàng các thiết bị Smartphone và Laptop tiên tiến nhất hiện nay.' ?>
-                </p>
+                </div>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
     <?php if (!empty($settings['about_desc_2'])): ?>
         <div class="row mb-5">
             <div class="col-12">
-                <p class="text-secondary fs-6 lh-lg mb-0"><?= $settings['about_desc_2'] ?></p>
+                <div class="text-secondary fs-6 lh-lg mb-0"><?= $settings['about_desc_2'] ?></div>
             </div>
         </div>
     <?php endif; ?>
@@ -78,7 +78,7 @@
                         style="width: 80px; height: 80px;">
                         <i class="fa fa-medal fs-1"></i>
                     </div>
-                    <h5 class="fw-bold mt-2">Chất lượng điểm 10</h5>
+                    <h3 class="h5 fw-bold mt-2">Chất lượng điểm 10</h3>
                     <p class="text-secondary mb-0 mt-3">Cam kết tất cả thiết bị đều là hàng chính hãng từ các thương
                         hiệu uy tín toàn cầu như Apple, Samsung, Asus.</p>
                 </div>
@@ -89,7 +89,7 @@
                         style="width: 80px; height: 80px;">
                         <i class="fa fa-bolt fs-1"></i>
                     </div>
-                    <h5 class="fw-bold mt-2">Giao hàng thần tốc</h5>
+                    <h3 class="h5 fw-bold mt-2">Giao hàng thần tốc</h3>
                     <p class="text-secondary mb-0 mt-3">Sở hữu ngay trong vòng 2h tại nội thành với đội ngũ giao nhận
                         được đào tạo chuyên môn và thân thiện.</p>
                 </div>
@@ -100,7 +100,7 @@
                         style="width: 80px; height: 80px;">
                         <i class="fa fa-shield-heart fs-1"></i>
                     </div>
-                    <h5 class="fw-bold mt-2">Hậu mãi trọn đời</h5>
+                    <h3 class="h5 fw-bold mt-2">Hậu mãi trọn đời</h3>
                     <p class="text-secondary mb-0 mt-3">Chính sách 1-đổi-1 trong vòng 30 ngày. Hỗ trợ phần mềm, vệ sinh
                         thiết bị hoàn toàn miễn phí trọn đời.</p>
                 </div>

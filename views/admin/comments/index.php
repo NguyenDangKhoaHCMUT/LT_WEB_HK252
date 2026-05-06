@@ -1,17 +1,17 @@
 <?php
-$keyword       = $keyword ?? '';
-$status        = $status ?? '';
-$page          = $page ?? 1;
+$keyword = $keyword ?? '';
+$status = $status ?? '';
+$page = $page ?? 1;
 $totalComments = $totalComments ?? 0;
-$totalPages    = $totalPages ?? 1;
-$comments      = $comments ?? [];
-$perPage       = $perPage ?? 10;
+$totalPages = $totalPages ?? 1;
+$comments = $comments ?? [];
+$perPage = $perPage ?? 10;
 
 $statusLabelMap = [
-    ''         => 'Tất cả trạng thái',
+    '' => 'Tất cả trạng thái',
     'approved' => 'Hiển thị',
-    'hidden'   => 'Đã ẩn',
-    'pending'  => 'Chờ duyệt',
+    'hidden' => 'Đã ẩn',
+    'pending' => 'Chờ duyệt',
 ];
 
 $buildQuery = fn(array $extra) => http_build_query(array_merge(
@@ -23,7 +23,7 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
 <!-- Page Header -->
 <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4">
     <div>
-        <h4 class="mb-1 fw-bold text-dark">Quản lý Bình luận</h4>
+        <h2 class="h4 mb-1 fw-bold text-dark">Quản lý Bình luận</h2>
         <p class="text-muted mb-0">Xem, tìm kiếm, ẩn/hiện hoặc xoá bình luận của người dùng.</p>
     </div>
 </div>
@@ -39,12 +39,9 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
                     <span class="input-group-text bg-light border-end-0">
                         <i class="fa fa-search text-muted"></i>
                     </span>
-                    <input type="text" class="form-control border-start-0 bg-light"
-                        name="keyword"
-                        id="comment-search-input"
-                        value="<?= htmlspecialchars($keyword) ?>"
-                        placeholder="Tìm theo nội dung, bài viết, tên người bình luận..."
-                        autocomplete="off">
+                    <input type="text" class="form-control border-start-0 bg-light" name="keyword"
+                        id="comment-search-input" value="<?= htmlspecialchars($keyword) ?>"
+                        placeholder="Tìm theo nội dung, bài viết, tên người bình luận..." autocomplete="off">
                     <?php if ($keyword !== ''): ?>
                         <a href="/btl/adminComment/index?<?= $buildQuery(['keyword' => '']) ?>"
                             class="btn btn-outline-secondary" title="Xoá từ khoá">
@@ -90,15 +87,19 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
     <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
         <span class="text-muted small fw-medium">Đang lọc:</span>
         <?php if ($keyword !== ''): ?>
-            <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2">
+            <span
+                class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2">
                 <i class="fa fa-hashtag me-1"></i><?= htmlspecialchars($keyword) ?>
-                <a href="/btl/adminComment/index?<?= $buildQuery(['keyword' => '']) ?>" class="text-primary ms-2 text-decoration-none">×</a>
+                <a href="/btl/adminComment/index?<?= $buildQuery(['keyword' => '']) ?>"
+                    class="text-primary ms-2 text-decoration-none">×</a>
             </span>
         <?php endif; ?>
         <?php if ($status !== ''): ?>
-            <span class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-3 py-2">
+            <span
+                class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-3 py-2">
                 <i class="fa fa-filter me-1"></i><?= htmlspecialchars($statusLabelMap[$status] ?? $status) ?>
-                <a href="/btl/adminComment/index?<?= $buildQuery(['status' => '']) ?>" class="text-secondary ms-2 text-decoration-none">×</a>
+                <a href="/btl/adminComment/index?<?= $buildQuery(['status' => '']) ?>"
+                    class="text-secondary ms-2 text-decoration-none">×</a>
             </span>
         <?php endif; ?>
     </div>
@@ -110,13 +111,20 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
         <table class="table table-hover align-middle mb-0">
             <thead style="background:#f8f9fb;">
                 <tr>
-                    <th class="ps-4 py-3 text-muted fw-semibold" style="font-size:.75rem;text-transform:uppercase;width:44px;">#</th>
-                    <th class="py-3 text-muted fw-semibold" style="font-size:.75rem;text-transform:uppercase;">Người bình luận</th>
-                    <th class="py-3 text-muted fw-semibold" style="font-size:.75rem;text-transform:uppercase;min-width:180px;">Bài viết</th>
-                    <th class="py-3 text-muted fw-semibold" style="font-size:.75rem;text-transform:uppercase;min-width:260px;">Nội dung</th>
-                    <th class="py-3 text-muted fw-semibold" style="font-size:.75rem;text-transform:uppercase;">Trạng thái</th>
-                    <th class="py-3 text-muted fw-semibold" style="font-size:.75rem;text-transform:uppercase;">Ngày tạo</th>
-                    <th class="py-3 text-muted fw-semibold text-end pe-4" style="font-size:.75rem;text-transform:uppercase;">Thao tác</th>
+                    <th class="ps-4 py-3 text-muted fw-semibold"
+                        style="font-size:.75rem;text-transform:uppercase;width:44px;">#</th>
+                    <th class="py-3 text-muted fw-semibold" style="font-size:.75rem;text-transform:uppercase;">Người
+                        bình luận</th>
+                    <th class="py-3 text-muted fw-semibold"
+                        style="font-size:.75rem;text-transform:uppercase;min-width:180px;">Bài viết</th>
+                    <th class="py-3 text-muted fw-semibold"
+                        style="font-size:.75rem;text-transform:uppercase;min-width:260px;">Nội dung</th>
+                    <th class="py-3 text-muted fw-semibold" style="font-size:.75rem;text-transform:uppercase;">Trạng
+                        thái</th>
+                    <th class="py-3 text-muted fw-semibold" style="font-size:.75rem;text-transform:uppercase;">Ngày tạo
+                    </th>
+                    <th class="py-3 text-muted fw-semibold text-end pe-4"
+                        style="font-size:.75rem;text-transform:uppercase;">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
@@ -146,7 +154,8 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
                                 <?php if (!empty($comment['rating'])): ?>
                                     <div class="small text-warning">
                                         <?php for ($i = 1; $i <= 5; $i++): ?>
-                                            <i class="fa<?= $i <= (int) $comment['rating'] ? 's' : 'r' ?> fa-star" style="font-size:.7rem;"></i>
+                                            <i class="fa<?= $i <= (int) $comment['rating'] ? 's' : 'r' ?> fa-star"
+                                                style="font-size:.7rem;"></i>
                                         <?php endfor; ?>
                                         <span class="text-muted">(<?= (int) $comment['rating'] ?>/5)</span>
                                     </div>
@@ -155,7 +164,8 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
 
                             <!-- Post -->
                             <td>
-                                <div class="fw-medium text-dark text-truncate" style="max-width:200px;" title="<?= htmlspecialchars($comment['post_title']) ?>">
+                                <div class="fw-medium text-dark text-truncate" style="max-width:200px;"
+                                    title="<?= htmlspecialchars($comment['post_title']) ?>">
                                     <?= htmlspecialchars($comment['post_title']) ?>
                                 </div>
                                 <a href="/btl/news/<?= rawurlencode($comment['post_slug']) ?>"
@@ -179,12 +189,13 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
                                 <?php
                                 $badgeMap = [
                                     'approved' => ['Hiển thị', 'bg-success bg-opacity-10 text-success border-success'],
-                                    'hidden'   => ['Đã ẩn',    'bg-secondary bg-opacity-10 text-secondary border-secondary'],
-                                    'pending'  => ['Chờ duyệt','bg-warning bg-opacity-10 text-warning border-warning'],
+                                    'hidden' => ['Đã ẩn', 'bg-secondary bg-opacity-10 text-secondary border-secondary'],
+                                    'pending' => ['Chờ duyệt', 'bg-warning bg-opacity-10 text-warning border-warning'],
                                 ];
                                 [$badgeLabel, $badgeClass] = $badgeMap[$comment['status']] ?? ['?', ''];
                                 ?>
-                                <span class="badge border px-3 py-2 fw-medium rounded-2 <?= $badgeClass ?>" style="font-size:.75rem;">
+                                <span class="badge border px-3 py-2 fw-medium rounded-2 <?= $badgeClass ?>"
+                                    style="font-size:.75rem;">
                                     <?= $badgeLabel ?>
                                 </span>
                             </td>
@@ -205,8 +216,7 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
                                         <i class="fa <?= $comment['status'] === 'hidden' ? 'fa-eye' : 'fa-eye-slash' ?>"></i>
                                     </a>
                                     <a href="/btl/adminComment/delete/<?= (int) $comment['id'] ?>?<?= $buildQuery(['page' => $page]) ?>"
-                                        class="btn btn-sm btn-light border text-danger"
-                                        title="Xoá bình luận"
+                                        class="btn btn-sm btn-light border text-danger" title="Xoá bình luận"
                                         onclick="return confirm('Bạn có chắc chắn muốn xoá bình luận này?')">
                                         <i class="fa fa-trash-alt"></i>
                                     </a>
@@ -220,7 +230,8 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
     </div>
 
     <!-- Footer -->
-    <div class="card-footer bg-white border-top d-flex flex-column flex-lg-row justify-content-between align-items-center gap-3 py-3 px-4">
+    <div
+        class="card-footer bg-white border-top d-flex flex-column flex-lg-row justify-content-between align-items-center gap-3 py-3 px-4">
         <span class="text-muted small">
             <?php if ($keyword !== '' || $status !== ''): ?>
                 Tìm thấy <strong class="text-dark"><?= (int) $totalComments ?></strong> bình luận phù hợp.
@@ -233,17 +244,20 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
             <nav aria-label="Phân trang bình luận">
                 <ul class="pagination pagination-sm mb-0">
                     <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-                        <a class="page-link" href="/btl/adminComment/index?<?= $buildQuery(['page' => max(1, $page - 1)]) ?>">
+                        <a class="page-link"
+                            href="/btl/adminComment/index?<?= $buildQuery(['page' => max(1, $page - 1)]) ?>">
                             <i class="fa fa-angle-left"></i>
                         </a>
                     </li>
                     <?php
                     $range = 2;
                     $start = max(1, $page - $range);
-                    $end   = min($totalPages, $page + $range);
+                    $end = min($totalPages, $page + $range);
                     if ($start > 1): ?>
-                        <li class="page-item"><a class="page-link" href="/btl/adminComment/index?<?= $buildQuery(['page' => 1]) ?>">1</a></li>
-                        <?php if ($start > 2): ?><li class="page-item disabled"><span class="page-link">…</span></li><?php endif; ?>
+                        <li class="page-item"><a class="page-link"
+                                href="/btl/adminComment/index?<?= $buildQuery(['page' => 1]) ?>">1</a></li>
+                        <?php if ($start > 2): ?>
+                            <li class="page-item disabled"><span class="page-link">…</span></li><?php endif; ?>
                     <?php endif; ?>
                     <?php for ($i = $start; $i <= $end; $i++): ?>
                         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
@@ -251,11 +265,15 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
                         </li>
                     <?php endfor; ?>
                     <?php if ($end < $totalPages): ?>
-                        <?php if ($end < $totalPages - 1): ?><li class="page-item disabled"><span class="page-link">…</span></li><?php endif; ?>
-                        <li class="page-item"><a class="page-link" href="/btl/adminComment/index?<?= $buildQuery(['page' => $totalPages]) ?>"><?= $totalPages ?></a></li>
+                        <?php if ($end < $totalPages - 1): ?>
+                            <li class="page-item disabled"><span class="page-link">…</span></li><?php endif; ?>
+                        <li class="page-item"><a class="page-link"
+                                href="/btl/adminComment/index?<?= $buildQuery(['page' => $totalPages]) ?>"><?= $totalPages ?></a>
+                        </li>
                     <?php endif; ?>
                     <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-                        <a class="page-link" href="/btl/adminComment/index?<?= $buildQuery(['page' => min($totalPages, $page + 1)]) ?>">
+                        <a class="page-link"
+                            href="/btl/adminComment/index?<?= $buildQuery(['page' => min($totalPages, $page + 1)]) ?>">
                             <i class="fa fa-angle-right"></i>
                         </a>
                     </li>

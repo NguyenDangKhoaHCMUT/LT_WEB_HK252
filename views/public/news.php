@@ -159,7 +159,7 @@ $sectionTitle = $hasFilters ? 'Kết quả' : 'Bài viết mới nhất';
                     <article class="card h-100 border-0 shadow-sm news-post-card">
                         <div class="news-card-image-wrap">
                             <img
-                                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3C/svg%3E"
+                                src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%209'%3E%3C/svg%3E"
                                 data-src="<?= htmlspecialchars($post['thumbnail'] ?: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop') ?>"
                                 class="card-img-top news-card-image lazy-img"
                                 alt="<?= htmlspecialchars($post['title']) ?>"

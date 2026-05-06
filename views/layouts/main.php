@@ -2,6 +2,7 @@
 <html lang="vi">
 
 <head>
+    <base href="/btl/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title ?? 'TechStore - Thiết bị công nghệ cao cấp') ?></title>
@@ -35,7 +36,6 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/btl/public/css/style.css">
-    <base href="/btl/">
 </head>
 
 <body>
@@ -193,7 +193,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-4">
-                    <h5 class="fw-bold text-primary mb-3"><i class="fa fa-laptop-code me-2"></i>TechStore</h5>
+                    <div class="h5 fw-bold text-primary mb-3"><i class="fa fa-laptop-code me-2"></i>TechStore</div>
                     <p class="text-secondary small mb-3">Hệ thống bán lẻ thiết bị công nghệ hàng đầu, chuyên cung cấp
                         Smartphone và Laptop chính hãng với giá cả cạnh tranh và dịch vụ bảo hành tận tâm.</p>
                     <ul class="list-unstyled text-secondary small mb-0">
@@ -204,7 +204,7 @@
                     </ul>
                 </div>
                 <div class="col-lg-2 col-6 mb-4">
-                    <h6 class="fw-bold mb-3">Khám phá</h6>
+                    <div class="h6 fw-bold mb-3">Khám phá</div>
                     <ul class="list-unstyled text-secondary small tech-footer-links">
                         <li><a href="/btl/"><i class="fa fa-angle-right me-1"></i> Trang chủ</a></li>
                         <li><a href="/btl/product/index"><i class="fa fa-angle-right me-1"></i> Sản phẩm</a></li>
@@ -213,14 +213,14 @@
                     </ul>
                 </div>
                 <div class="col-lg-3 col-6 mb-4">
-                    <h6 class="fw-bold mb-3">Hỗ trợ khách hàng</h6>
+                    <div class="h6 fw-bold mb-3">Hỗ trợ khách hàng</div>
                     <ul class="list-unstyled text-secondary small tech-footer-links">
                         <li><a href="/btl/home/contact"><i class="fa fa-angle-right me-1"></i> Liên hệ</a></li>
                         <li><a href="/btl/faq/index"><i class="fa fa-angle-right me-1"></i> Hỏi đáp (FAQ)</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 mb-4">
-                    <h6 class="fw-bold mb-3">Kết nối với chúng tôi</h6>
+                    <div class="h6 fw-bold mb-3">Kết nối với chúng tôi</div>
                     <div class="d-flex gap-3 tech-social-icons">
                         <a href="#" class="text-light fs-4"><i class="fab fa-facebook"></i></a>
                         <a href="#" class="text-light fs-4"><i class="fab fa-youtube"></i></a>

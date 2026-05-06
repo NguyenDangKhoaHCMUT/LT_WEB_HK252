@@ -1,50 +1,3 @@
-<!-- Quill CSS -->
-<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
-
-<style>
-    .ql-editor {
-        min-height: 150px;
-        font-size: 0.95rem;
-        font-family: 'Inter', sans-serif;
-    }
-
-    .ql-editor.ql-desc1 {
-        min-height: 120px;
-        max-height: 250px;
-        overflow-y: auto;
-    }
-
-    .ql-editor.ql-desc2 {
-        min-height: 200px;
-        max-height: 500px;
-        overflow-y: auto;
-    }
-
-    .quill-wrapper {
-        border: 1px solid #dee2e6;
-        border-radius: 0.375rem;
-        overflow: hidden;
-    }
-
-    .quill-wrapper .ql-toolbar {
-        border: none;
-        border-bottom: 1px solid #dee2e6;
-        background: #f8f9fa;
-    }
-
-    .quill-wrapper .ql-container {
-        border: none;
-    }
-
-    .char-count {
-        font-size: 0.8rem;
-    }
-
-    .char-count.over {
-        color: #dc3545;
-    }
-</style>
-
 <div class="container-fluid py-4">
     <div class="row mb-4">
         <div class="col-12 d-flex justify-content-between align-items-center">
@@ -61,7 +14,7 @@
         <div class="card-body p-4">
             <form action="/btl/adminSetting/about" method="POST" enctype="multipart/form-data" id="settingsForm">
 
-                <h5 class="fw-bold text-primary mb-4 border-bottom pb-2">1. Văn bản Giới thiệu</h5>
+                <h3 class="h5 fw-bold text-primary mb-4 border-bottom pb-2">1. Văn bản Giới thiệu</h3>
 
                 <div class="row mb-4">
                     <div class="col-md-6 mb-3">
@@ -111,7 +64,7 @@
                     </div>
                 </div>
 
-                <h5 class="fw-bold text-primary mb-4 border-bottom pb-2">2. Hình ảnh Slide (Carousel)</h5>
+                <h3 class="h5 fw-bold text-primary mb-4 border-bottom pb-2">2. Hình ảnh Slide (Carousel)</h3>
                 <p class="text-muted mb-4">Bạn hãy tải lên ảnh mới từ máy tính, nền tảng sẽ tự động thay thế ảnh hiển
                     thị ngoài carousel.</p>
 
