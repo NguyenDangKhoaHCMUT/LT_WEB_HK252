@@ -1,4 +1,4 @@
--- Khởi tạo Database cho BTL Lập trình Web
+﻿-- Khởi tạo Database cho BTL Lập trình Web
 CREATE DATABASE IF NOT EXISTS web_btl;
 USE web_btl;
 

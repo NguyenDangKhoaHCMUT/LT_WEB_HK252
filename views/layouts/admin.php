@@ -73,6 +73,12 @@
                 <div class="menu-inner">
                     <nav>
                         <ul class="metismenu" id="menu">
+                            <li class="<?= strpos($current_uri, '/adminProduct/') !== false ? 'mm-active' : '' ?>">
+                                <a href="/btl/adminProduct/index" aria-expanded="true"><i class="fa fa-box-open"></i><span>Quản lý Sản phẩm</span></a>
+                            </li>
+                            <li class="<?= strpos($current_uri, '/adminOrder/') !== false ? 'mm-active' : '' ?>">
+                                <a href="/btl/adminOrder/index" aria-expanded="true"><i class="fa fa-cart-shopping"></i><span>Giỏ hàng / Đơn hàng</span></a>
+                            </li>
                             <li class="<?= strpos($current_uri, '/adminUser/') !== false ? 'mm-active' : '' ?>">
                                 <a href="/btl/adminUser/index" aria-expanded="true"><i class="fa fa-users"></i><span>Quản lý Thành viên</span></a>
                             </li>

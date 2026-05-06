@@ -97,7 +97,22 @@
                                     <span
                                         class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                                         style="font-size: 0.65rem;">
-                                        0
+                                        <?php
+                                        $cart_count = 0;
+                                        if (isset($_SESSION['user_id'])) {
+                                            try {
+                                                require_once 'config/database.php';
+                                                require_once 'models/Order.php';
+                                                $db = (new Database())->getConnection();
+                                                $cart_model = new Order($db);
+                                                $cart_data = $cart_model->getCart($_SESSION['user_id']);
+                                                $cart_count = (int) ($cart_data['count'] ?? 0);
+                                            } catch (Exception $e) {
+                                                $cart_count = 0;
+                                            }
+                                        }
+                                        echo $cart_count;
+                                        ?>
                                     </span>
                                 </a>
                             </li>
