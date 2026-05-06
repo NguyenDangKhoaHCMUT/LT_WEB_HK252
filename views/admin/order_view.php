@@ -7,13 +7,13 @@
     <div class="col-lg-8">
         <div class="card border-0 shadow-sm">
             <div class="card-body">
-                <h5 class="mb-3">Thông tin người đặt</h5>
+            <div class="mb-3">Thông tin người đặt</div>
                 <p><strong>Họ tên:</strong> <?php echo htmlspecialchars($order['customer_name'] ?? $order['user_fullname'] ?? '', ENT_QUOTES); ?></p>
                 <p><strong>Điện thoại:</strong> <?php echo htmlspecialchars($order['phone'] ?? '', ENT_QUOTES); ?></p>
                 <p><strong>Địa chỉ:</strong> <?php echo nl2br(htmlspecialchars($order['address'] ?? '', ENT_QUOTES)); ?></p>
 
                 <hr>
-                <h5 class="mb-3">Sản phẩm</h5>
+                <div class="mb-3">Sản phẩm</div>
                 <div class="table-responsive">
                     <table class="table mb-0">
                         <thead class="table-light">
