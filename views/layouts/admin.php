@@ -123,26 +123,6 @@
                 </div>
             </div>
             <!-- header area end -->
-            <!-- page title area start -->
-            <div class="page-title-area">
-                <div class="row align-items-center">
-                    <div class="col-sm-6">
-                        <div class="breadcrumbs-area clearfix">
-                            <h4 class="page-title float-start"><?= isset($title) ? htmlspecialchars($title) : 'Dashboard' ?></h4>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 clearfix">
-                        <div class="user-profile float-end">
-                            <img class="avatar user-thumb" src="public/srtdash/assets/images/author/avatar.png" alt="avatar">
-                            <h4 class="user-name dropdown-toggle" data-bs-toggle="dropdown">Admin <i class="fa-solid fa-angle-down"></i></h4>
-                            <div class="dropdown-menu user-dropdown">
-                                <a class="dropdown-item" href="/btl/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- page title area end -->
             <div class="main-content-inner pt-4" id="main-content">
                 <?php if (isset($_SESSION['flash_msg'])): ?>
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
