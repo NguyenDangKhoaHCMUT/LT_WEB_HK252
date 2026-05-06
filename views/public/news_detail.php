@@ -1,6 +1,6 @@
 <?php $post = $post ?? []; ?>
 <?php $comments = $comments ?? []; ?>
-<section class="py-2 py-lg-4">
+<div class="py-2 py-lg-4">
     <div class="mb-4">
         <a href="/btl/news" class="text-decoration-none small text-secondary">
             <i class="fa-solid fa-arrow-left me-1"></i> Quay lại danh sách tin tức
@@ -9,27 +9,28 @@
 
     <div class="row g-4">
         <div class="col-lg-8">
-            <article class="card border-0 shadow-sm overflow-hidden mb-4">
-                <img
-                    src="<?= htmlspecialchars($post['thumbnail'] ?? 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop') ?>"
-                    class="w-100 news-detail-image"
-                    alt="<?= htmlspecialchars($post['title']) ?>">
+            <div class="card border-0 shadow-sm overflow-hidden mb-4">
+                <img src="<?= htmlspecialchars($post['thumbnail'] ?? 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop') ?>"
+                    class="w-100 news-detail-image" alt="<?= htmlspecialchars($post['title']) ?>">
                 <div class="card-body p-4 p-lg-5">
                     <h1 class="fw-bold mb-3"><?= htmlspecialchars($post['title']) ?></h1>
                     <p class="lead text-secondary"><?= htmlspecialchars($post['summary']) ?></p>
 
                     <div class="d-flex flex-wrap gap-3 text-secondary small border-top border-bottom py-3 mb-4">
-                        <span><i class="fa-regular fa-user me-1"></i><?= htmlspecialchars($post['author_name']) ?></span>
-                        <span><i class="fa-regular fa-calendar me-1"></i><?= date('d/m/Y', strtotime($post['created_at'])) ?></span>
+                        <span><i
+                                class="fa-regular fa-user me-1"></i><?= htmlspecialchars($post['author_name']) ?></span>
+                        <span><i
+                                class="fa-regular fa-calendar me-1"></i><?= date('d/m/Y', strtotime($post['created_at'])) ?></span>
                         <span><i class="fa-regular fa-eye me-1"></i><?= (int) $post['view_count'] ?> lượt xem</span>
-                        <span><i class="fa-regular fa-comments me-1"></i><?= (int) $post['comment_count'] ?> bình luận</span>
+                        <span><i class="fa-regular fa-comments me-1"></i><?= (int) $post['comment_count'] ?> bình
+                            luận</span>
                     </div>
 
                     <div class="news-content">
                         <?= $post['content'] ?>
                     </div>
                 </div>
-            </article>
+            </div>
 
             <section class="card border-0 shadow-sm">
                 <div class="card-body p-4 p-lg-5">
@@ -48,13 +49,8 @@
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label for="content" class="form-label fw-semibold">Nội dung bình luận</label>
-                                    <textarea
-                                        class="form-control"
-                                        id="content"
-                                        name="content"
-                                        rows="4"
-                                        placeholder="Chia sẻ cảm nhận của bạn về bài viết này..."
-                                        maxlength="1000"
+                                    <textarea class="form-control" id="content" name="content" rows="4"
+                                        placeholder="Chia sẻ cảm nhận của bạn về bài viết này..." maxlength="1000"
                                         required></textarea>
                                     <div class="form-text">Tối đa 1000 ký tự. Nội dung sẽ được hiển thị an toàn.</div>
                                 </div>
@@ -80,7 +76,8 @@
                             </div>
                         </form>
                     <?php else: ?>
-                        <div class="alert alert-light border d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+                        <div
+                            class="alert alert-light border d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
                             <div>
                                 <strong>Muốn tham gia thảo luận?</strong>
                                 <div class="text-secondary small">Hãy đăng nhập để gửi bình luận cho bài viết này.</div>
@@ -96,18 +93,20 @@
                                     <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-2">
                                         <div class="d-flex align-items-center gap-3">
                                             <?php if (!empty($comment['avatar'])): ?>
-                                                <img
-                                                    src="/btl/<?= htmlspecialchars($comment['avatar']) ?>"
+                                                <img src="/btl/<?= htmlspecialchars($comment['avatar']) ?>"
                                                     alt="<?= htmlspecialchars($comment['author_name']) ?>"
                                                     class="rounded-circle news-comment-avatar">
                                             <?php else: ?>
-                                                <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center news-comment-avatar">
+                                                <div
+                                                    class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center news-comment-avatar">
                                                     <i class="fa-regular fa-user"></i>
                                                 </div>
                                             <?php endif; ?>
                                             <div>
                                                 <div class="fw-semibold"><?= htmlspecialchars($comment['author_name']) ?></div>
-                                                <div class="small text-secondary"><?= date('d/m/Y H:i', strtotime($comment['created_at'])) ?></div>
+                                                <div class="small text-secondary">
+                                                    <?= date('d/m/Y H:i', strtotime($comment['created_at'])) ?>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -146,9 +145,13 @@
                             <?php foreach ($relatedPosts as $relatedPost): ?>
                                 <a href="/btl/news/<?= rawurlencode($relatedPost['slug']) ?>" class="text-decoration-none">
                                     <div class="border rounded-4 p-3 news-related-item">
-                                        <div class="fw-semibold text-dark mb-2"><?= htmlspecialchars($relatedPost['title']) ?></div>
-                                        <div class="small text-secondary mb-2"><?= htmlspecialchars($relatedPost['summary']) ?></div>
-                                        <div class="small text-primary"><?= date('d/m/Y', strtotime($relatedPost['created_at'])) ?></div>
+                                        <div class="fw-semibold text-dark mb-2"><?= htmlspecialchars($relatedPost['title']) ?>
+                                        </div>
+                                        <div class="small text-secondary mb-2"><?= htmlspecialchars($relatedPost['summary']) ?>
+                                        </div>
+                                        <div class="small text-primary">
+                                            <?= date('d/m/Y', strtotime($relatedPost['created_at'])) ?>
+                                        </div>
                                     </div>
                                 </a>
                             <?php endforeach; ?>
@@ -160,4 +163,4 @@
             </div>
         </div>
     </div>
-</section>
+</div>

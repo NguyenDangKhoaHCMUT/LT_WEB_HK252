@@ -4,125 +4,6 @@ $faqs ??= [];
 $user_questions ??= [];
 $pending_count ??= 0;
 ?>
-<style>
-    .faq-tab-btn {
-        border-radius: 10px !important;
-        font-weight: 500;
-        font-size: 0.9rem;
-        padding: 0.55rem 1.2rem;
-    }
-
-    .faq-table th {
-        font-size: 0.82rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        color: #6c757d;
-        border-bottom: 2px solid #e9ecef;
-    }
-
-    .faq-table td {
-        vertical-align: middle;
-        font-size: 0.92rem;
-    }
-
-    .faq-question-text {
-        max-width: 320px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-weight: 500;
-    }
-
-    .faq-answer-text {
-        max-width: 260px;
-        color: #555;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .badge-published {
-        background: #d1e7dd;
-        color: #146c43;
-        font-size: 0.75rem;
-        padding: 3px 10px;
-        border-radius: 50px;
-        font-weight: 600;
-    }
-
-    .badge-hidden {
-        background: #f8d7da;
-        color: #842029;
-        font-size: 0.75rem;
-        padding: 3px 10px;
-        border-radius: 50px;
-        font-weight: 600;
-    }
-
-    .badge-pending {
-        background: #fff3cd;
-        color: #856404;
-        font-size: 0.75rem;
-        padding: 3px 10px;
-        border-radius: 50px;
-        font-weight: 600;
-    }
-
-    .badge-answered {
-        background: #d1e7dd;
-        color: #146c43;
-        font-size: 0.75rem;
-        padding: 3px 10px;
-        border-radius: 50px;
-        font-weight: 600;
-    }
-
-    .user-avatar-sm {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #e9ecef;
-    }
-
-    .answer-preview {
-        background: #f0f5ff;
-        border-left: 3px solid #0d6efd;
-        border-radius: 0 8px 8px 0;
-        padding: 0.6rem 0.85rem;
-        font-size: 0.88rem;
-        color: #444;
-        margin-top: 0.4rem;
-        max-width: 340px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .pending-dot {
-        width: 8px;
-        height: 8px;
-        background: #ffc107;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 5px;
-        animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-
-        0%,
-        100% {
-            opacity: 1;
-        }
-
-        50% {
-            opacity: 0.4;
-        }
-    }
-</style>
-
 <div class="container-fluid py-4">
 
     <!-- Header -->
@@ -238,7 +119,7 @@ $pending_count ??= 0;
         </div>
 
         <!-- ========= Tab 2: User Questions ========= -->
-        <div class="tab-pane fade" id="tabUserQuestions" id="user-questions">
+        <div class="tab-pane fade" id="tabUserQuestions">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-0">
                     <?php if (!empty($user_questions)): ?>
@@ -340,7 +221,7 @@ $pending_count ??= 0;
         <div class="modal-content rounded-4 border-0 shadow">
             <form method="POST" action="/btl/adminFaq/create">
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold">Thêm câu hỏi FAQ mới</h5>
+                    <h3 class="h5 modal-title fw-bold">Thêm câu hỏi FAQ mới</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body px-4 py-3">
@@ -389,7 +270,7 @@ $pending_count ??= 0;
             <form method="POST" action="/btl/adminFaq/update">
                 <input type="hidden" name="id" id="editFaqId">
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold">Chỉnh sửa câu hỏi FAQ</h5>
+                    <h3 class="h5 modal-title fw-bold">Chỉnh sửa câu hỏi FAQ</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body px-4 py-3">
@@ -435,7 +316,7 @@ $pending_count ??= 0;
             <form method="POST" action="/btl/adminFaq/answer">
                 <input type="hidden" name="id" id="answerQuestionId">
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold"><i class="fa fa-reply text-primary me-2"></i>Trả lời câu hỏi</h5>
+                    <h3 class="h5 modal-title fw-bold"><i class="fa fa-reply text-primary me-2"></i>Trả lời câu hỏi</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body px-4 py-3">

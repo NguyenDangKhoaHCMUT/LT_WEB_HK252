@@ -9,7 +9,7 @@ $posts = $posts ?? [];
 <!-- Page Header -->
 <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4">
     <div>
-        <h4 class="mb-1 fw-bold text-dark">Quản lý Tin tức</h4>
+        <h2 class="h4 mb-1 fw-bold text-dark">Quản lý Tin tức</h2>
         <p class="text-muted mb-0">Xem, tìm kiếm, thêm, sửa và xoá các bài viết trên website.</p>
     </div>
     <a href="/btl/adminNews/create" class="btn btn-primary d-inline-flex align-items-center gap-2 fw-semibold px-4 rounded-3">

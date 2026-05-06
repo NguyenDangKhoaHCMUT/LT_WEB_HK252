@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'TechStore Admin Dashboard' ?></title>
 
+    <base href="/btl/">
+
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 -->
@@ -13,7 +15,8 @@
     <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <base href="/btl/">
+    <!-- Quill CSS -->
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 
     <style>
         :root {
@@ -184,6 +187,176 @@
         .sidebar-backdrop.show {
             display: block;
         }
+
+        /* Quill Editor Custom Styles */
+        .ql-editor {
+            min-height: 150px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .ql-editor.ql-desc1 {
+            min-height: 120px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .ql-editor.ql-desc2 {
+            min-height: 200px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .quill-wrapper {
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            overflow: hidden;
+        }
+
+        .quill-wrapper .ql-toolbar {
+            border: none;
+            border-bottom: 1px solid #dee2e6;
+            background: #f8f9fa;
+        }
+
+        .quill-wrapper .ql-container {
+            border: none;
+        }
+
+        .char-count {
+            font-size: 0.8rem;
+        }
+
+        .char-count.over {
+            color: #dc3545;
+        }
+    
+
+        /* FAQ Admin Styles */
+.faq-tab-btn {
+        border-radius: 10px !important;
+        font-weight: 500;
+        font-size: 0.9rem;
+        padding: 0.55rem 1.2rem;
+    }
+
+    .faq-table th {
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #6c757d;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .faq-table td {
+        vertical-align: middle;
+        font-size: 0.92rem;
+    }
+
+    .faq-question-text {
+        max-width: 320px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 500;
+    }
+
+    .faq-answer-text {
+        max-width: 260px;
+        color: #555;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .badge-published {
+        background: #d1e7dd;
+        color: #146c43;
+        font-size: 0.75rem;
+        padding: 3px 10px;
+        border-radius: 50px;
+        font-weight: 600;
+        white-space: nowrap;
+        display: inline-block;
+    }
+
+    .badge-hidden {
+        background: #f8d7da;
+        color: #842029;
+        font-size: 0.75rem;
+        padding: 3px 10px;
+        border-radius: 50px;
+        font-weight: 600;
+        white-space: nowrap;
+        display: inline-block;
+    }
+
+    .badge-pending {
+        background: #fff3cd;
+        color: #856404;
+        font-size: 0.75rem;
+        padding: 3px 10px;
+        border-radius: 50px;
+        font-weight: 600;
+        white-space: nowrap;
+        display: inline-block;
+    }
+
+    .badge-answered {
+        background: #d1e7dd;
+        color: #146c43;
+        font-size: 0.75rem;
+        padding: 3px 10px;
+        border-radius: 50px;
+        font-weight: 600;
+        white-space: nowrap;
+        display: inline-block;
+    }
+
+    .user-avatar-sm {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #e9ecef;
+    }
+
+    .answer-preview {
+        background: #f0f5ff;
+        border-left: 3px solid #0d6efd;
+        border-radius: 0 8px 8px 0;
+        padding: 0.6rem 0.85rem;
+        font-size: 0.88rem;
+        color: #444;
+        margin-top: 0.4rem;
+        max-width: 340px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .pending-dot {
+        width: 8px;
+        height: 8px;
+        background: #ffc107;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.4;
+        }
+    }
     </style>
 </head>
 
