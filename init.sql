@@ -1,5 +1,5 @@
-﻿-- Khởi tạo Database cho BTL Lập trình Web
-CREATE DATABASE IF NOT EXISTS web_btl;
+-- Khởi tạo Database cho BTL Lập trình Web
+CREATE DATABASE IF NOT EXISTS web_btl DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE web_btl;
 
 -- Bảng liên hệ
@@ -24,6 +24,11 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Tài khoản Admin mặc định (Email: admin@example.com | Mật khẩu: 123456)
+INSERT IGNORE INTO users (email, password, fullname, role, status) VALUES 
+('admin@example.com', '$2y$10$93EpWobsuj.prf7seDxTCOLjXflernlxzWsYQlPbZ6leAHwpRhxB6', 'Admin', 'admin', 'active');
+
+
 -- Bảng settings (Lưu trữ cấu hình, nội dung động của website)
 CREATE TABLE IF NOT EXISTS settings (
     setting_key VARCHAR(100) PRIMARY KEY,
@@ -38,8 +43,8 @@ INSERT IGNORE INTO settings (setting_key, setting_value) VALUES
 ('about_desc_1', 'Tại <strong>TechStore</strong>, chúng tôi tin rằng công nghệ là chìa khóa để khai mở những giới hạn mới của con người. Được thành lập với khát khao thu hẹp khoảng cách công nghệ, chúng tôi không ngừng nỗ lực mang đến cho khách hàng các thiết bị Smartphone và Laptop tiên tiến nhất hiện nay.'),
 ('about_desc_2', 'Chúng tôi tâm niệm "Trải nghiệm vượt kỳ vọng". Do đó, ngoài các dòng sản phẩm chất lượng cao với mức giá cạnh tranh, TechStore tự hào cung cấp dịch vụ hậu mãi đẳng cấp, bảo hành minh bạch và tư vấn bằng cả trái tim.'),
 ('about_carousel_1', 'https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=2070&auto=format&fit=crop'),
-('about_carousel_2', 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop'),
-('about_carousel_3', 'https://images.unsplash.com/photo-1531297172864-45d6124c9c8c?q=80&w=2070&auto=format&fit=crop');
+('about_carousel_2', 'https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=2070&auto=format&fit=crop'),
+('about_carousel_3', 'https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=2070&auto=format&fit=crop');
 
 CREATE TABLE IF NOT EXISTS posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -159,3 +164,68 @@ INSERT IGNORE INTO faqs (question, answer, sort_order, is_published) VALUES
 ('Tôi có thể mua hàng trả góp không?', 'Có! TechStore hỗ trợ trả góp 0% lãi suất qua thẻ tín dụng các ngân hàng lớn và ví điện tử như MoMo, ZaloPay với kỳ hạn từ 3 đến 24 tháng.', 2, 1),
 ('Thời gian giao hàng mất bao lâu?', 'Nội thành: 2-4 giờ. Ngoại thành và các tỉnh thành khác: 1-3 ngày làm việc. Miễn phí giao hàng cho đơn từ 2 triệu đồng.', 3, 1),
 ('Sản phẩm có bảo hành không?', 'Tất cả sản phẩm tại TechStore đều có bảo hành chính hãng từ 12 đến 24 tháng tùy theo hãng và model. Ngoài ra, TechStore cung cấp thêm 6 tháng bảo hành mở rộng miễn phí.', 4, 1);
+
+-- ==========================================
+-- TÍNH NĂNG SẢN PHẨM & ĐƠN HÀNG (FEATURE)
+-- ==========================================
+
+-- Bảng danh mục sản phẩm
+CREATE TABLE IF NOT EXISTS categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Dữ liệu mẫu cho danh mục sản phẩm
+INSERT IGNORE INTO categories (name) VALUES 
+('Smartphone'), 
+('Laptop'), 
+('Máy tính bảng'), 
+('Đồng hồ thông minh'), 
+('Tai nghe'), 
+('Phụ kiện'), 
+('Linh kiện PC'), 
+('Màn hình'), 
+('Thiết bị âm thanh'), 
+('Thiết bị mạng');
+
+-- Bảng sản phẩm
+CREATE TABLE IF NOT EXISTS products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    image VARCHAR(255),
+    price BIGINT NOT NULL DEFAULT 0,
+    stock INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+);
+
+-- Bảng đơn hàng
+CREATE TABLE IF NOT EXISTS orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    status ENUM('cart', 'pending', 'processing', 'completed', 'cancelled') DEFAULT 'cart',
+    total_amount BIGINT DEFAULT 0,
+    customer_name VARCHAR(255),
+    phone VARCHAR(20),
+    address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_order_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Bảng chi tiết đơn hàng
+CREATE TABLE IF NOT EXISTS order_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    unit_price BIGINT NOT NULL,
+    UNIQUE KEY uq_order_product (order_id, product_id),
+    CONSTRAINT fk_item_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    CONSTRAINT fk_item_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
