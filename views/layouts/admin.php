@@ -198,27 +198,21 @@
         <ul class="sidebar-menu">
             <li class="nav-small-cap text-muted text-uppercase fw-bold mb-2 mt-2 px-3" style="font-size: 0.75rem;">Menu
                 chính</li>
-            <li><a href="/btl/admin/index"
-                    class="<?= strpos($current_uri, '/admin/index') !== false ? 'active' : '' ?>"><i
-                        class="fa fa-chart-pie"></i> Tổng quan</a></li>
             <li><a href="/btl/adminUser/index"
                     class="<?= strpos($current_uri, '/adminUser/') !== false ? 'active' : '' ?>"><i
                         class="fa fa-users"></i> Quản lý Thành viên</a></li>
-            <li><a href="/btl/adminProduct/index"
-                    class="<?= strpos($current_uri, '/adminProduct/') !== false ? 'active' : '' ?>"><i
-                        class="fa fa-mobile-alt"></i> Quản lý Sản phẩm</a></li>
             <li><a href="/btl/adminNews/index"
                     class="<?= strpos($current_uri, '/adminNews/') !== false ? 'active' : '' ?>"><i
                         class="fa fa-newspaper"></i> Quản lý Tin tức</a></li>
             <li><a href="/btl/adminComment/index"
                     class="<?= strpos($current_uri, '/adminComment/') !== false ? 'active' : '' ?>"><i
                         class="fa fa-comments"></i> Quản lý Bình luận</a></li>
-            <li><a href="/btl/adminOrder/index"
-                    class="<?= strpos($current_uri, '/adminOrder/') !== false ? 'active' : '' ?>"><i
-                        class="fa fa-shopping-cart"></i> Quản lý Đơn hàng</a></li>
             <li><a href="/btl/adminFaq/index"
                     class="<?= strpos($current_uri, '/adminFaq/') !== false ? 'active' : '' ?>"><i
-                        class="fa fa-comments"></i> Quản lý Hỏi/Đáp</a></li>
+                        class="fa fa-question-circle"></i> Quản lý Hỏi/Đáp</a></li>
+            <li><a href="/btl/adminContact/index"
+                    class="<?= stripos($current_uri, '/admincontact') !== false ? 'active' : '' ?>"><i
+                        class="fa fa-envelope"></i> Quản lý Liên hệ</a></li>
 
             <li class="nav-small-cap text-muted text-uppercase fw-bold mb-2 mt-4 px-3" style="font-size: 0.75rem;">Hệ
                 thống</li>

@@ -15,8 +15,8 @@
     <?php endif; ?>
 
     <!-- Open Graph / Social Sharing -->
-    <meta property="og:type"        content="<?= htmlspecialchars($ogType ?? 'website') ?>">
-    <meta property="og:title"       content="<?= htmlspecialchars($ogTitle ?? $title ?? 'TechStore') ?>">
+    <meta property="og:type" content="<?= htmlspecialchars($ogType ?? 'website') ?>">
+    <meta property="og:title" content="<?= htmlspecialchars($ogTitle ?? $title ?? 'TechStore') ?>">
     <meta property="og:description" content="<?= htmlspecialchars($ogDescription ?? $metaDescription ?? '') ?>">
     <?php if (!empty($canonicalUrl)): ?>
         <meta property="og:url" content="<?= htmlspecialchars($canonicalUrl) ?>">
@@ -194,33 +194,38 @@
             <div class="row">
                 <div class="col-lg-4 mb-4">
                     <h5 class="fw-bold text-primary mb-3"><i class="fa fa-laptop-code me-2"></i>TechStore</h5>
-                    <p class="text-secondary small">Hệ thống bán lẻ thiết bị công nghệ hàng đầu, chuyên cung cấp
+                    <p class="text-secondary small mb-3">Hệ thống bán lẻ thiết bị công nghệ hàng đầu, chuyên cung cấp
                         Smartphone và Laptop chính hãng với giá cả cạnh tranh và dịch vụ bảo hành tận tâm.</p>
-                </div>
-                <div class="col-lg-2 col-6 mb-4">
-                    <h6 class="fw-bold mb-3">Sản phẩm</h6>
-                    <ul class="list-unstyled text-secondary small tech-footer-links">
-                        <li><a href="#">iPhone</a></li>
-                        <li><a href="#">Samsung Galaxy</a></li>
-                        <li><a href="#">MacBook</a></li>
-                        <li><a href="#">Laptop Gaming</a></li>
+                    <ul class="list-unstyled text-secondary small mb-0">
+                        <li class="mb-2"><i class="fa fa-map-marker-alt me-2 text-primary"></i>Đại học Bách Khoa TP.HCM
+                        </li>
+                        <li class="mb-2"><i class="fa fa-phone-alt me-2 text-primary"></i>(028) 12 345 678</li>
+                        <li><i class="fa fa-envelope me-2 text-primary"></i>support@techstore.vn</li>
                     </ul>
                 </div>
                 <div class="col-lg-2 col-6 mb-4">
-                    <h6 class="fw-bold mb-3">Hỗ trợ</h6>
+                    <h6 class="fw-bold mb-3">Khám phá</h6>
                     <ul class="list-unstyled text-secondary small tech-footer-links">
-                        <li><a href="/btl/home/about">Giới thiệu</a></li>
-                        <li><a href="/btl/home/contact">Liên hệ</a></li>
-                        <li><a href="#">Bảo hành</a></li>
-                        <li><a href="/btl/faq/index">Hỏi đáp (FAQ)</a></li>
+                        <li><a href="/btl/"><i class="fa fa-angle-right me-1"></i> Trang chủ</a></li>
+                        <li><a href="/btl/product/index"><i class="fa fa-angle-right me-1"></i> Sản phẩm</a></li>
+                        <li><a href="/btl/news/index"><i class="fa fa-angle-right me-1"></i> Tin tức</a></li>
+                        <li><a href="/btl/home/about"><i class="fa fa-angle-right me-1"></i> Giới thiệu</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-4 mb-4">
+                <div class="col-lg-3 col-6 mb-4">
+                    <h6 class="fw-bold mb-3">Hỗ trợ khách hàng</h6>
+                    <ul class="list-unstyled text-secondary small tech-footer-links">
+                        <li><a href="/btl/home/contact"><i class="fa fa-angle-right me-1"></i> Liên hệ</a></li>
+                        <li><a href="/btl/faq/index"><i class="fa fa-angle-right me-1"></i> Hỏi đáp (FAQ)</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 mb-4">
                     <h6 class="fw-bold mb-3">Kết nối với chúng tôi</h6>
                     <div class="d-flex gap-3 tech-social-icons">
                         <a href="#" class="text-light fs-4"><i class="fab fa-facebook"></i></a>
                         <a href="#" class="text-light fs-4"><i class="fab fa-youtube"></i></a>
                         <a href="#" class="text-light fs-4"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-light fs-4"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>
