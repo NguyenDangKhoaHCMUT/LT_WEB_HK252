@@ -4,7 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'TechStore - Thiết bị công nghệ cao cấp' ?></title>
+    <title><?= htmlspecialchars($title ?? 'TechStore - Thiết bị công nghệ cao cấp') ?></title>
+    <meta name="description"
+        content="<?= htmlspecialchars($metaDescription ?? 'TechStore cung cấp tin tức công nghệ, bài đánh giá sản phẩm và thông tin hữu ích cho người dùng yêu công nghệ.') ?>">
+    <?php if (!empty($metaKeywords)): ?>
+        <meta name="keywords" content="<?= htmlspecialchars($metaKeywords) ?>">
+    <?php endif; ?>
+    <?php if (!empty($canonicalUrl)): ?>
+        <link rel="canonical" href="<?= htmlspecialchars($canonicalUrl) ?>">
+    <?php endif; ?>
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type"        content="<?= htmlspecialchars($ogType ?? 'website') ?>">
+    <meta property="og:title"       content="<?= htmlspecialchars($ogTitle ?? $title ?? 'TechStore') ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($ogDescription ?? $metaDescription ?? '') ?>">
+    <?php if (!empty($canonicalUrl)): ?>
+        <meta property="og:url" content="<?= htmlspecialchars($canonicalUrl) ?>">
+    <?php endif; ?>
+    <?php if (!empty($ogImage)): ?>
+        <meta property="og:image" content="<?= htmlspecialchars($ogImage) ?>">
+    <?php endif; ?>
+
 
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -50,7 +70,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= strpos($current_uri, '/news') !== false ? 'text-primary fw-bold' : '' ?>"
-                            href="/btl/news/index">Tin tức</a>
+                            href="/btl/news">Tin tức</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= strpos($current_uri, '/faq') !== false ? 'text-primary fw-bold' : '' ?>"
