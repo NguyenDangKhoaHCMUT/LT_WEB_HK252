@@ -100,3 +100,556 @@ body {
     transform: translateY(-8px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
 }
+
+.news-cover-image {
+    min-height: 320px;
+    max-height: 420px;
+    object-fit: cover;
+}
+
+.news-card-image {
+    height: 240px;
+    object-fit: cover;
+}
+
+.news-detail-image {
+    height: 360px;
+    object-fit: cover;
+}
+
+.news-post-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.news-post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.08) !important;
+}
+
+.news-content {
+    line-height: 1.8;
+    color: #495057;
+}
+
+.news-content p:last-child {
+    margin-bottom: 0;
+}
+
+.news-comment-avatar {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.news-related-item {
+    transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.news-related-item:hover {
+    border-color: #0d6efd !important;
+    transform: translateX(4px);
+}
+
+.news-search-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f6f9ff 100%);
+}
+
+/* Layout tweaks for the inline search summary inside the search card */
+.news-search-card .news-hero-summary {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.news-search-card .news-hero-stat {
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.85rem;
+    background: linear-gradient(180deg, #ffffff 0%, #eef6ff 100%);
+    border: 1px solid #e6eefc;
+    box-shadow: 0 8px 20px rgba(15, 50, 120, 0.03);
+    text-align: center;
+}
+
+.news-search-card .news-hero-stat-value {
+    color: #0d6efd;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.news-search-card .news-hero-stat-label {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.news-hero-block {
+    margin-bottom: 1.5rem !important;
+}
+
+.news-hero-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+}
+
+.news-hero-stat {
+    background: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
+    border: 1px solid #dce8ff;
+    border-radius: 1rem;
+    padding: 1rem 0.9rem;
+    text-align: center;
+}
+
+.news-hero-stat-value {
+    display: block;
+    color: #0d6efd;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.news-hero-stat-label {
+    display: block;
+    margin-top: 0.25rem;
+    color: #6c757d;
+    font-size: 0.88rem;
+}
+
+.news-live-root {
+    transition: opacity 0.2s ease;
+}
+
+.news-live-root.is-loading {
+    opacity: 0.65;
+}
+
+.news-search-form .form-control,
+.news-search-form .form-select {
+    min-height: 52px;
+    border-radius: 0.75rem;
+    border: 1px solid #e6eefc;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+    padding: 0.65rem 1rem;
+    box-shadow: 0 6px 18px rgba(13, 110, 253, 0.06);
+    transition: box-shadow 0.18s ease, transform 0.12s ease, border-color 0.12s ease;
+}
+
+.news-search-form .form-control:focus,
+.news-search-form .form-select:focus {
+    box-shadow: 0 12px 36px rgba(13, 110, 253, 0.08);
+    border-color: #cfe0ff;
+}
+
+.news-search-form .btn {
+    min-height: 52px;
+    border-radius: 0.75rem;
+    padding: 0 0.9rem;
+}
+
+.news-search-form .btn-primary {
+    background: linear-gradient(90deg, #0d6efd 0%, #0069ff 100%);
+    border: none;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.12);
+}
+
+.news-search-form .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px rgba(13, 110, 253, 0.16);
+}
+
+.news-search-form .btn-outline-secondary {
+    background: #ffffff;
+    border: 1px solid #e6edf9;
+    color: #495057;
+}
+
+.news-search-form .btn-outline-secondary:hover {
+    background: #f8fbff;
+    border-color: #d9e7ff;
+}
+
+.news-search-meta {
+    max-width: 42rem;
+}
+
+.news-search-status {
+    min-height: 1.25rem;
+}
+
+.news-filter-pills {
+    margin-top: 0.45rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.news-filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #ffffff 0%, #f6fbff 100%);
+    border: none;
+    color: #0b2540;
+    font-size: 0.94rem;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(15, 50, 120, 0.04);
+}
+
+.news-filter-pill i {
+    color: #0d6efd;
+}
+
+@media (max-width: 991.98px) {
+    .news-search-form .col-lg-5,
+    .news-search-form .col-lg-2 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .news-search-form .d-grid {
+        gap: 0.5rem;
+    }
+
+    .news-search-form .btn {
+        width: 100%;
+    }
+}
+
+.news-featured-card {
+    border: 1px solid rgba(13, 110, 253, 0.08);
+}
+
+.news-section-heading {
+    margin-bottom: 1.75rem !important;
+}
+
+.news-section-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.75rem 1rem;
+    border-radius: 999px;
+    background: #eaf2ff;
+    color: #0d47a1;
+    font-weight: 600;
+}
+
+.news-section-count span {
+    font-size: 1.05rem;
+}
+
+.news-post-grid .news-post-card .card-body {
+    gap: 0;
+}
+
+.news-meta-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 1.15rem;
+    color: #4f5d75;
+    font-size: 0.96rem;
+    font-weight: 500;
+}
+
+.news-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1.4;
+}
+
+.news-meta-item i {
+    color: #0d6efd;
+    width: 1rem;
+    text-align: center;
+}
+
+.news-action-btn {
+    min-height: 46px;
+    border-radius: 999px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.news-pagination .page-link {
+    border: none;
+    min-width: 44px;
+    min-height: 44px;
+    margin: 0 0.2rem;
+    border-radius: 999px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #0d47a1;
+    background: #fff;
+    box-shadow: 0 0.2rem 0.6rem rgba(13, 110, 253, 0.08);
+}
+
+.news-pagination .page-item.active .page-link {
+    background: #0d6efd;
+    color: #fff;
+}
+
+.news-pagination .page-item.disabled .page-link {
+    color: #98a2b3;
+    background: #f3f6fb;
+    box-shadow: none;
+}
+
+@media (max-width: 991.98px) {
+    .news-detail-image,
+    .news-cover-image {
+        height: 260px;
+        min-height: 260px;
+    }
+
+    .news-hero-summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Lazy Image Loading ─────────────────────────────── */
+.news-card-image-wrap {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(90deg, #f0f2f5 25%, #e4e7ec 50%, #f0f2f5 75%);
+    background-size: 200% 100%;
+    animation: lazy-skeleton 1.4s ease infinite;
+}
+
+@keyframes lazy-skeleton {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.lazy-img {
+    opacity: 0;
+    transform: scale(1.03);
+    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
+    filter: blur(6px);
+    will-change: opacity, transform, filter;
+}
+
+.lazy-img.lazy-loaded {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+}
+
+/* Stop skeleton animation once image is loaded */
+.news-card-image-wrap:has(.lazy-loaded) {
+    background: none;
+    animation: none;
+}
+
+
+/* ===== FAQ Page Styles ===== */
+.faq-hero {
+        background: linear-gradient(135deg, #f8f9ff 0%, #eef2ff 100%);
+        border-radius: 20px;
+        padding: 3rem 2rem;
+        margin-bottom: 2.5rem;
+        text-align: center;
+    }
+
+    .faq-hero h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 0.75rem;
+    }
+
+    .faq-hero p {
+        color: #6c757d;
+        font-size: 1.05rem;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+    /* Accordion FAQ */
+    .faq-accordion .accordion-item {
+        border: 1px solid #e9ecef;
+        border-radius: 12px !important;
+        margin-bottom: 12px;
+        overflow: hidden;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        transition: box-shadow 0.2s;
+    }
+
+    .faq-accordion .accordion-item:hover {
+        box-shadow: 0 4px 16px rgba(13, 110, 253, 0.1);
+    }
+
+    .faq-accordion .accordion-button {
+        font-weight: 600;
+        font-size: 0.97rem;
+        color: #1a1a2e;
+        background: #fff;
+        padding: 1.1rem 1.4rem;
+        border-radius: 12px !important;
+    }
+
+    .faq-accordion .accordion-button:not(.collapsed) {
+        background: #f0f5ff;
+        color: #0d6efd;
+        box-shadow: none;
+    }
+
+    .faq-accordion .accordion-button::after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%230d6efd'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    }
+
+    .faq-accordion .accordion-body {
+        color: #555;
+        font-size: 0.95rem;
+        line-height: 1.75;
+        padding: 1rem 1.4rem 1.2rem;
+        background: #fff;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .faq-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        background: #e8f0fe;
+        color: #0d6efd;
+        border-radius: 50%;
+        font-size: 0.8rem;
+        font-weight: 700;
+        flex-shrink: 0;
+        margin-right: 0.85rem;
+    }
+
+    /* Section Divider */
+    .section-title {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .section-title-icon {
+        width: 36px;
+        height: 36px;
+        background: #e8f0fe;
+        color: #0d6efd;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+
+    /* Ask Question Box */
+    .ask-box {
+        background: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .ask-box textarea {
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        resize: vertical;
+        font-size: 0.95rem;
+        padding: 0.75rem 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .ask-box textarea:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
+    }
+
+    /* My questions */
+    .question-card {
+        background: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 14px;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1rem;
+        transition: box-shadow 0.2s;
+    }
+
+    .question-card:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+    }
+
+    .question-card .q-text {
+        font-weight: 600;
+        color: #1a1a2e;
+        font-size: 0.97rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .question-card .answer-block {
+        background: #f0f5ff;
+        border-left: 3px solid #0d6efd;
+        border-radius: 0 8px 8px 0;
+        padding: 0.75rem 1rem;
+        color: #444;
+        font-size: 0.93rem;
+        line-height: 1.65;
+        margin-top: 0.75rem;
+    }
+
+    .status-badge-pending {
+        background: #fff3cd;
+        color: #856404;
+        font-size: 0.78rem;
+        padding: 2px 10px;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+    .status-badge-answered {
+        background: #d1e7dd;
+        color: #146c43;
+        font-size: 0.78rem;
+        padding: 2px 10px;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+    .login-prompt {
+        background: linear-gradient(135deg, #f0f5ff 0%, #fff 100%);
+        border: 1px dashed #b6ccf7;
+        border-radius: 14px;
+        padding: 2rem;
+        text-align: center;
+        color: #6c757d;
+    }
+
+    .char-counter {
+        font-size: 0.8rem;
+        color: #aaa;
+        text-align: right;
+    }
+
+    .char-counter.over {
+        color: #dc3545;
+    }
+
+    @media (max-width: 768px) {
+        .faq-hero {
+            padding: 2rem 1.25rem;
+        }
+
+        .faq-hero h1 {
+            font-size: 1.7rem;
+        }
+    }
+
