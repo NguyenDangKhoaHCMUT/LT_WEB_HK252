@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once 'config/database.php';
 require_once 'models/Order.php';
 require_once 'models/Product.php';
@@ -12,6 +12,19 @@ class CartController
     public function __construct()
     {
         if (!isset($_SESSION['user_id'])) {
+            // Detect AJAX requests and return JSON instead of redirect
+            $isAjax = (
+                (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+                || (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
+            );
+
+            if ($isAjax) {
+                http_response_code(401);
+                header('Content-Type: application/json');
+                echo json_encode(['error' => 'Vui lòng đăng nhập để sử dụng giỏ hàng.', 'login_url' => '/btl/auth/login']);
+                exit();
+            }
+
             $_SESSION['flash_msg'] = 'Vui lòng đăng nhập để sử dụng giỏ hàng.';
             $_SESSION['flash_type'] = 'warning';
             header('Location: /btl/auth/login');

@@ -67,8 +67,7 @@
                             <div class="h6 fw-semibold mb-2 text-truncate" title="<?php echo htmlspecialchars($item['name'], ENT_QUOTES); ?>">
                                 <?php echo htmlspecialchars($item['name'], ENT_QUOTES); ?>
                             </div>
-                            <p class="text-muted small mb-3" style="min-height: 38px;">
-                                <?php
+                            <p class="text-muted small mb-3" style="min-height: 38px;"><?php
                                 $descriptionText = trim((string) ($item['description'] ?? ''));
                                 if (function_exists('mb_strimwidth')) {
                                     $descriptionText = mb_strimwidth($descriptionText, 0, 80, '...');
@@ -76,8 +75,8 @@
                                     $descriptionText = substr($descriptionText, 0, 80) . '...';
                                 }
                                 echo htmlspecialchars($descriptionText, ENT_QUOTES);
-                                ?>
-                            </p>
+                            ?></p>
+
                             <div class="mt-auto d-flex justify-content-between align-items-center">
                                 <div class="fw-bold text-primary">
                                     <?php echo number_format((int) ($item['price'] ?? 0), 0, ',', '.'); ?> đ
