@@ -9,6 +9,7 @@
 
 <!-- Bắt lỗi validation input bằng Javascript theo yêu cầu -->
 <form action="/btl/auth/register" method="POST" id="registerForm" onsubmit="return validateRegister()">
+    <?php Csrf::insertHiddenField(); ?>
     
     <div class="mb-3">
         <label for="fullname" class="form-label fw-semibold text-dark">Họ và Tên <span class="text-danger">*</span></label>

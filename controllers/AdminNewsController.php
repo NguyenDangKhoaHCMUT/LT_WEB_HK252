@@ -61,6 +61,13 @@ class AdminNewsController
             exit();
         }
 
+        if (!Csrf::validate($_POST['csrf_token'] ?? '')) {
+            $_SESSION['flash_msg'] = "Lỗi bảo mật: CSRF Token không hợp lệ.";
+            $_SESSION['flash_type'] = "danger";
+            header("Location: /btl/adminNews/index");
+            exit();
+        }
+
         $post = $this->collectPostInput();
         $errors = $this->validatePostData($post, null);
         $hasUploadedThumbnail = !empty($_FILES['thumbnail']['name'] ?? '');
@@ -137,6 +144,13 @@ class AdminNewsController
             exit();
         }
 
+        if (!Csrf::validate($_POST['csrf_token'] ?? '')) {
+            $_SESSION['flash_msg'] = "Lỗi bảo mật: CSRF Token không hợp lệ.";
+            $_SESSION['flash_type'] = "danger";
+            header("Location: /btl/adminNews/index");
+            exit();
+        }
+
         $existingPost = $this->postModel->getPostById($id);
         if (!$existingPost) {
             $_SESSION['flash_msg'] = "Không tìm thấy bài viết cần cập nhật.";
@@ -209,6 +223,12 @@ class AdminNewsController
 
     public function delete($id)
     {
+        if (!Csrf::validate($_GET['csrf_token'] ?? '')) {
+            $_SESSION['flash_msg'] = "Lỗi bảo mật: CSRF Token không hợp lệ.";
+            $_SESSION['flash_type'] = "danger";
+            header("Location: /btl/adminNews/index");
+            exit();
+        }
         $post = $this->postModel->getPostById($id);
         if (!$post) {
             $_SESSION['flash_msg'] = "Bài viết không tồn tại hoặc đã bị xóa.";

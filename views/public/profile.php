@@ -29,6 +29,7 @@
                 <?php endif; ?>
 
                 <form id="updateProfileForm" action="/btl/profile/index" method="POST" enctype="multipart/form-data">
+                    <?php Csrf::insertHiddenField(); ?>
                     <input type="hidden" name="update_profile" value="1">
 
                     <div class="mb-3">
@@ -52,6 +53,7 @@
             <div class="card-body">
                 <h5 class="card-title mb-4">Đổi mật khẩu</h5>
                 <form action="/btl/profile/index" method="POST" onsubmit="return validateChangePassword()">
+                    <?php Csrf::insertHiddenField(); ?>
                     <input type="hidden" name="change_password" value="1">
                     <div class="mb-3">
                         <label class="form-label">Mật khẩu cũ</label>

@@ -174,7 +174,7 @@ $posts = $posts ?? [];
                                         title="Sửa bài viết">
                                         <i class="fa fa-pen"></i>
                                     </a>
-                                    <a href="/btl/adminNews/delete/<?= (int) $post['id'] ?>"
+                                    <a href="<?= Csrf::addTokenToUrl('/btl/adminNews/delete/' . (int) $post['id']) ?>"
                                         class="btn btn-sm btn-light border text-danger"
                                         title="Xoá bài viết"
                                         onclick="return confirm('Bạn có chắc chắn muốn xoá bài viết «<?= htmlspecialchars(addslashes($post['title'])) ?>»?')">

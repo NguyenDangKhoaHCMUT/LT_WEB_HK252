@@ -10,6 +10,7 @@
                 <h5 class="card-title fw-bold mb-4">Cập nhật thông tin</h5>
 
                 <form action="/btl/adminUser/update/<?= $member['id'] ?>" method="POST">
+                    <?php Csrf::insertHiddenField(); ?>
                     <div class="mb-3">
                         <label class="form-label fw-medium">Họ và tên</label>
                         <input type="text" name="fullname" class="form-control"
@@ -43,9 +44,13 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary px-4"><i class="fa fa-save"></i> Lưu thay
-                            đổi</button>
+                    <div class="d-flex justify-content-between">
+                        <a href="<?= Csrf::addTokenToUrl('/btl/adminUser/reset_password/' . $member['id']) ?>" 
+                           class="btn btn-warning" 
+                           onclick="return confirm('Bạn có chắc muốn reset mật khẩu thành 123456?')">
+                           <i class="fa fa-key"></i> Reset mật khẩu
+                        </a>
+                        <button type="submit" class="btn btn-primary px-4"><i class="fa fa-save"></i> Lưu thay đổi</button>
                     </div>
                 </form>
             </div>

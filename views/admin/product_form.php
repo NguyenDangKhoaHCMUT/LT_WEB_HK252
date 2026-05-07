@@ -8,6 +8,7 @@
 <div class="card border-0 shadow-sm">
     <div class="card-body p-4">
         <form action="<?php echo $formAction; ?>" method="POST" enctype="multipart/form-data">
+            <?php Csrf::insertHiddenField(); ?>
             <div class="row g-3">
                 <div class="col-md-8">
                     <label class="form-label fw-semibold">Tên sản phẩm</label>

@@ -77,6 +77,7 @@ $formAction = $isEdit
 <?php endif; ?>
 
 <form method="POST" action="<?= $formAction ?>" enctype="multipart/form-data" id="news-form" novalidate>
+    <?php Csrf::insertHiddenField(); ?>
 
     <div class="row g-4">
 

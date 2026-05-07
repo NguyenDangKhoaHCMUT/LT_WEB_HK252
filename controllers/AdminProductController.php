@@ -76,6 +76,13 @@ class AdminProductController
             exit();
         }
 
+        if (!Csrf::validate($_POST['csrf_token'] ?? '')) {
+            $_SESSION['flash_msg'] = "Lỗi bảo mật: CSRF Token không hợp lệ.";
+            $_SESSION['flash_type'] = "danger";
+            header('Location: /btl/adminProduct/index');
+            exit();
+        }
+
         $name = trim($_POST['name'] ?? '');
         $categoryId = (int) ($_POST['category_id'] ?? 0);
         $description = trim($_POST['description'] ?? '');
@@ -151,6 +158,13 @@ class AdminProductController
             exit();
         }
 
+        if (!Csrf::validate($_POST['csrf_token'] ?? '')) {
+            $_SESSION['flash_msg'] = "Lỗi bảo mật: CSRF Token không hợp lệ.";
+            $_SESSION['flash_type'] = "danger";
+            header('Location: /btl/adminProduct/index');
+            exit();
+        }
+
         $id = (int) $id;
         $existingProduct = $this->productModel->getProductById($id);
 
@@ -212,6 +226,12 @@ class AdminProductController
 
     public function delete($id)
     {
+        if (!Csrf::validate($_GET['csrf_token'] ?? '')) {
+            $_SESSION['flash_msg'] = "Lỗi bảo mật: CSRF Token không hợp lệ.";
+            $_SESSION['flash_type'] = "danger";
+            header('Location: /btl/adminProduct/index');
+            exit();
+        }
         $id = (int) $id;
         $product = $this->productModel->getProductById($id);
 

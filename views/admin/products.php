@@ -77,7 +77,7 @@
                                         <i class="fa fa-pen"></i>
                                     </a>
                                     <a
-                                        href="/btl/adminProduct/delete/<?php echo (int) $item['id']; ?>"
+                                        href="<?= Csrf::addTokenToUrl('/btl/adminProduct/delete/' . (int) $item['id']) ?>"
                                         class="btn btn-sm btn-outline-danger"
                                         onclick="return confirm('Bạn có chắc muốn xoá sản phẩm này không?');">
                                         <i class="fa fa-trash"></i>

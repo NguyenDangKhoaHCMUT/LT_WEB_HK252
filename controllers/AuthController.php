@@ -31,6 +31,9 @@ class AuthController
 
             $loginStatus = $user->login($email, $password);
             if ($loginStatus === true) {
+                // Regenerate session ID to prevent Session Fixation
+                session_regenerate_id(true);
+                
                 // Tạo session
                 $_SESSION['user_id'] = $user->id;
                 $_SESSION['fullname'] = $user->fullname;
@@ -69,26 +72,30 @@ class AuthController
 
         $error = '';
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $user = new User($this->db);
-            $user->fullname = $_POST['fullname'] ?? '';
-            $user->email = $_POST['email'] ?? '';
-            $user->password = $_POST['password'] ?? '';
-            $confirm_password = $_POST['confirm_password'] ?? '';
-
-            if (empty($user->fullname) || empty($user->password) || empty($user->email) || empty($confirm_password)) {
-                $error = "Vui lòng nhập đầy đủ thông tin bắt buộc.";
-            } elseif ($user->password !== $confirm_password) {
-                $error = "Mật khẩu xác nhận không khớp.";
-            } elseif ($user->isEmailExists()) {
-                $error = "Email đã được sử dụng!";
+            if (!Csrf::validate($_POST['csrf_token'] ?? '')) {
+                $error = "Lỗi bảo mật: CSRF Token không hợp lệ.";
             } else {
-                if ($user->register()) {
-                    $_SESSION['flash_msg'] = "Đăng ký tải khoản thành công. Hãy đăng nhập!";
-                    $_SESSION['flash_type'] = "success";
-                    header("Location: /btl/auth/login");
-                    exit();
+                $user = new User($this->db);
+                $user->fullname = $_POST['fullname'] ?? '';
+                $user->email = $_POST['email'] ?? '';
+                $user->password = $_POST['password'] ?? '';
+                $confirm_password = $_POST['confirm_password'] ?? '';
+
+                if (empty($user->fullname) || empty($user->password) || empty($user->email) || empty($confirm_password)) {
+                    $error = "Vui lòng nhập đầy đủ thông tin bắt buộc.";
+                } elseif ($user->password !== $confirm_password) {
+                    $error = "Mật khẩu xác nhận không khớp.";
+                } elseif ($user->isEmailExists()) {
+                    $error = "Email đã được sử dụng!";
                 } else {
-                    $error = "Có lỗi xảy ra trong quá trình đăng ký. Vui lòng thử lại.";
+                    if ($user->register()) {
+                        $_SESSION['flash_msg'] = "Đăng ký tải khoản thành công. Hãy đăng nhập!";
+                        $_SESSION['flash_type'] = "success";
+                        header("Location: /btl/auth/login");
+                        exit();
+                    } else {
+                        $error = "Có lỗi xảy ra trong quá trình đăng ký. Vui lòng thử lại.";
+                    }
                 }
             }
         }

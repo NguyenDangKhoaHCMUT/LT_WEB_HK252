@@ -22,6 +22,12 @@ class ProfileController
         $user_data = $user->getUserById();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Csrf::validate($_POST['csrf_token'] ?? '')) {
+                $_SESSION['flash_msg'] = "Lỗi bảo mật: CSRF Token không hợp lệ.";
+                $_SESSION['flash_type'] = "danger";
+                header("Location: /btl/profile/index");
+                exit();
+            }
             // Update Profile
             if (isset($_POST['update_profile'])) {
                 $user->fullname = $_POST['fullname'] ?? '';

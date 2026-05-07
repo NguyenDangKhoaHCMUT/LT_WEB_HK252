@@ -1,6 +1,7 @@
-﻿<?php
+<?php
 session_start();
 require_once 'config/database.php';
+require_once 'helpers/Csrf.php';
 
 // Xử lý cơ bản URL rewrite từ .htaccess: ^(.*)$ index.php?url=$1
 $url_param = isset($_GET['url']) ? rtrim($_GET['url'], '/') : '';

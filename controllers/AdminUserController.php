@@ -1,10 +1,12 @@
 <?php
 require_once 'models/User.php';
 
-class AdminUserController {
+class AdminUserController
+{
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         // Chỉ cho phép admin truy cập
         if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
             $_SESSION['flash_msg'] = "Bạn không có quyền truy cập trang này!";
@@ -16,7 +18,8 @@ class AdminUserController {
         $this->db = $database->getConnection();
     }
 
-    public function index() {
+    public function index()
+    {
         $userModel = new User($this->db);
         $users = $userModel->getAllUsers();
 
@@ -24,11 +27,18 @@ class AdminUserController {
         ob_start();
         require_once 'views/admin/users/index.php';
         $content = ob_get_clean();
-        
+
         require_once 'views/layouts/admin.php';
     }
 
-    public function toggle_status($id) {
+    public function toggle_status($id)
+    {
+        if (!Csrf::validate($_GET['csrf_token'] ?? '')) {
+            $_SESSION['flash_msg'] = "Lỗi bảo mật: CSRF Token không hợp lệ.";
+            $_SESSION['flash_type'] = "danger";
+            header("Location: /btl/adminUser/index");
+            exit();
+        }
         $userModel = new User($this->db);
         if ($userModel->toggleStatus($id)) {
             $_SESSION['flash_msg'] = "Đã cập nhật trạng thái tài khoản.";
@@ -41,11 +51,12 @@ class AdminUserController {
         exit();
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $userModel = new User($this->db);
         $userModel->id = $id;
         $member = $userModel->getUserById();
-        
+
         if (!$member || $member['role'] === 'admin') {
             $_SESSION['flash_msg'] = "Không tìm thấy thành viên hoặc bạn không có quyền.";
             $_SESSION['flash_type'] = "danger";
@@ -57,15 +68,22 @@ class AdminUserController {
         ob_start();
         require_once 'views/admin/users/view.php';
         $content = ob_get_clean();
-        
+
         require_once 'views/layouts/admin.php';
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Csrf::validate($_POST['csrf_token'] ?? '')) {
+                $_SESSION['flash_msg'] = "Lỗi bảo mật: CSRF Token không hợp lệ.";
+                $_SESSION['flash_type'] = "danger";
+                header("Location: /btl/adminUser/view/" . $id);
+                exit();
+            }
             $userModel = new User($this->db);
             $userModel->id = $id;
-            
+
             $existing_member = $userModel->getUserById();
             if (!$existing_member || $existing_member['role'] === 'admin') {
                 header("Location: /btl/adminUser/index");
@@ -88,7 +106,14 @@ class AdminUserController {
         exit();
     }
 
-    public function reset_password($id) {
+    public function reset_password($id)
+    {
+        if (!Csrf::validate($_GET['csrf_token'] ?? '')) {
+            $_SESSION['flash_msg'] = "Lỗi bảo mật: CSRF Token không hợp lệ.";
+            $_SESSION['flash_type'] = "danger";
+            header("Location: /btl/adminUser/index");
+            exit();
+        }
         $userModel = new User($this->db);
         if ($userModel->resetPassword($id)) {
             $_SESSION['flash_msg'] = "Reset mật khẩu thành '123456' thành công.";
@@ -101,7 +126,14 @@ class AdminUserController {
         exit();
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
+        if (!Csrf::validate($_GET['csrf_token'] ?? '')) {
+            $_SESSION['flash_msg'] = "Lỗi bảo mật: CSRF Token không hợp lệ.";
+            $_SESSION['flash_type'] = "danger";
+            header("Location: /btl/adminUser/index");
+            exit();
+        }
         $userModel = new User($this->db);
         if ($userModel->deleteUser($id)) {
             $_SESSION['flash_msg'] = "Xoá người dùng thành công.";
