@@ -25,7 +25,18 @@ class ProductController
             $products = $productModel->getAllProducts($keyword, $limit, $offset);
         }
 
-        $title = "Sản phẩm";
+        // SEO
+        $title = !empty($keyword)
+            ? 'Tìm kiếm: ' . htmlspecialchars($keyword, ENT_QUOTES) . ' | Sản phẩm TechStore'
+            : 'Sản phẩm công nghệ chính hãng | TechStore';
+        $metaDescription = !empty($keyword)
+            ? 'Kết quả tìm kiếm sản phẩm cho "' . htmlspecialchars($keyword, ENT_QUOTES) . '" tại TechStore.'
+            : 'Khám phá bộ sưu tập smartphone, laptop và phụ kiện công nghệ chính hãng với giá tốt nhất tại TechStore.';
+        $metaKeywords = 'sản phẩm công nghệ, smartphone, laptop, phụ kiện, TechStore';
+        $canonicalUrl = 'http://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/btl/product/index' . ($page > 1 ? '?page=' . $page : '');
+        $ogTitle = $title;
+        $ogDescription = $metaDescription;
+
         ob_start();
         require_once 'views/public/product.php';
         $content = ob_get_clean();
@@ -57,7 +68,18 @@ class ProductController
 
         $related = $productModel->getRelatedProducts($product['category_id'] ?? null, $product['id'] ?? null, 4);
 
-        $title = $product['name'] ?? 'Chi tiết sản phẩm';
+        // SEO
+        $productName = htmlspecialchars($product['name'] ?? 'Chi tiết sản phẩm', ENT_QUOTES);
+        $categoryName = htmlspecialchars($product['category_name'] ?? '', ENT_QUOTES);
+        $title = $productName . ($categoryName ? ' - ' . $categoryName : '') . ' | TechStore';
+        $metaDescription = mb_substr(strip_tags($product['description'] ?? ''), 0, 160) ?: 'Mua ' . $productName . ' chính hãng, giá tốt tại TechStore.';
+        $metaKeywords = implode(', ', array_filter([$productName, $categoryName, 'mua online', 'chính hãng', 'TechStore']));
+        $canonicalUrl = 'http://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/btl/product/detail/' . urlencode($product['slug'] ?? '');
+        $ogTitle = $title;
+        $ogDescription = $metaDescription;
+        $ogImage = !empty($product['image']) ? $product['image'] : null;
+        $ogType = 'product';
+
         ob_start();
         require_once 'views/public/product_detail.php';
         $content = ob_get_clean();

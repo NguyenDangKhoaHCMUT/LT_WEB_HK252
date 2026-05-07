@@ -10,12 +10,12 @@
 
         <div class="row">
             <div class="col-md-8">
-                <h5>Thông tin khách hàng</h5>
+                <h4>Thông tin khách hàng</h4>
                 <p class="mb-1"><strong>Tên:</strong> <?php echo htmlspecialchars($order['customer_name']); ?></p>
                 <p class="mb-1"><strong>Điện thoại:</strong> <?php echo htmlspecialchars($order['phone']); ?></p>
                 <p class="mb-1"><strong>Địa chỉ:</strong> <?php echo htmlspecialchars($order['address']); ?></p>
 
-                <h5 class="mt-4">Sản phẩm</h5>
+                <h4 class="mt-4">Sản phẩm</h4>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -39,7 +39,7 @@
             </div>
             <div class="col-md-4">
                 <div class="card bg-light p-3">
-                    <h6 class="mb-3">Tổng cộng</h6>
+                    <h5 class="mb-3">Tổng cộng</h5>
                     <div class="d-flex justify-content-between">
                         <div>Số tiền:</div>
                         <div class="fw-semibold"><?php echo number_format($order['total_amount']); ?> đ</div>

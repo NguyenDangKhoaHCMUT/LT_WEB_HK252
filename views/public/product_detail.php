@@ -59,15 +59,13 @@
                                         return;
                                     }
 
-                                    if (response.ok) {
-                                        // Update cart badge count
-                                        const cartResponse = await fetch('/btl/api/cart-count.php');
-                                        if (cartResponse.ok) {
-                                            const data = await cartResponse.json();
-                                            const badge = document.querySelector('.navbar .badge');
-                                            if (badge) {
-                                                badge.textContent = data.count || 0;
-                                            }
+                                    const data = await response.json();
+
+                                    if (response.ok && data.success) {
+                                        // Update cart badge count from response
+                                        const badge = document.querySelector('.badge.bg-danger');
+                                        if (badge) {
+                                            badge.textContent = data.cart_count || 0;
                                         }
                                         // Show success message
                                         Swal.fire({

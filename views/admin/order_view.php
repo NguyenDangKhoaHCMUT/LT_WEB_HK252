@@ -49,7 +49,7 @@
     <div class="col-lg-4">
         <div class="card border-0 shadow-sm">
             <div class="card-body">
-                <h5>Trạng thái đơn hàng</h5>
+                <h2>Trạng thái đơn hàng</h2>
                 <form action="/btl/adminOrder/updateStatus/<?php echo (int) $order['id']; ?>" method="POST">
                     <div class="mb-3">
                         <select name="status" class="form-select">
