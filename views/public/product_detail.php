@@ -17,9 +17,8 @@
                         <p class="text-muted mb-2"><?php echo htmlspecialchars($product['category_name'] ?? 'Chưa phân loại', ENT_QUOTES); ?></p>
                         <div class="mb-3 fw-bold text-primary fs-5"><?php echo number_format((int) ($product['price'] ?? 0), 0, ',', '.'); ?> đ</div>
 
-                        <div class="mb-3 text-muted" style="white-space:pre-wrap;">
-                            <?php echo nl2br(htmlspecialchars($product['description'] ?? '', ENT_QUOTES)); ?>
-                        </div>
+                        <div class="mb-3 text-muted"><?php echo nl2br(htmlspecialchars($product['description'] ?? '', ENT_QUOTES)); ?></div>
+
 
                         <form id="addToCartForm" class="mt-auto d-flex gap-2 align-items-center">
                             <input type="hidden" name="product_id" value="<?php echo (int) ($product['id'] ?? 0); ?>">
@@ -36,17 +35,37 @@
                                 try {
                                     const response = await fetch('/btl/cart/add', {
                                         method: 'POST',
-                                        body: formData
+                                        body: formData,
+                                        headers: {
+                                            'X-Requested-With': 'XMLHttpRequest',
+                                            'Accept': 'application/json'
+                                        }
                                     });
-                                    if (response.ok) {
-                                        // Update cart badge count
-                                        const cartResponse = await fetch('/btl/api/cart-count.php');
-                                        if (cartResponse.ok) {
-                                            const data = await cartResponse.json();
-                                            const badge = document.querySelector('.navbar .badge');
-                                            if (badge) {
-                                                badge.textContent = data.count || 0;
+
+                                    if (response.status === 401) {
+                                        // User not logged in
+                                        Swal.fire({
+                                            icon: 'warning',
+                                            title: 'Chưa đăng nhập',
+                                            text: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.',
+                                            confirmButtonText: 'Đăng nhập',
+                                            showCancelButton: true,
+                                            cancelButtonText: 'Hủy'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location.href = '/btl/auth/login';
                                             }
+                                        });
+                                        return;
+                                    }
+
+                                    const data = await response.json();
+
+                                    if (response.ok && data.success) {
+                                        // Update cart badge count from response
+                                        const badge = document.querySelector('.badge.bg-danger');
+                                        if (badge) {
+                                            badge.textContent = data.cart_count || 0;
                                         }
                                         // Show success message
                                         Swal.fire({
@@ -54,6 +73,15 @@
                                             position: 'bottom-end',
                                             icon: 'success',
                                             title: 'Thêm vào giỏ hàng thành công!',
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'bottom-end',
+                                            icon: 'error',
+                                            title: 'Lỗi: không thể thêm vào giỏ',
                                             showConfirmButton: false,
                                             timer: 2000
                                         });

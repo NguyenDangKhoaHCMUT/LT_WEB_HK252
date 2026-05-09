@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once 'config/database.php';
 require_once 'models/Order.php';
 require_once 'models/Product.php';
@@ -12,6 +12,19 @@ class CartController
     public function __construct()
     {
         if (!isset($_SESSION['user_id'])) {
+            // Detect AJAX requests and return JSON instead of redirect
+            $isAjax = (
+                (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+                || (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
+            );
+
+            if ($isAjax) {
+                http_response_code(401);
+                header('Content-Type: application/json');
+                echo json_encode(['error' => 'Vui lòng đăng nhập để sử dụng giỏ hàng.', 'login_url' => '/btl/auth/login']);
+                exit();
+            }
+
             $_SESSION['flash_msg'] = 'Vui lòng đăng nhập để sử dụng giỏ hàng.';
             $_SESSION['flash_type'] = 'warning';
             header('Location: /btl/auth/login');
@@ -37,7 +50,18 @@ class CartController
 
     public function add()
     {
+        $isAjax = (
+            (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+            || (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
+        );
+
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            if ($isAjax) {
+                http_response_code(405);
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'error' => 'Method not allowed']);
+                exit();
+            }
             header('Location: /btl/product/index');
             exit();
         }
@@ -46,6 +70,12 @@ class CartController
         $quantity = max(1, (int) ($_POST['quantity'] ?? 1));
 
         if ($product_id <= 0) {
+            if ($isAjax) {
+                http_response_code(400);
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'error' => 'Sản phẩm không hợp lệ.']);
+                exit();
+            }
             $_SESSION['flash_msg'] = 'Sản phẩm không hợp lệ.';
             $_SESSION['flash_type'] = 'danger';
             header('Location: /btl/product/index');
@@ -54,6 +84,12 @@ class CartController
 
         $product = $this->productModel->getProductById($product_id);
         if (!$product) {
+            if ($isAjax) {
+                http_response_code(404);
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'error' => 'Không tìm thấy sản phẩm.']);
+                exit();
+            }
             $_SESSION['flash_msg'] = 'Không tìm thấy sản phẩm.';
             $_SESSION['flash_type'] = 'warning';
             header('Location: /btl/product/index');
@@ -61,9 +97,22 @@ class CartController
         }
 
         if ($this->orderModel->addToCart($_SESSION['user_id'], $product_id, $quantity)) {
+            if ($isAjax) {
+                $cart = $this->orderModel->getCart($_SESSION['user_id']);
+                $cartCount = $cart ? (int) ($cart['count'] ?? 0) : 0;
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Đã thêm vào giỏ hàng.', 'cart_count' => $cartCount]);
+                exit();
+            }
             $_SESSION['flash_msg'] = 'Đã thêm ' . htmlspecialchars($product['name'], ENT_QUOTES) . ' vào giỏ hàng.';
             $_SESSION['flash_type'] = 'success';
         } else {
+            if ($isAjax) {
+                http_response_code(500);
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'error' => 'Không thể thêm sản phẩm vào giỏ hàng.']);
+                exit();
+            }
             $_SESSION['flash_msg'] = 'Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.';
             $_SESSION['flash_type'] = 'danger';
         }

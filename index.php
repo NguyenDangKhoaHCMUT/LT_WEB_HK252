@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 session_start();
 require_once 'config/database.php';
 
@@ -28,4 +28,3 @@ if (file_exists($controller_file)) {
     http_response_code(404);
     echo "Lỗi 404: Không tìm thấy Controller '{$controller_name}'.";
 }
-?>
