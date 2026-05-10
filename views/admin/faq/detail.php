@@ -35,16 +35,13 @@
                 <div class="card-body p-4">
                     <h5 class="fw-bold text-dark mb-3">Nội dung câu hỏi:</h5>
                     <div class="bg-light rounded-4 p-4 mb-4 border-start border-4 border-primary shadow-sm">
-                        <div class="fw-medium text-dark"
-                            style="white-space: pre-wrap; line-height: 1.6; font-size: 1rem;">
-                            <?= nl2br(htmlspecialchars($data['question'])) ?></div>
+                        <div class="fw-medium text-dark faq-detail-text"><?= nl2br(htmlspecialchars(trim((string) ($data['question'] ?? '')))) ?></div>
                     </div>
 
                     <h5 class="fw-bold text-dark mb-3">Nội dung trả lời:</h5>
                     <?php if (!empty($data['answer'])): ?>
                         <div class="bg-primary bg-opacity-10 rounded-4 p-4 border-start border-4 border-primary shadow-sm">
-                            <div class="text-dark" style="white-space: pre-wrap; line-height: 1.6; font-size: 1rem;">
-                                <?= nl2br(htmlspecialchars($data['answer'])) ?></div>
+                            <div class="text-dark faq-detail-text"><?= nl2br(htmlspecialchars(trim((string) $data['answer']))) ?></div>
                         </div>
                         <?php if ($type === 'user' && !empty($data['answered_at'])): ?>
                             <div class="mt-2 text-muted small">

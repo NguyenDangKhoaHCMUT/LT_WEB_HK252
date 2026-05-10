@@ -77,6 +77,15 @@
         }
         .pending-dot { width: 8px; height: 8px; background: #ffc107; border-radius: 50%; display: inline-block; margin-right: 5px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        /* Detail page: pre-wrap preserves user newlines; avoid indent/newline in PHP after ">" or it renders as leading space */
+        .faq-detail-text {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 1rem;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
     </style>
 </head>
 
