@@ -70,13 +70,52 @@ $sectionTitle = $hasFilters ? 'Kết quả' : 'Bài viết mới nhất';
                         autocomplete="off"
                         placeholder="Nhập tiêu đề, mô tả, nội dung hoặc từ khóa công nghệ...">
                 </div>
-                <div class="col-md-4 col-lg-3">
-                    <label for="sort" class="form-label fw-semibold">Sắp xếp</label>
-                    <select class="form-select" id="sort" name="sort" data-news-search-filter>
-                        <option value="latest" <?= ($sort ?? 'latest') === 'latest' ? 'selected' : '' ?>>Mới nhất</option>
-                        <option value="most_viewed" <?= ($sort ?? '') === 'most_viewed' ? 'selected' : '' ?>>Xem nhiều</option>
-                        <option value="most_commented" <?= ($sort ?? '') === 'most_commented' ? 'selected' : '' ?>>Bình luận nhiều</option>
-                    </select>
+                <div class="col-md-4 col-lg-3 min-w-0">
+                    <label id="news-sort-label" class="form-label fw-semibold" for="news-sort-trigger">Sắp xếp</label>
+                    <div class="news-sort-select-wrap">
+                        <div class="news-sort-dropdown" data-news-sort-dropdown>
+                            <input
+                                type="hidden"
+                                name="sort"
+                                id="sort"
+                                value="<?= htmlspecialchars($sort ?? 'latest') ?>"
+                                data-news-search-filter>
+                            <button
+                                type="button"
+                                class="news-sort-dropdown-toggle"
+                                id="news-sort-trigger"
+                                aria-haspopup="listbox"
+                                aria-expanded="false"
+                                aria-controls="news-sort-menu"
+                                aria-labelledby="news-sort-label news-sort-value">
+                                <span class="news-sort-dropdown-value" id="news-sort-value"><?= htmlspecialchars($sortLabel) ?></span>
+                                <span class="news-sort-dropdown-chevron" aria-hidden="true"><i class="fa-solid fa-chevron-down"></i></span>
+                            </button>
+                            <ul class="news-sort-dropdown-menu" id="news-sort-menu" role="listbox" tabindex="-1" hidden>
+                                <li
+                                    role="option"
+                                    class="news-sort-dropdown-option<?= ($sort ?? 'latest') === 'latest' ? ' is-active' : '' ?>"
+                                    data-value="latest"
+                                    aria-selected="<?= ($sort ?? 'latest') === 'latest' ? 'true' : 'false' ?>">
+                                    Mới nhất
+                                </li>
+                                <li
+                                    role="option"
+                                    class="news-sort-dropdown-option<?= ($sort ?? '') === 'most_viewed' ? ' is-active' : '' ?>"
+                                    data-value="most_viewed"
+                                    aria-selected="<?= ($sort ?? '') === 'most_viewed' ? 'true' : 'false' ?>">
+                                    Xem nhiều
+                                </li>
+                                <li
+                                    role="option"
+                                    class="news-sort-dropdown-option<?= ($sort ?? '') === 'most_commented' ? ' is-active' : '' ?>"
+                                    data-value="most_commented"
+                                    aria-selected="<?= ($sort ?? '') === 'most_commented' ? 'true' : 'false' ?>">
+                                    Bình luận nhiều
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-12 col-lg-3">
                     <div class="news-hero-summary">

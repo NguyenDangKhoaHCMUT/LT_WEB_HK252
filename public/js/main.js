@@ -1,3 +1,134 @@
+function closeNewsSortDropdown(wrap) {
+    if (!wrap) {
+        return;
+    }
+
+    wrap.classList.remove('is-open');
+    var toggle = wrap.querySelector('.news-sort-dropdown-toggle');
+    var menu = wrap.querySelector('.news-sort-dropdown-menu');
+
+    if (toggle) {
+        toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    if (menu) {
+        menu.setAttribute('hidden', '');
+    }
+}
+
+(function registerNewsSortGlobalHandlers() {
+    if (registerNewsSortGlobalHandlers.done) {
+        return;
+    }
+
+    registerNewsSortGlobalHandlers.done = true;
+
+    document.addEventListener('click', function (e) {
+        document.querySelectorAll('[data-news-sort-dropdown].is-open').forEach(function (wrap) {
+            if (!wrap.contains(e.target)) {
+                closeNewsSortDropdown(wrap);
+            }
+        });
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') {
+            return;
+        }
+
+        document.querySelectorAll('[data-news-sort-dropdown].is-open').forEach(function (wrap) {
+            closeNewsSortDropdown(wrap);
+        });
+    });
+}());
+
+function initializeNewsSortDropdown(root) {
+    var wrap = root.querySelector('[data-news-sort-dropdown]');
+    if (!wrap || wrap.dataset.newsSortBound === '1') {
+        return;
+    }
+
+    wrap.dataset.newsSortBound = '1';
+
+    var hidden = wrap.querySelector('input[name="sort"][data-news-search-filter]');
+    var toggle = wrap.querySelector('.news-sort-dropdown-toggle');
+    var menu = wrap.querySelector('.news-sort-dropdown-menu');
+    var options = wrap.querySelectorAll('.news-sort-dropdown-option');
+    var valueLabel = wrap.querySelector('.news-sort-dropdown-value');
+
+    if (!hidden || !toggle || !menu || !valueLabel) {
+        return;
+    }
+
+    function getLabelForValue(value) {
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].getAttribute('data-value') === value) {
+                return options[i].textContent.trim();
+            }
+        }
+
+        return valueLabel.textContent.trim();
+    }
+
+    function setOpen(isOpen) {
+        wrap.classList.toggle('is-open', isOpen);
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+
+        if (isOpen) {
+            menu.removeAttribute('hidden');
+        } else {
+            menu.setAttribute('hidden', '');
+        }
+    }
+
+    function syncVisualState() {
+        var v = (hidden.value || 'latest').toString().trim() || 'latest';
+
+        valueLabel.textContent = getLabelForValue(v);
+
+        options.forEach(function (opt) {
+            var isSelected = opt.getAttribute('data-value') === v;
+
+            opt.classList.toggle('is-active', isSelected);
+            opt.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        });
+    }
+
+    syncVisualState();
+
+    toggle.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var nextOpen = !wrap.classList.contains('is-open');
+        setOpen(nextOpen);
+    });
+
+    options.forEach(function (opt) {
+        opt.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var val = opt.getAttribute('data-value');
+
+            if (!val) {
+                closeNewsSortDropdown(wrap);
+                return;
+            }
+
+            if (val === hidden.value) {
+                closeNewsSortDropdown(wrap);
+                return;
+            }
+
+            hidden.value = val;
+            syncVisualState();
+            closeNewsSortDropdown(wrap);
+            hidden.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     initializeNewsLiveSearch(document);
     initializeLazyImages(document);
@@ -18,6 +149,8 @@ function initializeNewsLiveSearch(scope) {
     if (!form || !input) {
         return;
     }
+
+    initializeNewsSortDropdown(newsRoot);
 
     var baseUrl = newsRoot.getAttribute('data-news-url') || form.getAttribute('action') || window.location.pathname;
     var debounceTimer = null;
