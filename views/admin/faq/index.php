@@ -72,12 +72,12 @@ $pending_count ??= 0;
                                             <td>
                                                 <div class="faq-question-text"
                                                     title="<?= htmlspecialchars($faq['question']) ?>">
-                                                    <?= htmlspecialchars($faq['question']) ?>
+                                                    <?= nl2br(htmlspecialchars($faq['question'])) ?>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="faq-answer-text" title="<?= htmlspecialchars($faq['answer']) ?>">
-                                                    <?= htmlspecialchars($faq['answer']) ?>
+                                                    <?= nl2br(htmlspecialchars($faq['answer'])) ?>
                                                 </div>
                                             </td>
                                             <td class="text-center text-muted"><?= $faq['sort_order'] ?></td>
@@ -89,6 +89,10 @@ $pending_count ??= 0;
                                                 <?php endif; ?>
                                             </td>
                                             <td class="pe-4">
+                                                <a href="/btl/adminFaq/detail?id=<?= $faq['id'] ?>&type=faq" 
+                                                   class="btn btn-sm btn-light me-1 rounded-3" title="Xem chi tiết">
+                                                    <i class="fa fa-eye text-info"></i>
+                                                </a>
                                                 <button class="btn btn-sm btn-light me-1 rounded-3" title="Chỉnh sửa"
                                                     onclick="editFaq(<?= $faq['id'] ?>, <?= htmlspecialchars(json_encode($faq['question']), ENT_QUOTES) ?>, <?= htmlspecialchars(json_encode($faq['answer']), ENT_QUOTES) ?>, <?= $faq['sort_order'] ?>, <?= $faq['is_published'] ?>)">
                                                     <i class="fa fa-pen text-primary"></i>
@@ -124,15 +128,16 @@ $pending_count ??= 0;
                 <div class="card-body p-0">
                     <?php if (!empty($user_questions)): ?>
                         <div class="table-responsive">
-                            <table class="table faq-table mb-0">
+                            <table class="table faq-table mb-0" style="min-width: 1000px;">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="ps-4" style="width:50px">#</th>
-                                        <th style="width:180px">Người hỏi</th>
-                                        <th>Câu hỏi / Trả lời</th>
-                                        <th style="width:120px">Thời gian</th>
-                                        <th style="width:100px">Trạng thái</th>
-                                        <th style="width:120px" class="pe-4">Thao tác</th>
+                                        <th class="ps-4" style="min-width: 60px;">#</th>
+                                        <th style="min-width: 240px;">NGƯỜI HỎI</th>
+                                        <th style="min-width: 200px;">CÂU HỎI</th>
+                                        <th style="min-width: 200px;">TRẢ LỜI</th>
+                                        <th style="min-width: 130px;">THỜI GIAN</th>
+                                        <th style="min-width: 110px;">TRẠNG THÁI</th>
+                                        <th style="min-width: 120px;" class="pe-4">THAO TÁC</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -154,24 +159,33 @@ $pending_count ??= 0;
                                                         <div class="fw-semibold" style="font-size:0.88rem;">
                                                             <?= htmlspecialchars($q['fullname'] ?? 'Ẩn danh') ?>
                                                         </div>
-                                                        <div class="text-muted" style="font-size:0.78rem;">
-                                                            <?= htmlspecialchars($q['email'] ?? '') ?>
+                                                        <div class="text-muted" style="font-size:0.78rem;"
+                                                            title="<?= htmlspecialchars($q['email'] ?? '') ?>">
+                                                            <?php
+                                                            $email = $q['email'] ?? '';
+                                                            echo htmlspecialchars(mb_strlen($email) > 30 ? mb_substr($email, 0, 27) . '...' : $email);
+                                                            ?>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>
-                                                <div style="font-weight:500;font-size:0.9rem;max-width:320px;">
+                                                <div class="faq-user-question-text"
+                                                    title="<?= htmlspecialchars($q['question']) ?>">
                                                     <?php if ($q['status'] === 'pending'): ?>
                                                         <span class="pending-dot"></span>
                                                     <?php endif; ?>
-                                                    <?= htmlspecialchars($q['question']) ?>
+                                                    <?= nl2br(htmlspecialchars($q['question'])) ?>
                                                 </div>
+                                            </td>
+                                            <td>
                                                 <?php if ($q['status'] === 'answered' && !empty($q['answer'])): ?>
-                                                    <div class="answer-preview" title="<?= htmlspecialchars($q['answer']) ?>">
-                                                        <i
-                                                            class="fa fa-reply text-primary me-1"></i><?= htmlspecialchars($q['answer']) ?>
+                                                    <div class="answer-preview"
+                                                        title="<?= htmlspecialchars($q['answer']) ?>">
+                                                        <?= nl2br(htmlspecialchars($q['answer'])) ?>
                                                     </div>
+                                                <?php else: ?>
+                                                    <span class="text-muted small"><em>Chưa trả lời</em></span>
                                                 <?php endif; ?>
                                             </td>
                                             <td class="text-muted" style="font-size:0.82rem;">
@@ -182,10 +196,14 @@ $pending_count ??= 0;
                                                 <?php if ($q['status'] === 'answered'): ?>
                                                     <span class="badge-answered">Đã trả lời</span>
                                                 <?php else: ?>
-                                                    <span class="badge-pending">Chờ duyệt</span>
+                                                    <span class="badge-pending">Chờ trả lời</span>
                                                 <?php endif; ?>
                                             </td>
                                             <td class="pe-4">
+                                                <a href="/btl/adminFaq/detail?id=<?= $q['id'] ?>&type=user" 
+                                                   class="btn btn-sm btn-light me-1 rounded-3" title="Xem chi tiết">
+                                                    <i class="fa fa-eye text-info"></i>
+                                                </a>
                                                 <button class="btn btn-sm btn-primary rounded-3 me-1" title="Trả lời"
                                                     onclick="openAnswerModal(<?= $q['id'] ?>, <?= htmlspecialchars(json_encode($q['question']), ENT_QUOTES) ?>, <?= htmlspecialchars(json_encode($q['answer'] ?? ''), ENT_QUOTES) ?>)">
                                                     <i class="fa fa-reply"></i>
@@ -215,133 +233,7 @@ $pending_count ??= 0;
 </div>
 
 
-<!-- ===== Modal: Thêm FAQ ===== -->
-<div class="modal fade" id="modalAddFaq" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
-            <form method="POST" action="/btl/adminFaq/create">
-                <div class="modal-header border-0 pb-0">
-                    <h3 class="h5 modal-title fw-bold">Thêm câu hỏi FAQ mới</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body px-4 py-3">
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Câu hỏi <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="question" required
-                            placeholder="Nhập câu hỏi thường gặp...">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Câu trả lời <span class="text-danger">*</span></label>
-                        <textarea class="form-control" name="answer" rows="5" required
-                            placeholder="Nhập nội dung trả lời..."></textarea>
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Thứ tự hiển thị</label>
-                            <input type="number" class="form-control" name="sort_order" value="0" min="0">
-                            <small class="text-muted">Số nhỏ hơn hiển thị trước</small>
-                        </div>
-                        <div class="col-md-6 d-flex align-items-center pt-3">
-                            <div class="form-check form-switch mt-3">
-                                <input class="form-check-input" type="checkbox" name="is_published" id="addPublished"
-                                    checked>
-                                <label class="form-check-label fw-semibold" for="addPublished">Hiển thị công
-                                    khai</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Huỷ</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-5">
-                        <i class="fa fa-plus me-1"></i>Thêm FAQ
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-<!-- ===== Modal: Sửa FAQ ===== -->
-<div class="modal fade" id="modalEditFaq" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
-            <form method="POST" action="/btl/adminFaq/update">
-                <input type="hidden" name="id" id="editFaqId">
-                <div class="modal-header border-0 pb-0">
-                    <h3 class="h5 modal-title fw-bold">Chỉnh sửa câu hỏi FAQ</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body px-4 py-3">
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Câu hỏi <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="question" id="editFaqQuestion" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Câu trả lời <span class="text-danger">*</span></label>
-                        <textarea class="form-control" name="answer" id="editFaqAnswer" rows="5" required></textarea>
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Thứ tự hiển thị</label>
-                            <input type="number" class="form-control" name="sort_order" id="editFaqOrder" value="0"
-                                min="0">
-                        </div>
-                        <div class="col-md-6 d-flex align-items-center pt-3">
-                            <div class="form-check form-switch mt-3">
-                                <input class="form-check-input" type="checkbox" name="is_published" id="editPublished">
-                                <label class="form-check-label fw-semibold" for="editPublished">Hiển thị công
-                                    khai</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Huỷ</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-5">
-                        <i class="fa fa-save me-1"></i>Lưu thay đổi
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-<!-- ===== Modal: Trả lời câu hỏi của người dùng ===== -->
-<div class="modal fade" id="modalAnswer" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
-            <form method="POST" action="/btl/adminFaq/answer">
-                <input type="hidden" name="id" id="answerQuestionId">
-                <div class="modal-header border-0 pb-0">
-                    <h3 class="h5 modal-title fw-bold"><i class="fa fa-reply text-primary me-2"></i>Trả lời câu hỏi</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body px-4 py-3">
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold text-muted">Câu hỏi từ người dùng:</label>
-                        <div class="bg-light rounded-3 p-3 text-dark fw-medium" id="answerQuestionText"
-                            style="font-size:0.95rem;"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Nội dung trả lời <span
-                                class="text-danger">*</span></label>
-                        <textarea class="form-control" name="answer" id="answerText" rows="5" required
-                            placeholder="Nhập câu trả lời của bạn..."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Huỷ</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-5">
-                        <i class="fa fa-paper-plane me-1"></i>Gửi trả lời
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+<?php require_once 'views/admin/faq/modals.php'; ?>
 
 
 <script>

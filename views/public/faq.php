@@ -27,7 +27,7 @@
                                     data-bs-toggle="collapse" data-bs-target="#faqCollapse<?= $faq['id'] ?>"
                                     aria-expanded="<?= $i === 0 ? 'true' : 'false' ?>">
                                     <span class="faq-number"><?= $i + 1 ?></span>
-                                    <?= htmlspecialchars($faq['question']) ?>
+                                    <?= nl2br(htmlspecialchars($faq['question'])) ?>
                                 </button>
                             </h2>
                             <div id="faqCollapse<?= $faq['id'] ?>"
@@ -48,7 +48,7 @@
             <?php endif; ?>
         </div>
 
-        <!-- Right: Ask a question + My questions -->
+        <!-- Right: Ask a question -->
         <div class="col-lg-5">
 
             <!-- Ask Box -->
@@ -73,38 +73,6 @@
                     </form>
                 </div>
 
-                <!-- My Questions -->
-                <?php if (!empty($my_questions)): ?>
-                    <div class="section-title mt-3">
-                        <span class="section-title-icon"><i class="fa fa-clock-rotate-left"></i></span>
-                        Câu hỏi của tôi
-                    </div>
-                    <?php foreach ($my_questions as $q): ?>
-                        <div class="question-card">
-                            <div class="d-flex justify-content-between align-items-start mb-1">
-                                <div class="q-text"><?= htmlspecialchars($q['question']) ?></div>
-                                <?php if ($q['status'] === 'answered'): ?>
-                                    <span class="status-badge-answered ms-2 flex-shrink-0">Đã trả lời</span>
-                                <?php else: ?>
-                                    <span class="status-badge-pending ms-2 flex-shrink-0">Chờ trả lời</span>
-                                <?php endif; ?>
-                            </div>
-                            <small class="text-muted">
-                                <i class="fa fa-calendar-alt me-1"></i>
-                                <?= date('d/m/Y H:i', strtotime($q['created_at'])) ?>
-                            </small>
-                            <?php if ($q['status'] === 'answered' && !empty($q['answer'])): ?>
-                                <div class="answer-block">
-                                    <small class="d-block text-primary fw-semibold mb-1">
-                                        <i class="fa fa-headset me-1"></i>TechStore phản hồi:
-                                    </small>
-                                    <?= nl2br(htmlspecialchars($q['answer'])) ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-
             <?php elseif (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'admin'): ?>
                 <div class="login-prompt">
                     <i class="fa fa-shield-halved fa-2x mb-2 text-primary opacity-75"></i>
@@ -126,6 +94,41 @@
 
         </div>
     </div>
+
+    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_role'] !== 'admin' && !empty($my_questions)): ?>
+        <div class="row g-4 faq-my-questions-section">
+            <div class="col-12">
+                <div class="section-title">
+                    <span class="section-title-icon"><i class="fa fa-clock-rotate-left"></i></span>
+                    Câu hỏi của tôi
+                </div>
+                <?php foreach ($my_questions as $q): ?>
+                    <div class="question-card">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <div class="q-text"><?= nl2br(htmlspecialchars($q['question'])) ?></div>
+                            <?php if ($q['status'] === 'answered'): ?>
+                                <span class="status-badge-answered ms-2 flex-shrink-0">Đã trả lời</span>
+                            <?php else: ?>
+                                <span class="status-badge-pending ms-2 flex-shrink-0">Chờ trả lời</span>
+                            <?php endif; ?>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fa fa-calendar-alt me-1"></i>
+                            <?= date('d/m/Y H:i', strtotime($q['created_at'])) ?>
+                        </small>
+                        <?php if ($q['status'] === 'answered' && !empty($q['answer'])): ?>
+                            <div class="answer-block">
+                                <small class="d-block text-primary fw-semibold mb-1">
+                                    <i class="fa fa-headset me-1"></i>TechStore phản hồi:
+                                </small>
+                                <?= nl2br(htmlspecialchars($q['answer'])) ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    <?php endif; ?>
 </div>
 
 <script>

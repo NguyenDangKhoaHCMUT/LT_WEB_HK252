@@ -11,7 +11,7 @@ $statusLabelMap = [
     '' => 'Tất cả trạng thái',
     'approved' => 'Hiển thị',
     'hidden' => 'Đã ẩn',
-    'pending' => 'Chờ duyệt',
+    'pending' => 'Chờ trả lời',
 ];
 
 $buildQuery = fn(array $extra) => http_build_query(array_merge(
@@ -190,7 +190,7 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
                                 $badgeMap = [
                                     'approved' => ['Hiển thị', 'bg-success bg-opacity-10 text-success border-success'],
                                     'hidden' => ['Đã ẩn', 'bg-secondary bg-opacity-10 text-secondary border-secondary'],
-                                    'pending' => ['Chờ duyệt', 'bg-warning bg-opacity-10 text-warning border-warning'],
+                                    'pending' => ['Chờ trả lời', 'bg-warning bg-opacity-10 text-warning border-warning'],
                                 ];
                                 [$badgeLabel, $badgeClass] = $badgeMap[$comment['status']] ?? ['?', ''];
                                 ?>

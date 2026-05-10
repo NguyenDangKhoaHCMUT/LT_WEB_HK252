@@ -41,14 +41,40 @@
         .faq-tab-btn { border-radius: 10px !important; font-weight: 500; font-size: 0.9rem; padding: 0.55rem 1.2rem; }
         .faq-table th { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6c757d; border-bottom: 2px solid #e9ecef; }
         .faq-table td { vertical-align: middle; font-size: 0.92rem; }
-        .faq-question-text { max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
-        .faq-answer-text { max-width: 260px; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* List tables: max 5 lines (full text on detail page) */
+        .faq-question-text,
+        .faq-answer-text,
+        .faq-user-question-text,
+        .answer-preview {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 5;
+            line-clamp: 5;
+            overflow: hidden;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+        .faq-question-text { max-width: 320px; font-weight: 500; }
+        .faq-answer-text { max-width: 260px; color: #555; }
+        .faq-user-question-text { min-width: 180px; max-width: 300px; font-weight: 500; font-size: 0.9rem; }
+
         .badge-published { background: #d1e7dd; color: #146c43; font-size: 0.75rem; padding: 3px 10px; border-radius: 50px; font-weight: 600; white-space: nowrap; display: inline-block; }
         .badge-hidden { background: #f8d7da; color: #842029; font-size: 0.75rem; padding: 3px 10px; border-radius: 50px; font-weight: 600; white-space: nowrap; display: inline-block; }
         .badge-pending { background: #fff3cd; color: #856404; font-size: 0.75rem; padding: 3px 10px; border-radius: 50px; font-weight: 600; white-space: nowrap; display: inline-block; }
         .badge-answered { background: #d1e7dd; color: #146c43; font-size: 0.75rem; padding: 3px 10px; border-radius: 50px; font-weight: 600; white-space: nowrap; display: inline-block; }
         .user-avatar-sm { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid #e9ecef; }
-        .answer-preview { background: #f0f5ff; border-left: 3px solid #0d6efd; border-radius: 0 8px 8px 0; padding: 0.6rem 0.85rem; font-size: 0.88rem; color: #444; margin-top: 0.4rem; max-width: 340px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .answer-preview {
+            background: #f0f5ff;
+            border-left: 3px solid #0d6efd;
+            border-radius: 0 8px 8px 0;
+            padding: 0.6rem 0.85rem;
+            font-size: 0.88rem;
+            color: #444;
+            margin-top: 0;
+            min-width: 180px;
+            max-width: 300px;
+        }
         .pending-dot { width: 8px; height: 8px; background: #ffc107; border-radius: 50%; display: inline-block; margin-right: 5px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     </style>
