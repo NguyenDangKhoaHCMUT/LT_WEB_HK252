@@ -40,13 +40,16 @@
 
 <body>
 
+    <?php $current_uri = $_SERVER['REQUEST_URI'] ?? ''; ?>
+
     <!-- Main Navigation -->
     <nav class="navbar navbar-expand-lg bg-white sticky-top tech-navbar shadow-sm py-2">
-        <div class="container d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center">
-                <!-- Toggle Button for Mobile -->
-                <button class="navbar-toggler border-0 shadow-none px-2 me-2" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarCenter">
+        <div class="container tech-navbar-inner d-flex align-items-center flex-nowrap justify-content-between">
+            <div class="d-flex align-items-center flex-shrink-0">
+                <!-- Mobile: open left drawer -->
+                <button class="navbar-toggler d-lg-none border-0 shadow-none px-2 me-2" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#techMobileNav" aria-controls="techMobileNav"
+                    aria-label="Mở menu">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -56,10 +59,9 @@
                 </a>
             </div>
 
-            <!-- Center Menu -->
-            <div class="collapse navbar-collapse justify-content-center" id="navbarCenter">
-                <?php $current_uri = $_SERVER['REQUEST_URI'] ?? ''; ?>
-                <ul class="navbar-nav fw-medium gap-lg-2 mt-3 mt-lg-0 text-center">
+            <!-- Desktop center menu -->
+            <div class="d-none d-lg-flex flex-grow-1 justify-content-center align-items-center">
+                <ul class="navbar-nav flex-row fw-medium gap-lg-2 mb-0">
                     <li class="nav-item">
                         <a class="nav-link <?= $current_uri == '/btl/' || strpos($current_uri, '/home/index') !== false ? 'text-primary fw-bold' : '' ?>"
                             href="/btl/">Trang chủ</a>
@@ -83,8 +85,8 @@
                 </ul>
             </div>
 
-            <!-- Right side items -->
-            <div class="d-flex align-items-center" id="navTech">
+            <!-- Right side items (always top-right on mobile) -->
+            <div class="d-flex align-items-center flex-shrink-0 ms-2" id="navTech">
                 <ul class="navbar-nav align-items-center flex-row m-0 p-0">
 
                     <!-- User Account -->
@@ -168,6 +170,29 @@
             </div>
         </div>
     </nav>
+
+    <!-- Mobile nav drawer (slides from left) -->
+    <div class="offcanvas offcanvas-start tech-mobile-nav" tabindex="-1" id="techMobileNav"
+        aria-labelledby="techMobileNavLabel">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-semibold" id="techMobileNavLabel">Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Đóng menu"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <nav class="nav flex-column px-3 py-3">
+                <a class="nav-link tech-mobile-nav-link py-3 border-bottom <?= $current_uri == '/btl/' || strpos($current_uri, '/home/index') !== false ? 'text-primary fw-bold' : 'text-dark' ?>"
+                    href="/btl/">Trang chủ</a>
+                <a class="nav-link tech-mobile-nav-link py-3 border-bottom <?= strpos($current_uri, '/product') !== false ? 'text-primary fw-bold' : 'text-dark' ?>"
+                    href="/btl/product/index">Sản phẩm</a>
+                <a class="nav-link tech-mobile-nav-link py-3 border-bottom <?= strpos($current_uri, '/news') !== false ? 'text-primary fw-bold' : 'text-dark' ?>"
+                    href="/btl/news">Tin tức</a>
+                <a class="nav-link tech-mobile-nav-link py-3 border-bottom <?= strpos($current_uri, '/faq') !== false ? 'text-primary fw-bold' : 'text-dark' ?>"
+                    href="/btl/faq/index">Hỏi/Đáp</a>
+                <a class="nav-link tech-mobile-nav-link py-3 <?= strpos($current_uri, '/home/contact') !== false ? 'text-primary fw-bold' : 'text-dark' ?>"
+                    href="/btl/home/contact">Liên hệ</a>
+            </nav>
+        </div>
+    </div>
 
     <!-- Main Content Area -->
     <div class="container mt-4 min-vh-100 tech-content">

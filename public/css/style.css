@@ -30,6 +30,24 @@ body {
     transform: translate(-30%, -30%) !important;
 }
 
+/* Single-row header on mobile; cart + avatar stay right */
+.tech-navbar-inner {
+    gap: 0.5rem;
+}
+
+.tech-mobile-nav {
+    --bs-offcanvas-width: min(300px, 88vw);
+}
+
+.tech-mobile-nav-link {
+    border-radius: 0;
+}
+
+.tech-mobile-nav-link:hover,
+.tech-mobile-nav-link:focus {
+    background-color: rgba(13, 110, 253, 0.07);
+}
+
 /* Components: Card (áp dụng cho login/register/profile) */
 .card {
     border: none;
