@@ -58,7 +58,7 @@ $sectionTitle = $hasFilters ? 'Kết quả' : 'Bài viết mới nhất';
     <div class="card border-0 shadow-sm mb-5 news-search-card">
         <div class="card-body">
             <form method="GET" action="/btl/news" class="row g-3 align-items-center news-search-form" data-news-search-form>
-                <div class="col-lg-6">
+                <div class="col-md-8 col-lg-6">
                     <label for="keyword" class="form-label fw-semibold">Từ khóa</label>
                     <input
                         type="text"
@@ -70,7 +70,7 @@ $sectionTitle = $hasFilters ? 'Kết quả' : 'Bài viết mới nhất';
                         autocomplete="off"
                         placeholder="Nhập tiêu đề, mô tả, nội dung hoặc từ khóa công nghệ...">
                 </div>
-                <div class="col-lg-3">
+                <div class="col-md-4 col-lg-3">
                     <label for="sort" class="form-label fw-semibold">Sắp xếp</label>
                     <select class="form-select" id="sort" name="sort" data-news-search-filter>
                         <option value="latest" <?= ($sort ?? 'latest') === 'latest' ? 'selected' : '' ?>>Mới nhất</option>
@@ -78,7 +78,7 @@ $sectionTitle = $hasFilters ? 'Kết quả' : 'Bài viết mới nhất';
                         <option value="most_commented" <?= ($sort ?? '') === 'most_commented' ? 'selected' : '' ?>>Bình luận nhiều</option>
                     </select>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-12 col-lg-3">
                     <div class="news-hero-summary">
                         <div class="news-hero-stat">
                             <span class="news-hero-stat-value"><?= (int) $totalPosts ?></span>

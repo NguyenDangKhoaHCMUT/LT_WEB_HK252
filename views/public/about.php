@@ -15,22 +15,25 @@
                 </div>
                 <div class="carousel-inner">
                     <div class="carousel-item active" data-bs-interval="3000">
-                        <img src="<?= htmlspecialchars($settings['about_carousel_1'] ?? 'https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=2070&auto=format&fit=crop') ?>"
-                            class="d-block w-100"
-                            style="object-fit: cover; height: 100%; min-height: 400px; max-height: 450px;"
-                            alt="Image 1">
+                        <div class="about-carousel-placeholder">
+                            <img src="<?= htmlspecialchars($settings['about_carousel_1'] ?? 'https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=2070&auto=format&fit=crop') ?>"
+                                class="about-carousel-img d-block"
+                                alt="TechStore — ảnh 1">
+                        </div>
                     </div>
                     <div class="carousel-item" data-bs-interval="3000">
-                        <img src="<?= htmlspecialchars($settings['about_carousel_2'] ?? 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop') ?>"
-                            class="d-block w-100"
-                            style="object-fit: cover; height: 100%; min-height: 400px; max-height: 450px;"
-                            alt="Image 2">
+                        <div class="about-carousel-placeholder">
+                            <img src="<?= htmlspecialchars($settings['about_carousel_2'] ?? 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop') ?>"
+                                class="about-carousel-img d-block"
+                                alt="TechStore — ảnh 2">
+                        </div>
                     </div>
                     <div class="carousel-item" data-bs-interval="3000">
-                        <img src="<?= htmlspecialchars($settings['about_carousel_3'] ?? 'https://images.unsplash.com/photo-1531297172864-45d6124c9c8c?q=80&w=2070&auto=format&fit=crop') ?>"
-                            class="d-block w-100"
-                            style="object-fit: cover; height: 100%; min-height: 400px; max-height: 450px;"
-                            alt="Image 3">
+                        <div class="about-carousel-placeholder">
+                            <img src="<?= htmlspecialchars($settings['about_carousel_3'] ?? 'https://images.unsplash.com/photo-1531297172864-45d6124c9c8c?q=80&w=2070&auto=format&fit=crop') ?>"
+                                class="about-carousel-img d-block"
+                                alt="TechStore — ảnh 3">
+                        </div>
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#aboutImageCarousel"

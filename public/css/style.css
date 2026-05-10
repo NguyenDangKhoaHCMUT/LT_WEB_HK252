@@ -30,6 +30,42 @@ body {
     transform: translate(-30%, -30%) !important;
 }
 
+/* Single-row header on mobile; cart + avatar stay right */
+.tech-navbar-inner {
+    gap: 0.5rem;
+}
+
+/* About page: fixed viewport for carousel so all slides share one size */
+.about-page #aboutImageCarousel .about-carousel-placeholder {
+    position: relative;
+    width: 100%;
+    height: clamp(260px, 42vw, 440px);
+    background-color: #e9ecef;
+    overflow: hidden;
+}
+
+.about-page #aboutImageCarousel .about-carousel-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.tech-mobile-nav {
+    --bs-offcanvas-width: min(300px, 88vw);
+}
+
+.tech-mobile-nav-link {
+    border-radius: 0;
+}
+
+.tech-mobile-nav-link:hover,
+.tech-mobile-nav-link:focus {
+    background-color: rgba(13, 110, 253, 0.07);
+}
+
 /* Components: Card (áp dụng cho login/register/profile) */
 .card {
     border: none;
@@ -303,18 +339,24 @@ body {
 }
 
 @media (max-width: 991.98px) {
-    .news-search-form .col-lg-5,
-    .news-search-form .col-lg-2 {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-
     .news-search-form .d-grid {
         gap: 0.5rem;
     }
 
     .news-search-form .btn {
         width: 100%;
+    }
+}
+
+/* Tablet-only: keep the sort dropdown compact & stable */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .news-search-form .form-select {
+        background: #fff;
+    }
+
+    /* Prevent native select dropdown from exceeding the card edge */
+    .news-search-form #sort {
+        max-width: 220px;
     }
 }
 
