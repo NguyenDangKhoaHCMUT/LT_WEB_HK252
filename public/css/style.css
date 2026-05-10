@@ -303,18 +303,24 @@ body {
 }
 
 @media (max-width: 991.98px) {
-    .news-search-form .col-lg-5,
-    .news-search-form .col-lg-2 {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-
     .news-search-form .d-grid {
         gap: 0.5rem;
     }
 
     .news-search-form .btn {
         width: 100%;
+    }
+}
+
+/* Tablet-only: keep the sort dropdown compact & stable */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .news-search-form .form-select {
+        background: #fff;
+    }
+
+    /* Prevent native select dropdown from exceeding the card edge */
+    .news-search-form #sort {
+        max-width: 220px;
     }
 }
 
