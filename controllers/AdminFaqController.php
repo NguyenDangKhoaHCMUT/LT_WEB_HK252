@@ -151,6 +151,35 @@ class AdminFaqController
     }
 
     /**
+     * Xem chi tiết câu hỏi (FAQ hoặc câu hỏi từ người dùng)
+     */
+    public function detail()
+    {
+        $id = intval($_GET['id'] ?? 0);
+        $type = $_GET['type'] ?? 'faq'; // 'faq' hoặc 'user'
+
+        if ($type === 'user') {
+            $data = $this->faqModel->getQuestionById($id);
+            $title = "Chi tiết câu hỏi từ người dùng";
+        } else {
+            $data = $this->faqModel->getFaqById($id);
+            $title = "Chi tiết FAQ";
+        }
+
+        if (!$data) {
+            $_SESSION['flash_msg'] = "Không tìm thấy nội dung yêu cầu!";
+            $_SESSION['flash_type'] = "danger";
+            header("Location: /btl/adminFaq/index");
+            exit();
+        }
+
+        ob_start();
+        require_once 'views/admin/faq/detail.php';
+        $content = ob_get_clean();
+        require_once 'views/layouts/admin.php';
+    }
+
+    /**
      * Xoá câu hỏi của người dùng
      */
     public function deleteQuestion()

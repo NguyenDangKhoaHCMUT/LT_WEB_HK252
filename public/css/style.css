@@ -574,7 +574,13 @@ body {
         box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
     }
 
-    /* My questions */
+    /* My questions (full-width block below main FAQ row) */
+    .faq-my-questions-section {
+        margin-top: 0.25rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
     .question-card {
         background: #fff;
         border: 1px solid #e9ecef;
