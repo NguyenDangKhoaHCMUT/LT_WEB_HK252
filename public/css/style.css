@@ -35,6 +35,24 @@ body {
     gap: 0.5rem;
 }
 
+/* About page: fixed viewport for carousel so all slides share one size */
+.about-page #aboutImageCarousel .about-carousel-placeholder {
+    position: relative;
+    width: 100%;
+    height: clamp(260px, 42vw, 440px);
+    background-color: #e9ecef;
+    overflow: hidden;
+}
+
+.about-page #aboutImageCarousel .about-carousel-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
 .tech-mobile-nav {
     --bs-offcanvas-width: min(300px, 88vw);
 }
