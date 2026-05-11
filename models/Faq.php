@@ -30,6 +30,69 @@ class Faq
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    public function countPublishedFaqs()
+    {
+        $query = "SELECT COUNT(*) FROM " . $this->table_faqs . " WHERE is_published = 1";
+        $stmt = $this->conn->prepare($query);
+        if (!$stmt->execute()) {
+            return 0;
+        }
+        return (int) ($stmt->fetchColumn() ?: 0);
+    }
+
+    /**
+     * Published FAQs for public listing (paginated)
+     */
+    public function getPublishedFaqsPaginated($page = 1, $perPage = 8)
+    {
+        $page = max(1, (int) $page);
+        $perPage = max(1, (int) $perPage);
+        $offset = ($page - 1) * $perPage;
+
+        $query = "SELECT * FROM " . $this->table_faqs . "
+                  WHERE is_published = 1
+                  ORDER BY sort_order ASC, id ASC
+                  LIMIT :limit OFFSET :offset";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        if (!$stmt->execute()) {
+            return [];
+        }
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
+
+    public function countAllFaqs()
+    {
+        $query = "SELECT COUNT(*) FROM " . $this->table_faqs;
+        $stmt = $this->conn->prepare($query);
+        if (!$stmt->execute()) {
+            return 0;
+        }
+        return (int) ($stmt->fetchColumn() ?: 0);
+    }
+
+    /**
+     * All FAQs for admin (paginated)
+     */
+    public function getFaqsPaginated($page = 1, $perPage = 10)
+    {
+        $page = max(1, (int) $page);
+        $perPage = max(1, (int) $perPage);
+        $offset = ($page - 1) * $perPage;
+
+        $query = "SELECT * FROM " . $this->table_faqs . "
+                  ORDER BY sort_order ASC, id ASC
+                  LIMIT :limit OFFSET :offset";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        if (!$stmt->execute()) {
+            return [];
+        }
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
+
     /**
      * Lấy một FAQ theo ID
      */
@@ -104,6 +167,51 @@ class Faq
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    public function countUserQuestions($status = null)
+    {
+        $query = "SELECT COUNT(*) FROM " . $this->table_questions . " uq";
+        if ($status !== null) {
+            $query .= " WHERE uq.status = :status";
+        }
+        $stmt = $this->conn->prepare($query);
+        if ($status !== null) {
+            $stmt->bindParam(':status', $status);
+        }
+        if (!$stmt->execute()) {
+            return 0;
+        }
+        return (int) ($stmt->fetchColumn() ?: 0);
+    }
+
+    /**
+     * User questions for admin (paginated)
+     */
+    public function getUserQuestionsPaginated($page = 1, $perPage = 10, $status = null)
+    {
+        $page = max(1, (int) $page);
+        $perPage = max(1, (int) $perPage);
+        $offset = ($page - 1) * $perPage;
+
+        $query = "SELECT uq.*, u.fullname, u.email, u.avatar 
+                  FROM " . $this->table_questions . " uq
+                  LEFT JOIN users u ON uq.user_id = u.id";
+        if ($status !== null) {
+            $query .= " WHERE uq.status = :status";
+        }
+        $query .= " ORDER BY uq.created_at DESC
+                    LIMIT :limit OFFSET :offset";
+        $stmt = $this->conn->prepare($query);
+        if ($status !== null) {
+            $stmt->bindParam(':status', $status);
+        }
+        $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        if (!$stmt->execute()) {
+            return [];
+        }
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
+
     /**
      * Lấy câu hỏi theo ID
      */
@@ -129,6 +237,37 @@ class Faq
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countQuestionsByUser($user_id)
+    {
+        $query = "SELECT COUNT(*) FROM " . $this->table_questions . " WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':user_id', (int) $user_id, PDO::PARAM_INT);
+        if (!$stmt->execute()) {
+            return 0;
+        }
+        return (int) ($stmt->fetchColumn() ?: 0);
+    }
+
+    public function getQuestionsByUserPaginated($user_id, $page = 1, $perPage = 5)
+    {
+        $page = max(1, (int) $page);
+        $perPage = max(1, (int) $perPage);
+        $offset = ($page - 1) * $perPage;
+
+        $query = "SELECT * FROM " . $this->table_questions . "
+                  WHERE user_id = :user_id
+                  ORDER BY created_at DESC
+                  LIMIT :limit OFFSET :offset";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':user_id', (int) $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        if (!$stmt->execute()) {
+            return [];
+        }
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
     /**

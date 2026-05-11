@@ -1,8 +1,14 @@
+<?php
+$modal_faq_page = isset($faq_page) ? (int) $faq_page : 1;
+$modal_uq_page = isset($uq_page) ? (int) $uq_page : 1;
+?>
 <!-- ===== Modal: Thêm FAQ ===== -->
 <div class="modal fade" id="modalAddFaq" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <form method="POST" action="/btl/adminFaq/create">
+                <input type="hidden" name="faq_page" value="<?= $modal_faq_page ?>">
+                <input type="hidden" name="uq_page" value="<?= $modal_uq_page ?>">
                 <div class="modal-header border-0 pb-0">
                     <h3 class="h5 modal-title fw-bold">Thêm câu hỏi FAQ mới</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -51,6 +57,8 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <form method="POST" action="/btl/adminFaq/update">
+                <input type="hidden" name="faq_page" value="<?= $modal_faq_page ?>">
+                <input type="hidden" name="uq_page" value="<?= $modal_uq_page ?>">
                 <input type="hidden" name="id" id="editFaqId">
                 <div class="modal-header border-0 pb-0">
                     <h3 class="h5 modal-title fw-bold">Chỉnh sửa câu hỏi FAQ</h3>
@@ -97,6 +105,8 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <form method="POST" action="/btl/adminFaq/answer">
+                <input type="hidden" name="faq_page" value="<?= $modal_faq_page ?>">
+                <input type="hidden" name="uq_page" value="<?= $modal_uq_page ?>">
                 <input type="hidden" name="id" id="answerQuestionId">
                 <div class="modal-header border-0 pb-0">
                     <h3 class="h5 modal-title fw-bold"><i class="fa fa-reply text-primary me-2"></i>Trả lời câu hỏi</h3>

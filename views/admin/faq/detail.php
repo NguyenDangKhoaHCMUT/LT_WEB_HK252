@@ -3,6 +3,20 @@
  * @var array $data Dữ liệu câu hỏi/FAQ
  * @var string $type Loại nội dung ('faq' hoặc 'user')
  */
+$detail_faq_pg = max(1, (int) ($_GET['faq_page'] ?? 1));
+$detail_uq_pg = max(1, (int) ($_GET['uq_page'] ?? 1));
+$detail_list_qs = http_build_query(
+    array_filter(
+        [
+            'faq_page' => $detail_faq_pg > 1 ? $detail_faq_pg : null,
+            'uq_page' => $detail_uq_pg > 1 ? $detail_uq_pg : null,
+        ],
+        function ($v) {
+            return $v !== null;
+        },
+    ),
+);
+$detail_index_suffix = $detail_list_qs !== '' ? '?' . htmlspecialchars($detail_list_qs) : '';
 ?>
 <div class="container-fluid py-4">
     <!-- Breadcrumb & Back button -->
@@ -10,7 +24,8 @@
         <div class="col-12">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-transparent p-0 mb-2">
-                    <li class="breadcrumb-item"><a href="/btl/adminFaq/index" class="text-decoration-none">Quản lý Hỏi /
+                    <li class="breadcrumb-item"><a href="/btl/adminFaq/index<?= $detail_index_suffix ?>"
+                            class="text-decoration-none">Quản lý Hỏi /
                             Đáp</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Chi tiết</li>
                 </ol>
@@ -20,7 +35,7 @@
                     <i class="fa fa-circle-info text-primary me-2"></i>Chi tiết
                     <?= $type === 'user' ? 'câu hỏi người dùng' : 'FAQ' ?>
                 </h2>
-                <a href="/btl/adminFaq/index<?= $type === 'user' ? '#user-questions' : '' ?>"
+                <a href="/btl/adminFaq/index<?= $detail_index_suffix ?><?= $type === 'user' ? '#user-questions' : '' ?>"
                     class="btn btn-outline-secondary btn-sm rounded-pill px-3">
                     <i class="fa fa-arrow-left me-1"></i>Quay lại danh sách
                 </a>
@@ -148,7 +163,7 @@
                                 <i
                                     class="fa fa-reply me-2"></i><?= empty($data['answer']) ? 'Trả lời câu hỏi' : 'Chỉnh sửa trả lời' ?>
                             </button>
-                            <a href="/btl/adminFaq/deleteQuestion?id=<?= $data['id'] ?>"
+                            <a href="/btl/adminFaq/deleteQuestion?<?= htmlspecialchars(http_build_query(array_filter(['id' => $data['id'], 'faq_page' => $detail_faq_pg > 1 ? $detail_faq_pg : null, 'uq_page' => $detail_uq_pg > 1 ? $detail_uq_pg : null], function ($v) { return $v !== null; }))) ?>"
                                 class="btn btn-light text-danger rounded-3 text-start"
                                 onclick="return confirm('Xác nhận xoá câu hỏi này?')">
                                 <i class="fa fa-trash me-2"></i>Xoá câu hỏi
@@ -158,7 +173,7 @@
                                 onclick="editFaqInDetail(<?= $data['id'] ?>, <?= htmlspecialchars(json_encode($data['question']), ENT_QUOTES) ?>, <?= htmlspecialchars(json_encode($data['answer']), ENT_QUOTES) ?>, <?= $data['sort_order'] ?>, <?= $data['is_published'] ?>)">
                                 <i class="fa fa-pen me-2"></i>Chỉnh sửa FAQ
                             </button>
-                            <a href="/btl/adminFaq/delete?id=<?= $data['id'] ?>"
+                            <a href="/btl/adminFaq/delete?<?= htmlspecialchars(http_build_query(array_filter(['id' => $data['id'], 'faq_page' => $detail_faq_pg > 1 ? $detail_faq_pg : null, 'uq_page' => $detail_uq_pg > 1 ? $detail_uq_pg : null], function ($v) { return $v !== null; }))) ?>"
                                 class="btn btn-light text-danger rounded-3 text-start"
                                 onclick="return confirm('Xác nhận xoá FAQ này?')">
                                 <i class="fa fa-trash me-2"></i>Xoá FAQ
@@ -185,7 +200,11 @@
 </script>
 
 <!-- Nhúng Modal Trả lời & Modal Sửa FAQ vào đây để các nút thao tác nhanh hoạt động -->
-<?php require_once 'views/admin/faq/modals.php'; ?>
+<?php
+$faq_page = $detail_faq_pg;
+$uq_page = $detail_uq_pg;
+require_once 'views/admin/faq/modals.php';
+?>
 
 <script>
     function openAnswerModalInDetail(id, question, currentAnswer) {

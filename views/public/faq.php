@@ -1,3 +1,31 @@
+<?php
+$faq_page = isset($faq_page) ? (int) $faq_page : 1;
+$faq_total = isset($faq_total) ? (int) $faq_total : 0;
+$faq_total_pages = isset($faq_total_pages) ? (int) $faq_total_pages : 1;
+$faq_row_start = isset($faq_row_start) ? (int) $faq_row_start : 0;
+$my_page = isset($my_page) ? (int) $my_page : 1;
+$my_total = isset($my_total) ? (int) $my_total : 0;
+$my_total_pages = isset($my_total_pages) ? (int) $my_total_pages : 1;
+$my_row_start = isset($my_row_start) ? (int) $my_row_start : 0;
+$faqs = $faqs ?? [];
+$my_questions = $my_questions ?? [];
+
+$buildPublicFaqQuery = function (array $overrides) use ($faq_page, $my_page) {
+    $fp = array_key_exists('faq_page', $overrides) ? (int) $overrides['faq_page'] : $faq_page;
+    $mp = array_key_exists('my_page', $overrides) ? (int) $overrides['my_page'] : $my_page;
+    return http_build_query(
+        array_filter(
+            [
+                'faq_page' => $fp > 1 ? $fp : null,
+                'my_page' => $mp > 1 ? $mp : null,
+            ],
+            function ($v) {
+                return $v !== null;
+            },
+        ),
+    );
+};
+?>
 <div class="faq-page py-2">
 
     <!-- Hero -->
@@ -26,7 +54,7 @@
                                 <button class="accordion-button <?= $i > 0 ? 'collapsed' : '' ?>" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#faqCollapse<?= $faq['id'] ?>"
                                     aria-expanded="<?= $i === 0 ? 'true' : 'false' ?>">
-                                    <span class="faq-number"><?= $i + 1 ?></span>
+                                    <span class="faq-number"><?= $faq_row_start + $i + 1 ?></span>
                                     <?= nl2br(htmlspecialchars($faq['question'])) ?>
                                 </button>
                             </h2>
@@ -40,6 +68,30 @@
                         </div>
                     <?php endforeach; ?>
                 </div>
+
+                <?php if ($faq_total > 0 && $faq_total_pages > 1): ?>
+                    <nav class="mt-3 pt-2" aria-label="Phân trang câu hỏi thường gặp">
+                        <ul class="pagination pagination-sm justify-content-center flex-wrap mb-0">
+                            <li class="page-item <?= $faq_page <= 1 ? 'disabled' : '' ?>">
+                                <a class="page-link rounded-pill px-3"
+                                    href="/btl/faq/index?<?= htmlspecialchars($buildPublicFaqQuery(['faq_page' => max(1, $faq_page - 1)])) ?>">Trước</a>
+                            </li>
+                            <?php for ($p = 1; $p <= $faq_total_pages; $p++): ?>
+                                <li class="page-item <?= $p === $faq_page ? 'active' : '' ?>">
+                                    <a class="page-link"
+                                        href="/btl/faq/index?<?= htmlspecialchars($buildPublicFaqQuery(['faq_page' => $p])) ?>"><?= $p ?></a>
+                                </li>
+                            <?php endfor; ?>
+                            <li class="page-item <?= $faq_page >= $faq_total_pages ? 'disabled' : '' ?>">
+                                <a class="page-link rounded-pill px-3"
+                                    href="/btl/faq/index?<?= htmlspecialchars($buildPublicFaqQuery(['faq_page' => min($faq_total_pages, $faq_page + 1)])) ?>">Sau</a>
+                            </li>
+                        </ul>
+                        <p class="text-center text-muted small mb-0 mt-2">
+                            Trang <?= $faq_page ?> / <?= $faq_total_pages ?> — <?= $faq_total ?> câu hỏi
+                        </p>
+                    </nav>
+                <?php endif; ?>
             <?php else: ?>
                 <div class="text-center py-5 text-muted">
                     <i class="fa fa-inbox fa-3x mb-3 opacity-50"></i>
@@ -61,6 +113,8 @@
                 <div class="ask-box mb-4">
                     <form method="POST" action="/btl/faq/index" id="askForm">
                         <input type="hidden" name="action" value="submit_question">
+                        <input type="hidden" name="faq_page" value="<?= (int) $faq_page ?>">
+                        <input type="hidden" name="my_page" value="<?= (int) $my_page ?>">
                         <div class="mb-3">
                             <label class="form-label fw-semibold text-dark">Câu hỏi của bạn</label>
                             <textarea class="form-control" name="question" id="questionInput" rows="5" maxlength="1000"
@@ -95,8 +149,8 @@
         </div>
     </div>
 
-    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_role'] !== 'admin' && !empty($my_questions)): ?>
-        <div class="row g-4 faq-my-questions-section">
+    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_role'] !== 'admin' && $my_total > 0): ?>
+        <div class="row g-4 faq-my-questions-section" id="faq-my-questions">
             <div class="col-12">
                 <div class="section-title">
                     <span class="section-title-icon"><i class="fa fa-clock-rotate-left"></i></span>
@@ -126,6 +180,30 @@
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
+
+                <?php if ($my_total_pages > 1): ?>
+                    <nav class="mt-3" aria-label="Phân trang câu hỏi của tôi">
+                        <ul class="pagination pagination-sm justify-content-center flex-wrap mb-0">
+                            <li class="page-item <?= $my_page <= 1 ? 'disabled' : '' ?>">
+                                <a class="page-link rounded-pill px-3"
+                                    href="/btl/faq/index?<?= htmlspecialchars($buildPublicFaqQuery(['my_page' => max(1, $my_page - 1)])) ?>#faq-my-questions">Trước</a>
+                            </li>
+                            <?php for ($p = 1; $p <= $my_total_pages; $p++): ?>
+                                <li class="page-item <?= $p === $my_page ? 'active' : '' ?>">
+                                    <a class="page-link"
+                                        href="/btl/faq/index?<?= htmlspecialchars($buildPublicFaqQuery(['my_page' => $p])) ?>#faq-my-questions"><?= $p ?></a>
+                                </li>
+                            <?php endfor; ?>
+                            <li class="page-item <?= $my_page >= $my_total_pages ? 'disabled' : '' ?>">
+                                <a class="page-link rounded-pill px-3"
+                                    href="/btl/faq/index?<?= htmlspecialchars($buildPublicFaqQuery(['my_page' => min($my_total_pages, $my_page + 1)])) ?>#faq-my-questions">Sau</a>
+                            </li>
+                        </ul>
+                        <p class="text-center text-muted small mb-0 mt-2">
+                            Trang <?= $my_page ?> / <?= $my_total_pages ?> — <?= $my_total ?> câu hỏi đã gửi
+                        </p>
+                    </nav>
+                <?php endif; ?>
             </div>
         </div>
     <?php endif; ?>

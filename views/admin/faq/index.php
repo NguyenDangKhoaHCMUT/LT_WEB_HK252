@@ -3,6 +3,32 @@
 $faqs ??= [];
 $user_questions ??= [];
 $pending_count ??= 0;
+$faq_page = isset($faq_page) ? (int) $faq_page : 1;
+$faq_total = isset($faq_total) ? (int) $faq_total : 0;
+$faq_total_pages = isset($faq_total_pages) ? (int) $faq_total_pages : 1;
+$faq_row_start = isset($faq_row_start) ? (int) $faq_row_start : 0;
+$uq_page = isset($uq_page) ? (int) $uq_page : 1;
+$uq_total = isset($uq_total) ? (int) $uq_total : 0;
+$uq_total_pages = isset($uq_total_pages) ? (int) $uq_total_pages : 1;
+$uq_row_start = isset($uq_row_start) ? (int) $uq_row_start : 0;
+
+$buildAdminFaqListQuery = function (array $overrides) use ($faq_page, $uq_page) {
+    $fp = array_key_exists('faq_page', $overrides) ? (int) $overrides['faq_page'] : $faq_page;
+    $up = array_key_exists('uq_page', $overrides) ? (int) $overrides['uq_page'] : $uq_page;
+    return http_build_query(
+        array_filter(
+            [
+                'faq_page' => $fp > 1 ? $fp : null,
+                'uq_page' => $up > 1 ? $up : null,
+            ],
+            function ($v) {
+                return $v !== null;
+            },
+        ),
+    );
+};
+$_faq_list_qs = $buildAdminFaqListQuery([]);
+$_faq_list_qs_suffix = $_faq_list_qs !== '' ? '&' . htmlspecialchars($_faq_list_qs) : '';
 ?>
 <div class="container-fluid py-4">
 
@@ -30,7 +56,7 @@ $pending_count ??= 0;
         <li class="nav-item">
             <button class="nav-link faq-tab-btn active" data-bs-toggle="pill" data-bs-target="#tabFaqs">
                 <i class="fa fa-list-ul me-1"></i>Câu hỏi thường gặp
-                <span class="badge bg-secondary ms-1"><?= count($faqs) ?></span>
+                <span class="badge bg-secondary ms-1"><?= $faq_total ?></span>
             </button>
         </li>
         <li class="nav-item">
@@ -40,7 +66,7 @@ $pending_count ??= 0;
                 <?php if ($pending_count > 0): ?>
                     <span class="badge bg-warning text-dark ms-1"><?= $pending_count ?></span>
                 <?php else: ?>
-                    <span class="badge bg-secondary ms-1"><?= count($user_questions) ?></span>
+                    <span class="badge bg-secondary ms-1"><?= $uq_total ?></span>
                 <?php endif; ?>
             </button>
         </li>
@@ -68,7 +94,7 @@ $pending_count ??= 0;
                                 <tbody>
                                     <?php foreach ($faqs as $i => $faq): ?>
                                         <tr>
-                                            <td class="ps-4 text-muted"><?= $i + 1 ?></td>
+                                            <td class="ps-4 text-muted"><?= $faq_row_start + $i + 1 ?></td>
                                             <td>
                                                 <div class="faq-question-text"
                                                     title="<?= htmlspecialchars($faq['question']) ?>">
@@ -89,7 +115,7 @@ $pending_count ??= 0;
                                                 <?php endif; ?>
                                             </td>
                                             <td class="pe-4">
-                                                <a href="/btl/adminFaq/detail?id=<?= $faq['id'] ?>&type=faq" 
+                                                <a href="/btl/adminFaq/detail?id=<?= $faq['id'] ?>&type=faq<?= $_faq_list_qs_suffix ?>"
                                                    class="btn btn-sm btn-light me-1 rounded-3" title="Xem chi tiết">
                                                     <i class="fa fa-eye text-info"></i>
                                                 </a>
@@ -97,7 +123,7 @@ $pending_count ??= 0;
                                                     onclick="editFaq(<?= $faq['id'] ?>, <?= htmlspecialchars(json_encode($faq['question']), ENT_QUOTES) ?>, <?= htmlspecialchars(json_encode($faq['answer']), ENT_QUOTES) ?>, <?= $faq['sort_order'] ?>, <?= $faq['is_published'] ?>)">
                                                     <i class="fa fa-pen text-primary"></i>
                                                 </button>
-                                                <a href="/btl/adminFaq/delete?id=<?= $faq['id'] ?>"
+                                                <a href="/btl/adminFaq/delete?<?= htmlspecialchars(http_build_query(array_filter(['id' => $faq['id'], 'faq_page' => $faq_page > 1 ? $faq_page : null, 'uq_page' => $uq_page > 1 ? $uq_page : null], function ($v) { return $v !== null; }))) ?>"
                                                     class="btn btn-sm btn-light rounded-3" title="Xoá"
                                                     onclick="return confirm('Xác nhận xoá câu hỏi này?')">
                                                     <i class="fa fa-trash text-danger"></i>
@@ -108,6 +134,29 @@ $pending_count ??= 0;
                                 </tbody>
                             </table>
                         </div>
+                        <?php if ($faq_total > 0 && $faq_total_pages > 1): ?>
+                            <div class="card-footer bg-white border-0 pt-0 pb-3">
+                                <nav aria-label="Phân trang FAQ">
+                                    <ul class="pagination pagination-sm justify-content-center flex-wrap mb-1">
+                                        <li class="page-item <?= $faq_page <= 1 ? 'disabled' : '' ?>">
+                                            <a class="page-link"
+                                                href="/btl/adminFaq/index?<?= htmlspecialchars($buildAdminFaqListQuery(['faq_page' => max(1, $faq_page - 1)])) ?>">Trước</a>
+                                        </li>
+                                        <?php for ($p = 1; $p <= $faq_total_pages; $p++): ?>
+                                            <li class="page-item <?= $p === $faq_page ? 'active' : '' ?>">
+                                                <a class="page-link"
+                                                    href="/btl/adminFaq/index?<?= htmlspecialchars($buildAdminFaqListQuery(['faq_page' => $p])) ?>"><?= $p ?></a>
+                                            </li>
+                                        <?php endfor; ?>
+                                        <li class="page-item <?= $faq_page >= $faq_total_pages ? 'disabled' : '' ?>">
+                                            <a class="page-link"
+                                                href="/btl/adminFaq/index?<?= htmlspecialchars($buildAdminFaqListQuery(['faq_page' => min($faq_total_pages, $faq_page + 1)])) ?>">Sau</a>
+                                        </li>
+                                    </ul>
+                                    <p class="text-center text-muted small mb-0">Trang <?= $faq_page ?> / <?= $faq_total_pages ?></p>
+                                </nav>
+                            </div>
+                        <?php endif; ?>
                     <?php else: ?>
                         <div class="text-center py-5 text-muted">
                             <i class="fa fa-inbox fa-3x mb-3 opacity-40"></i>
@@ -143,7 +192,7 @@ $pending_count ??= 0;
                                 <tbody>
                                     <?php foreach ($user_questions as $i => $q): ?>
                                         <tr>
-                                            <td class="ps-4 text-muted"><?= $i + 1 ?></td>
+                                            <td class="ps-4 text-muted"><?= $uq_row_start + $i + 1 ?></td>
                                             <td>
                                                 <div class="d-flex align-items-center gap-2">
                                                     <?php if (!empty($q['avatar'])): ?>
@@ -200,7 +249,7 @@ $pending_count ??= 0;
                                                 <?php endif; ?>
                                             </td>
                                             <td class="pe-4">
-                                                <a href="/btl/adminFaq/detail?id=<?= $q['id'] ?>&type=user" 
+                                                <a href="/btl/adminFaq/detail?id=<?= $q['id'] ?>&type=user<?= $_faq_list_qs_suffix ?>"
                                                    class="btn btn-sm btn-light me-1 rounded-3" title="Xem chi tiết">
                                                     <i class="fa fa-eye text-info"></i>
                                                 </a>
@@ -208,7 +257,7 @@ $pending_count ??= 0;
                                                     onclick="openAnswerModal(<?= $q['id'] ?>, <?= htmlspecialchars(json_encode($q['question']), ENT_QUOTES) ?>, <?= htmlspecialchars(json_encode($q['answer'] ?? ''), ENT_QUOTES) ?>)">
                                                     <i class="fa fa-reply"></i>
                                                 </button>
-                                                <a href="/btl/adminFaq/deleteQuestion?id=<?= $q['id'] ?>"
+                                                <a href="/btl/adminFaq/deleteQuestion?<?= htmlspecialchars(http_build_query(array_filter(['id' => $q['id'], 'faq_page' => $faq_page > 1 ? $faq_page : null, 'uq_page' => $uq_page > 1 ? $uq_page : null], function ($v) { return $v !== null; }))) ?>"
                                                     class="btn btn-sm btn-light rounded-3" title="Xoá"
                                                     onclick="return confirm('Xác nhận xoá câu hỏi này?')">
                                                     <i class="fa fa-trash text-danger"></i>
@@ -219,6 +268,29 @@ $pending_count ??= 0;
                                 </tbody>
                             </table>
                         </div>
+                        <?php if ($uq_total > 0 && $uq_total_pages > 1): ?>
+                            <div class="card-footer bg-white border-0 pt-0 pb-3">
+                                <nav aria-label="Phân trang câu hỏi người dùng">
+                                    <ul class="pagination pagination-sm justify-content-center flex-wrap mb-1">
+                                        <li class="page-item <?= $uq_page <= 1 ? 'disabled' : '' ?>">
+                                            <a class="page-link"
+                                                href="/btl/adminFaq/index?<?= htmlspecialchars($buildAdminFaqListQuery(['uq_page' => max(1, $uq_page - 1)])) ?>#user-questions">Trước</a>
+                                        </li>
+                                        <?php for ($p = 1; $p <= $uq_total_pages; $p++): ?>
+                                            <li class="page-item <?= $p === $uq_page ? 'active' : '' ?>">
+                                                <a class="page-link"
+                                                    href="/btl/adminFaq/index?<?= htmlspecialchars($buildAdminFaqListQuery(['uq_page' => $p])) ?>#user-questions"><?= $p ?></a>
+                                            </li>
+                                        <?php endfor; ?>
+                                        <li class="page-item <?= $uq_page >= $uq_total_pages ? 'disabled' : '' ?>">
+                                            <a class="page-link"
+                                                href="/btl/adminFaq/index?<?= htmlspecialchars($buildAdminFaqListQuery(['uq_page' => min($uq_total_pages, $uq_page + 1)])) ?>#user-questions">Sau</a>
+                                        </li>
+                                    </ul>
+                                    <p class="text-center text-muted small mb-0">Trang <?= $uq_page ?> / <?= $uq_total_pages ?></p>
+                                </nav>
+                            </div>
+                        <?php endif; ?>
                     <?php else: ?>
                         <div class="text-center py-5 text-muted">
                             <i class="fa fa-comments fa-3x mb-3 opacity-40"></i>

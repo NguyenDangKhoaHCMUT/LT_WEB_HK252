@@ -4,6 +4,8 @@ require_once 'models/Faq.php';
 class AdminFaqController
 {
     private $faqModel;
+    private $faqPerPage = 10;
+    private $userQuestionsPerPage = 10;
 
     public function __construct()
     {
@@ -22,8 +24,28 @@ class AdminFaqController
      */
     public function index()
     {
-        $faqs = $this->faqModel->getAllFaqs();
-        $user_questions = $this->faqModel->getAllUserQuestions();
+        $faq_page = max(1, (int) ($_GET['faq_page'] ?? 1));
+        $faq_total = $this->faqModel->countAllFaqs();
+        $faq_total_pages = max(1, (int) ceil($faq_total / $this->faqPerPage));
+        if ($faq_page > $faq_total_pages) {
+            $faq_page = $faq_total_pages;
+        }
+        $faqs = $faq_total > 0
+            ? $this->faqModel->getFaqsPaginated($faq_page, $this->faqPerPage)
+            : [];
+        $faq_row_start = ($faq_page - 1) * $this->faqPerPage;
+
+        $uq_page = max(1, (int) ($_GET['uq_page'] ?? 1));
+        $uq_total = $this->faqModel->countUserQuestions(null);
+        $uq_total_pages = max(1, (int) ceil($uq_total / $this->userQuestionsPerPage));
+        if ($uq_page > $uq_total_pages) {
+            $uq_page = $uq_total_pages;
+        }
+        $user_questions = $uq_total > 0
+            ? $this->faqModel->getUserQuestionsPaginated($uq_page, $this->userQuestionsPerPage, null)
+            : [];
+        $uq_row_start = ($uq_page - 1) * $this->userQuestionsPerPage;
+
         $pending_count = $this->faqModel->countPendingQuestions();
 
         $title = "Quản lý Hỏi/Đáp";
@@ -39,8 +61,7 @@ class AdminFaqController
     public function create()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header("Location: /btl/adminFaq/index");
-            exit();
+            $this->redirectToFaqAdminIndex();
         }
 
         $question = trim($_POST['question'] ?? '');
@@ -51,15 +72,13 @@ class AdminFaqController
         if (empty($question) || empty($answer)) {
             $_SESSION['flash_msg'] = "Câu hỏi và câu trả lời không được để trống!";
             $_SESSION['flash_type'] = "danger";
-            header("Location: /btl/adminFaq/index");
-            exit();
+            $this->redirectToFaqAdminIndex();
         }
 
         $this->faqModel->createFaq($question, $answer, $sort_order, $is_published);
         $_SESSION['flash_msg'] = "Đã thêm câu hỏi FAQ thành công!";
         $_SESSION['flash_type'] = "success";
-        header("Location: /btl/adminFaq/index");
-        exit();
+        $this->redirectToFaqAdminIndex();
     }
 
     /**
@@ -68,8 +87,7 @@ class AdminFaqController
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header("Location: /btl/adminFaq/index");
-            exit();
+            $this->redirectToFaqAdminIndex();
         }
 
         $id       = intval($_POST['id'] ?? 0);
@@ -81,15 +99,13 @@ class AdminFaqController
         if ($id <= 0 || empty($question) || empty($answer)) {
             $_SESSION['flash_msg'] = "Dữ liệu không hợp lệ!";
             $_SESSION['flash_type'] = "danger";
-            header("Location: /btl/adminFaq/index");
-            exit();
+            $this->redirectToFaqAdminIndex();
         }
 
         $this->faqModel->updateFaq($id, $question, $answer, $sort_order, $is_published);
         $_SESSION['flash_msg'] = "Đã cập nhật FAQ thành công!";
         $_SESSION['flash_type'] = "success";
-        header("Location: /btl/adminFaq/index");
-        exit();
+        $this->redirectToFaqAdminIndex();
     }
 
     /**
@@ -103,8 +119,7 @@ class AdminFaqController
             $_SESSION['flash_msg'] = "Đã xoá câu hỏi FAQ!";
             $_SESSION['flash_type'] = "success";
         }
-        header("Location: /btl/adminFaq/index");
-        exit();
+        $this->redirectToFaqAdminIndex();
     }
 
     /**
@@ -129,8 +144,7 @@ class AdminFaqController
     public function answer()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header("Location: /btl/adminFaq/index");
-            exit();
+            $this->redirectToFaqAdminIndex('#user-questions');
         }
 
         $id     = intval($_POST['id'] ?? 0);
@@ -139,15 +153,13 @@ class AdminFaqController
         if ($id <= 0 || empty($answer)) {
             $_SESSION['flash_msg'] = "Dữ liệu không hợp lệ!";
             $_SESSION['flash_type'] = "danger";
-            header("Location: /btl/adminFaq/index");
-            exit();
+            $this->redirectToFaqAdminIndex('#user-questions');
         }
 
         $this->faqModel->answerQuestion($id, $answer);
         $_SESSION['flash_msg'] = "Đã trả lời câu hỏi của người dùng!";
         $_SESSION['flash_type'] = "success";
-        header("Location: /btl/adminFaq/index#user-questions");
-        exit();
+        $this->redirectToFaqAdminIndex('#user-questions');
     }
 
     /**
@@ -190,7 +202,25 @@ class AdminFaqController
             $_SESSION['flash_msg'] = "Đã xoá câu hỏi!";
             $_SESSION['flash_type'] = "success";
         }
-        header("Location: /btl/adminFaq/index#user-questions");
+        $this->redirectToFaqAdminIndex('#user-questions');
+    }
+
+    private function redirectToFaqAdminIndex(string $hash = '')
+    {
+        $fp = max(1, (int) ($_POST['faq_page'] ?? $_GET['faq_page'] ?? 1));
+        $up = max(1, (int) ($_POST['uq_page'] ?? $_GET['uq_page'] ?? 1));
+        $q = http_build_query(
+            array_filter(
+                [
+                    'faq_page' => $fp > 1 ? $fp : null,
+                    'uq_page' => $up > 1 ? $up : null,
+                ],
+                function ($v) {
+                    return $v !== null;
+                },
+            ),
+        );
+        header('Location: /btl/adminFaq/index' . ($q !== '' ? '?' . $q : '') . $hash);
         exit();
     }
 }
