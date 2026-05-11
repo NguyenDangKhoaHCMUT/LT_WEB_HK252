@@ -8,7 +8,6 @@
         </div>
     </div>
 
-    <!-- Alert Messages will be handled by SweetAlert in layouts/admin.php -->
 
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-4">

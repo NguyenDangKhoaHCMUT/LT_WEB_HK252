@@ -28,12 +28,10 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
     </div>
 </div>
 
-<!-- Search & Filter Bar -->
 <div class="card border-0 shadow-sm rounded-3 mb-4">
     <div class="card-body p-3">
         <form method="GET" action="/btl/adminComment/index" class="row g-2 align-items-center">
 
-            <!-- Keyword -->
             <div class="col-12 col-md-6">
                 <div class="input-group">
                     <span class="input-group-text bg-light border-end-0">
@@ -69,7 +67,6 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
                 </button>
             </div>
 
-            <!-- Reset -->
             <?php if ($keyword !== '' || $status !== ''): ?>
                 <div class="col-12 col-md-1">
                     <a href="/btl/adminComment/index" class="btn btn-outline-secondary w-100" title="Đặt lại">
@@ -82,7 +79,6 @@ $buildQuery = fn(array $extra) => http_build_query(array_merge(
     </div>
 </div>
 
-<!-- Active Filter Pills -->
 <?php if ($keyword !== '' || $status !== ''): ?>
     <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
         <span class="text-muted small fw-medium">Đang lọc:</span>

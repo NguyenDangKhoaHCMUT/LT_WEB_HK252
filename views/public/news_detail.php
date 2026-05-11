@@ -44,7 +44,7 @@
                         </span>
                     </div>
 
-                    <?php if (isset($_SESSION['user_id'])): ?>
+                    <?php if (isset($_SESSION['user_id']) && (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin')): ?>
                         <form method="POST" class="card bg-light border-0 mb-4">
                             <div class="card-body">
                                 <div class="mb-3">
@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                         </form>
-                    <?php else: ?>
+                    <?php elseif (!isset($_SESSION['user_id'])): ?>
                         <div
                             class="alert alert-light border d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
                             <div>
@@ -83,6 +83,10 @@
                                 <div class="text-secondary small">Hãy đăng nhập để gửi bình luận cho bài viết này.</div>
                             </div>
                             <a href="/btl/auth/login" class="btn btn-outline-primary rounded-pill px-4">Đăng nhập</a>
+                        </div>
+                    <?php else: ?>
+                        <div class="alert alert-warning border mb-4">
+                            <i class="fa-solid fa-circle-info me-2"></i> Tài khoản Quản trị viên chỉ có thể xem, không thể gửi bình luận.
                         </div>
                     <?php endif; ?>
 

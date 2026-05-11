@@ -47,11 +47,13 @@
         <div class="container tech-navbar-inner d-flex align-items-center flex-nowrap justify-content-between">
             <div class="d-flex align-items-center flex-shrink-0">
                 <!-- Mobile: open left drawer -->
+                <?php if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin'): ?>
                 <button class="navbar-toggler d-lg-none border-0 shadow-none px-2 me-2" type="button"
                     data-bs-toggle="offcanvas" data-bs-target="#techMobileNav" aria-controls="techMobileNav"
                     aria-label="Mở menu">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                <?php endif; ?>
 
                 <!-- Brand Logo -->
                 <a class="navbar-brand fw-bold text-primary fs-4 m-0 p-0" href="/btl/">
@@ -61,6 +63,7 @@
 
             <!-- Desktop center menu -->
             <div class="d-none d-lg-flex flex-grow-1 justify-content-center align-items-center">
+                <?php if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin'): ?>
                 <ul class="navbar-nav flex-row fw-medium gap-lg-2 mb-0">
                     <li class="nav-item">
                         <a class="nav-link <?= $current_uri == '/btl/' || strpos($current_uri, '/home/index') !== false ? 'text-primary fw-bold' : '' ?>"
@@ -83,6 +86,7 @@
                             href="/btl/home/contact">Liên hệ</a>
                     </li>
                 </ul>
+                <?php endif; ?>
             </div>
 
             <!-- Right side items (always top-right on mobile) -->
@@ -180,6 +184,7 @@
         </div>
         <div class="offcanvas-body p-0">
             <nav class="nav flex-column px-3 py-3">
+                <?php if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin'): ?>
                 <a class="nav-link tech-mobile-nav-link py-3 border-bottom <?= $current_uri == '/btl/' || strpos($current_uri, '/home/index') !== false ? 'text-primary fw-bold' : 'text-dark' ?>"
                     href="/btl/">Trang chủ</a>
                 <a class="nav-link tech-mobile-nav-link py-3 border-bottom <?= strpos($current_uri, '/product') !== false ? 'text-primary fw-bold' : 'text-dark' ?>"
@@ -190,6 +195,7 @@
                     href="/btl/faq/index">Hỏi/Đáp</a>
                 <a class="nav-link tech-mobile-nav-link py-3 <?= strpos($current_uri, '/home/contact') !== false ? 'text-primary fw-bold' : 'text-dark' ?>"
                     href="/btl/home/contact">Liên hệ</a>
+                <?php endif; ?>
             </nav>
         </div>
     </div>

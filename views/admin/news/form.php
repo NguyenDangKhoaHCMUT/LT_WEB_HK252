@@ -38,13 +38,11 @@ $formAction = $isEdit
     .form-section { background: #fff; border: 1px solid #e9ecef; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem; }
     .form-section-title { font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: #6c757d; letter-spacing: 0.05em; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #f0f0f0; }
     .char-counter { font-size: 0.75rem; color: #adb5bd; text-align: right; margin-top: 2px; }
-    /* Upload hint (dùng chung) */
     .upload-hint { background: #f0f7ff; border: 1px solid #bdd9f8; border-radius: 0.5rem; padding: 0.65rem 0.85rem; font-size: 0.8rem; }
     .upload-hint__header { font-weight: 600; color: #1a6bbf; margin-bottom: 0.4rem; }
     .upload-hint__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.3rem; }
     .upload-hint__list li { display: flex; align-items: flex-start; gap: 0.45rem; color: #444; line-height: 1.4; }
     .upload-hint__list li i { margin-top: 0.1rem; flex-shrink: 0; }
-    /* Content image hint */
     .content-img-hint { background: #fffbea; border: 1px solid #fde68a; border-radius: 0.5rem; padding: 0.65rem 0.85rem; font-size: 0.8rem; margin-top: 0.6rem; }
     .content-img-hint__header { font-weight: 600; color: #92610a; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
     .content-img-hint__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.3rem; }
@@ -160,14 +158,11 @@ $formAction = $isEdit
 
         </div>
 
-        <!-- RIGHT COLUMN: Meta & settings -->
         <div class="col-lg-4">
 
-            <!-- Publish Settings -->
             <div class="form-section">
                 <div class="form-section-title"><i class="fa fa-sliders me-2"></i>Xuất bản</div>
 
-                <!-- Status -->
                 <div class="mb-3">
                     <label for="status" class="form-label fw-semibold">Trạng thái</label>
                     <select class="form-select <?= isset($errors['status']) ? 'is-invalid' : '' ?>" id="status" name="status">
@@ -201,7 +196,6 @@ $formAction = $isEdit
             <div class="form-section">
                 <div class="form-section-title"><i class="fa fa-image me-2"></i>Ảnh thumbnail</div>
 
-                <!-- Drop Zone -->
                 <div class="drop-zone" id="drop-zone" title="Kéo & thả ảnh hoặc click để chọn file">
                     <div id="drop-zone-placeholder">
                         <i class="fa fa-cloud-arrow-up text-muted" style="font-size:2rem;"></i>
@@ -234,7 +228,6 @@ $formAction = $isEdit
                     <div class="form-text">Nhập URL ảnh từ internet (nếu không upload file).</div>
                 </div>
 
-                <!-- Existing local thumbnail hint (edit mode) -->
                 <?php
                 $existingThumb = $post['thumbnail'] ?? '';
                 $isLocalThumb  = $existingThumb !== '' && !str_starts_with($existingThumb, 'http');
@@ -284,15 +277,14 @@ $formAction = $isEdit
                 </div>
             </div>
 
-        </div><!-- /col-lg-4 -->
-    </div><!-- /row -->
+        </div>
+    </div>
 </form>
 
 <!-- Quill JS -->
 <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 <script>
 (function () {
-    /* ── Quill WYSIWYG ── */
     var quill = new Quill('#quill-editor', {
         theme: 'snow',
         placeholder: 'Nhập nội dung bài viết...',
@@ -310,7 +302,6 @@ $formAction = $isEdit
         }
     });
 
-    /* Show quick usage hints*/
     applyToolbarHoverHints(quill);
 
     function applyToolbarHoverHints(editor) {
@@ -467,7 +458,6 @@ $formAction = $isEdit
         placeholder.style.display = '';
     });
 
-    /* Auto-preview if URL entered */
     urlInput.addEventListener('input', function () {
         var url = this.value.trim();
         if (url.match(/^https?:\/\/.+/i)) {
@@ -476,7 +466,6 @@ $formAction = $isEdit
         }
     });
 
-    /* Pre-fill preview if URL already set (edit mode) */
     (function () {
         var url = urlInput.value.trim();
         if (url) showPreview(url);
